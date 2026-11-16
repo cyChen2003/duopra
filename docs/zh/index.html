@@ -219,8 +219,8 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
       </div>
 
       <figure class="paperfig" data-reveal>
-        <a href="../assets/paper/fig1-timeline.webp" target="_blank" rel="noopener"><img src="../assets/paper/fig1-timeline.webp" width="2240" height="894" loading="lazy" decoding="async" alt="同一个请求的两条时间线。前后台分离时，看不到工具 schema 的前台把任务交给后台三次；Duopra 能看到 schema，先问清航班和日期，再自己调用两次 flight.status。"></a>
-        <figcaption><b>图 1.</b> 为什么前台必须自己动手（示意，1 秒单元）。(a) 工具 schema 只对后台可见，前台知道要做<em>什么</em>，却不知道<em>怎么</em>做：它立刻把请求交出去，之后用户的回答和改口又各要再交一次。(b) Duopra 能看到这些 schema，包括后台工具 <code>query(task)</code>：它先问清两个值，再自己调用 <code>flight.status</code>，改期后再调一次。</figcaption>
+        <a href="../assets/paper/fig1-timeline.webp" target="_blank" rel="noopener"><img src="../assets/paper/fig1-timeline.webp" width="2240" height="1022" loading="lazy" decoding="async" alt="图 1 分两栏，泳道相同：用户、前台、后台、工具。用户依次说“Search for a laptop…”“Wait, a tablet.”“Add 2 to the cart…”“Actually, just 1.”。(a) 前后台分离：前台说“Sure, searching.”，交出“Search for a laptop.”，后台于是搜索笔记本电脑；前台答“Got it, a tablet.”，却没有发出请求；又交出“Add 2 to the cart.”，后台调用 add_to_cart(laptop_001, 2)；前台答“OK, just one.”，仍然没有请求。购物车里最后是 2 台笔记本电脑。(b) Duopra 等用户说完才开口，说“Sure, one tablet.”，同时发出 query(“Find a tablet, then add one to my cart.”)；后台搜索平板，再调用 add_to_cart(tablet_001, 1)，Duopra 说“Done, it's $99.”。购物车里最后是 1 台平板。"></a>
+        <figcaption><b>图 1.</b> 一条说到一半改了两次的请求（Full-Duplex-Bench v3 的任务 <code>ecommerce_19</code>；语音有删节；示意图，不是某个系统的实际运行记录）。用户改了商品（笔记本电脑 → 平板）和数量（2 → 1），而加入购物车要用搜索返回的商品 ID。两栏的后台一样强、工具也相同，只有前台发出的请求不同。(a) 前台在用户第一次停顿时就把任务交出去：交接 1 是一条只有搜索、值也已过时的请求；用户改口后，它嘴上答应，却没有发出新请求；交接 2 只转述了“Add 2 to the cart”，而后台上一次搜的是笔记本电脑；最后一次改口同样只答应、没有请求。(b) Duopra 等请求说定之后，只发出一条请求 <code>query(task)</code>，带上两处修改和两个步骤；它也可以自己调用这两个工具。评测中，接 Qwen3-8B 后台的 Duopra 通过了这个任务（论文表 17(a)）。</figcaption>
       </figure>
 
       <div class="subhead" data-reveal>
