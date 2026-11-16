@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#070708" />
+    <script src="/static/theme.js?v=20261027-duopra-r9-personal"></script>
+    <meta
+      name="description"
+      content="Duopra — a spoken agent that listens while it speaks, and acts while it listens."
+    />
+    <title>Duopra</title>
+    <link rel="icon" type="image/svg+xml" href="/static/duplex-mark.svg" />
+    <link id="brand-icon" rel="alternate icon" type="image/png" href="/static/duplex-mark.png" />
+    <link rel="stylesheet" href="/static/style.css?v=20261027-duopra-r9-personal" />
+    <link rel="stylesheet" href="/static/harness.css?v=20261106-webtools-safe" />
+  </head>
+  <body data-phase="idle" data-mode="audio">
+    <div class="field" aria-hidden="true">
+      <div class="bloom bloom-a"></div>
+      <div class="bloom bloom-b"></div>
+      <div class="grain"></div>
+    </div>
+    <svg
+      class="icon-library"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+    >
+      <symbol id="i-mark" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="18" height="18" rx="4.5" />
+        <path d="M7.5 9.75h7.2l-2.1-2.1M16.5 14.25H9.3l2.1 2.1" />
+      </symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24">
+        <rect x="9" y="2" width="6" height="12" rx="3" />
+        <path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8" />
+      </symbol>
+      <symbol id="i-mic-off" viewBox="0 0 24 24">
+        <path
+          d="m3 3 18 18M9 9v3a3 3 0 0 0 5 2M9 5a3 3 0 0 1 6 0v4m-10 1v2a7 7 0 0 0 12 5m2-7v2c0 .7-.1 1.4-.3 2M12 19v3m-4 0h8"
+        />
+      </symbol>
+      <symbol id="i-upload" viewBox="0 0 24 24">
+        <path
+          d="M12 16V3m-5 5 5-5 5 5M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"
+        />
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24">
+        <path d="M4 12h16m-6-6 6 6-6 6" />
+      </symbol>
+      <symbol id="i-close" viewBox="0 0 24 24">
+        <path d="m6 6 12 12M6 18 18 6" />
+      </symbol>
+      <symbol id="i-sound" viewBox="0 0 24 24">
+        <path
+          d="m11 4-6 5H2v6h3l6 5zM16 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"
+        />
+      </symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24">
+        <path d="M4 7h7m6 0h3M4 17h3m6 0h7" />
+        <circle cx="14" cy="7" r="3" />
+        <circle cx="10" cy="17" r="3" />
+      </symbol>
+      <symbol id="i-history" viewBox="0 0 24 24">
+        <path d="M5 6a9 9 0 1 1-2 9M2 3v5h5m5-2v6l4 2" />
+      </symbol>
+      <symbol id="i-reset" viewBox="0 0 24 24">
+        <path d="M20 7a9 9 0 1 0 1 9M20 2v5h-5" />
+      </symbol>
+      <symbol id="i-bolt" viewBox="0 0 24 24">
+        <path d="M13 2 4 14h7l-1 8 9-12h-7z" />
+      </symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24">
+        <rect x="3.5" y="3.5" width="7" height="7" rx="2" />
+        <rect x="13.5" y="3.5" width="7" height="7" rx="2" />
+        <rect x="3.5" y="13.5" width="7" height="7" rx="2" />
+        <rect x="13.5" y="13.5" width="7" height="7" rx="2" />
+      </symbol>
+      <symbol id="i-wave" viewBox="0 0 24 24">
+        <path d="M2 12h2.5l2-5 3 10 3-12 3 12 2.5-8 1.5 3H22" />
+      </symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24">
+        <path d="m12 3 9 5-9 5-9-5zM3 12.5l9 5 9-5M3 16.5l9 5 9-5" />
+      </symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24">
+        <path d="m12 3 2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4z" />
+      </symbol>
+      <symbol id="i-globe" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18" />
+      </symbol>
+      <symbol id="i-file" viewBox="0 0 24 24">
+        <path d="M14 2H5a1 1 0 0 0-1 1v18a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V8zM14 2v6h6M8 13h8m-8 4h5" />
+      </symbol>
+      <symbol id="i-route" viewBox="0 0 24 24">
+        <circle cx="6" cy="18" r="2.2" />
+        <circle cx="18" cy="6" r="2.2" />
+        <path d="M8.2 18H13a4 4 0 0 0 4-4V8.2M15.8 6H11a4 4 0 0 0-4 4v5.8" />
+      </symbol>
+      <symbol id="i-eye" viewBox="0 0 24 24">
+        <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z" />
+        <circle cx="12" cy="12" r="3" />
+      </symbol>
+      <symbol id="i-bell" viewBox="0 0 24 24">
+        <path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0" />
+      </symbol>
+      <symbol id="i-search" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m20 20-3.6-3.6" />
+      </symbol>
+      <symbol id="i-check" viewBox="0 0 24 24">
+        <path d="m5 12 4 4L19 6" />
+      </symbol>
+      <symbol id="i-download" viewBox="0 0 24 24">
+        <path d="M12 3v12m-5-5 5 5 5-5M4 17v4h16v-4" />
+      </symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24">
+        <path d="m9 5 7 7-7 7" />
+      </symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
+      </symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24">
+        <path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z" />
+      </symbol>
+      <symbol id="i-home" viewBox="0 0 24 24">
+        <path d="M4 10.5 12 4l8 6.5V20H4zM10 20v-5.5h4V20" />
+      </symbol>
+      <symbol id="i-ticket" viewBox="0 0 24 24">
+        <path d="M3.5 7h17v3.2a1.8 1.8 0 0 0 0 3.6V17h-17v-3.2a1.8 1.8 0 0 0 0-3.6zM14.5 8.5v1.2m0 1.8v1m0 1.8v1.2" />
+      </symbol>
+      <symbol id="i-person" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="3.6" />
+        <path d="M5 20a7 7 0 0 1 14 0" />
+      </symbol>
+      <symbol id="i-book" viewBox="0 0 24 24">
+        <path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v14H7.5A2.5 2.5 0 0 0 5 19.5zM5 19.5A2.5 2.5 0 0 0 7.5 22H19v-5" />
+      </symbol>
+      <symbol id="i-leaf" viewBox="0 0 24 24">
+        <path d="M5.5 19C5.5 10.5 10.5 5 20 4.5 19.5 14 14 19 5.5 19zM5.5 19c2.8-4 6-6.6 9.5-8.5" />
+      </symbol>
+      <symbol id="i-building" viewBox="0 0 24 24">
+        <path d="M5 21V4h9v17m0-11h5v11M3 21h18M8.2 8h2.6m-2.6 4h2.6m-2.6 4h2.6" />
+      </symbol>
+      <symbol id="i-alert" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 7.5v5.5m0 3.4v.1" />
+      </symbol>
+    </svg>
+    <header class="topbar">
+      <a class="wordmark" href="/" aria-label="Duopra home">
+        <svg class="mark" aria-hidden="true"><use href="#i-mark" /></svg>
+        <span>DUOPRA</span>
+      </a>
+      <nav class="top-actions" aria-label="Conversation controls">
+        <span id="connection-state" class="connection"
+          ><span class="status-dot"></span
+          ><span data-i18n="available">Ready when you are</span></span
+        >
+        <button
+          id="agency-toggle"
+          class="text-toggle pressable"
+          aria-controls="agency-panel"
+          aria-expanded="false"
+          data-label="board"
+          aria-label="Dashboard"
+        >
+          <svg class="icon"><use href="#i-grid" /></svg
+          ><span data-i18n="board">Dashboard</span
+          ><b id="agency-count" class="count" hidden>0</b>
+        </button>
+        <button
+          id="history-button"
+          class="icon-button"
+          data-label="history"
+          aria-label="Conversation history"
+        >
+          <svg class="icon"><use href="#i-history" /></svg>
+        </button>
+        <button
+          id="settings-button"
+          class="icon-button"
+          data-label="settings"
+          aria-label="Settings"
+        >
+          <svg class="icon"><use href="#i-settings" /></svg>
+        </button>
+        <button id="theme-button" class="icon-button" aria-label="Switch to light theme">
+          <svg class="icon theme-sun"><use href="#i-sun" /></svg>
+          <svg class="icon theme-moon"><use href="#i-moon" /></svg>
+        </button>
+        <button
+          id="language-button"
+          class="language-button"
+          aria-label="Switch to Chinese"
+        >
+          中
+        </button>
+      </nav>
+    </header>
+    <main class="experience" id="experience">
+      <div class="introduction">
+        <p class="eyebrow"><b id="frontend-model-name">DUOPRA · AUDIO · FULL-DUPLEX AGENCY</b></p>
+        <h1>
+          <span class="dim" data-i18n="headline">A spoken agent that</span>
+          <strong data-i18n="headlineAccent">listens while it speaks, and acts while it listens.</strong>
+        </h1>
+        <nav id="cap-strip" class="cap-strip" aria-label="Capabilities"></nav>
+      </div>
+      <section class="presence" aria-label="Duopra core">
+        <canvas id="presence-canvas" aria-hidden="true"></canvas>
+        <button type="button" id="live-activity" class="live-activity" hidden></button>
+        <span id="live-activity-status" class="sr-only" aria-live="polite"></span>
+        <div class="orb-caption" id="orb-caption">
+          <span class="voice-legend" aria-hidden="true"
+            ><span class="you"><i></i><b data-i18n="legendYou">You</b></span
+            ><span class="agent"><i></i><b data-i18n="legendAgent">Duopra</b></span></span
+          ><span class="caption-rule" aria-hidden="true"></span
+          ><span id="presence-label" data-i18n="presenceIdle"
+            >Idle. Say something to begin.</span
+          >
+        </div>
+        <div id="media-preview" class="media-preview audio-file" hidden>
+          <audio id="preview-audio" muted controls></audio>
+          <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+          <div class="preview-top">
+            <span class="preview-badge"
+              ><i></i
+              ><span id="preview-label" data-i18n="audioReady"
+                >Ready to listen together</span
+              ></span
+            ><button
+              id="replace-audio"
+              class="subtle-button"
+              hidden
+              data-i18n="replaceAudio"
+            >
+              Change audio
+            </button>
+          </div>
+          <div class="preview-bottom">
+            <span id="audio-name"></span><span id="audio-time"></span>
+          </div>
+        </div>
+        <label
+          id="upload-zone"
+          class="upload-zone"
+          hidden
+          for="audio-file"
+          tabindex="0"
+        >
+          <span class="upload-symbol"
+            ><svg class="icon"><use href="#i-upload" /></svg
+          ></span>
+          <strong data-i18n="dropTitle">Bring a moment to Duopra</strong>
+          <span data-i18n="dropHint">Drop an audio file here, or choose a file</span>
+          <small data-i18n="dropTypes">WAV, MP3, M4A, FLAC, OGG · up to 10 MiB</small>
+        </label>
+        <input id="audio-file" type="file" accept="audio/*,.wav,.mp3,.m4a,.flac,.ogg,.opus,.aac,.aiff,.aif,.wma" hidden />
+      </section>
+      <div id="mic-visualizer" class="mic-visualizer" hidden>
+        <div class="mic-heading">
+          <span class="mic-identity"><svg class="icon"><use id="mic-wave-icon" href="#i-mic" /></svg><span id="mic-wave-label">Your voice</span></span>
+          <span id="mic-pitch" class="mic-pitch"></span>
+        </div>
+        <canvas id="mic-waveform" aria-hidden="true"></canvas>
+        <span class="sr-only" data-i18n="waveformDescription">Live microphone waveform. Height follows volume; closer waves indicate higher pitch.</span>
+      </div>
+      <section
+        id="caption-area"
+        class="caption-area"
+        aria-live="polite"
+        aria-atomic="false"
+      >
+        <div id="caption" class="caption">
+          <span id="caption-speaker" class="caption-speaker" hidden>DUOPRA</span>
+          <p id="caption-text">Say what’s on your mind. Interrupt whenever you like.</p>
+          <span class="speech-wave" aria-hidden="true"
+            ><i></i><i></i><i></i><i></i><i></i
+          ></span>
+        </div>
+      </section>
+      <div class="hud" id="hud" data-phase="idle" aria-label="Live telemetry">
+        <div class="hud-cell">
+          <i class="hud-light"></i>
+          <span class="hud-label" data-i18n="statState">State</span>
+          <b id="hud-state">Idle</b>
+        </div>
+        <div class="hud-cell hud-stream">
+          <span class="hud-label" data-i18n="statUnits">Units sent</span>
+          <b id="hud-units">0000</b>
+          <span class="hud-ticks" id="hud-ticks" aria-hidden="true"
+            ><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i
+          ></span>
+        </div>
+        <button type="button" class="hud-cell hud-link" id="hud-actions-cell">
+          <span class="hud-label" data-i18n="statActions">Actions</span>
+          <b id="hud-actions">0</b>
+        </button>
+        <div class="hud-cell">
+          <span class="hud-label">T+</span>
+          <b id="session-clock">00:00</b>
+        </div>
+      </div>
+      <div class="control-area">
+        <div class="mode-switch" role="group" aria-label="Input mode">
+          <span class="mode-indicator" aria-hidden="true"></span>
+          <button
+            class="mode-button pressable"
+            data-mode="audio"
+            aria-pressed="true"
+          >
+            <svg class="icon"><use href="#i-mic" /></svg
+            ><span data-i18n="voiceMode">Voice</span>
+          </button>
+          <button class="mode-button pressable" data-mode="file" aria-pressed="false">
+            <svg class="icon"><use href="#i-upload" /></svg
+            ><span data-i18n="audioMode">Upload audio</span>
+          </button>
+        </div>
+        <aside id="setup-banner" class="setup-banner" hidden>
+          <div><strong data-i18n="setupTitle">The voice model is not ready</strong>
+            <p data-i18n="setupIntro">Wait for server startup to finish before starting a conversation.</p></div>
+          <button id="complete-settings" class="secondary-button pressable" data-i18n="completeSettings">Device settings</button>
+        </aside>
+        <div class="session-controls">
+          <button
+            id="mute-mic"
+            class="round-control pressable"
+            hidden
+            aria-pressed="false"
+            data-label="muteMic"
+            aria-label="Mute microphone"
+          >
+            <svg class="icon"><use href="#i-mic" /></svg>
+          </button>
+          <button id="start-button" class="start-button pressable">
+            <span id="start-label" data-i18n="start">Start a conversation</span
+            ><svg class="icon start-arrow"><use href="#i-arrow" /></svg>
+          </button>
+          <button id="stop-button" class="stop-button pressable" hidden>
+            <span></span><span data-i18n="end">End conversation</span>
+          </button>
+          <button
+            id="mute-output"
+            class="round-control pressable"
+            hidden
+            aria-pressed="false"
+            data-label="muteOutput"
+            aria-label="Mute speaker"
+          >
+            <svg class="icon"><use href="#i-sound" /></svg>
+          </button>
+        </div>
+        <p id="control-hint" class="control-hint" data-i18n="startHint">
+          Your microphone turns on only when you begin.
+        </p>
+        <div id="upload-progress" class="upload-progress" hidden>
+          <span></span>
+        </div>
+      </div>
+    </main>
+    <footer class="page-footer">
+      <span class="footer-tag"
+        ><i></i
+        ><span data-i18n="footer">FULL-DUPLEX · 1 S INPUT UNITS · LOCAL RUNTIME</span></span
+      >
+      <span class="footer-links">
+        <span class="footer-copy" data-i18n="copyright">© 2026 DUOPRA</span>
+      </span>
+    </footer>
+    <div id="agency-scrim" class="agency-scrim" aria-hidden="true"></div>
+    <aside
+      id="agency-panel"
+      class="agency-panel"
+      aria-label="Dashboard"
+      aria-hidden="true"
+      inert
+    >
+      <div class="sheet-handle" id="agency-handle">
+        <span class="grabber" aria-hidden="true"></span>
+        <div class="tray-heading">
+          <div class="sheet-tabs" role="tablist" aria-label="Dashboard">
+            <button type="button" class="sheet-tab selected" role="tab" aria-selected="true" data-tab="capabilities"
+              ><span data-i18n="tabCapabilities">Capabilities</span></button
+            ><button type="button" class="sheet-tab" role="tab" aria-selected="false" data-tab="runtime"
+              ><span data-i18n="tabRuntime">Runtime</span><b id="tab-runtime-count" class="count" hidden>0</b></button
+            ><button type="button" class="sheet-tab" role="tab" aria-selected="false" data-tab="personal"><span data-i18n="tabPersonal">日程</span></button
+            ><span class="tab-indicator" aria-hidden="true"></span>
+          </div>
+          <button
+            id="close-agency"
+            class="icon-button"
+            data-label="minimize"
+            aria-label="Minimize dashboard"
+          >
+            <svg class="icon"><use href="#i-chevron" /></svg>
+          </button>
+        </div>
+      </div>
+      <div class="panel-body" id="agency-body">
+        <section class="sheet-pane" data-pane="capabilities" role="tabpanel">
+          <div class="cap-summary">
+            <div class="cap-count"><b id="cap-connected">0</b><span>/<i id="cap-total">0</i></span></div>
+            <div class="cap-summary-text">
+              <strong data-i18n="capSummary">capabilities connected</strong>
+              <span id="cap-runtime-line">—</span>
+            </div>
+            <button id="cap-refresh" class="icon-button" type="button" data-label="capRefresh" aria-label="Refresh">
+              <svg class="icon"><use href="#i-reset" /></svg>
+            </button>
+          </div>
+          <p class="cap-updated" id="cap-updated"></p>
+          <p class="cap-offline" id="cap-offline" data-i18n="capOffline" hidden>The runtime can’t be reached right now.</p>
+          <div id="cap-groups"></div>
+          <section class="cap-group" id="cap-tools" hidden>
+            <div class="section-head">
+              <h3 data-i18n="capGroup_tools">Function tools</h3>
+              <span class="section-count" id="tools-count"></span>
+            </div>
+            <p class="tools-banner" id="tools-banner"></p>
+            <div class="tool-domains" id="tool-domains"></div>
+            <input id="tool-search" type="search" autocomplete="off" spellcheck="false" placeholder="Search tools" />
+            <div class="tool-list" id="tool-list"></div>
+          </section>
+        </section>
+        <section class="sheet-pane" data-pane="runtime" role="tabpanel" hidden>
+          <p class="tray-description" data-i18n="agencyHint">
+            Tool events and playback measurements appear here. Each result labels its real, local or demonstration source.
+          </p>
+          <div class="stat-grid" id="agency-stats">
+            <div class="stat"><small data-i18n="statState">State</small><b id="stat-state">Idle</b></div>
+            <div class="stat"><small data-i18n="statQueue">Playback queue</small><b id="stat-queue">0.00 s</b></div>
+            <div class="stat"><small data-i18n="statUnits">Units sent</small><b id="stat-units">0000</b></div>
+            <div class="stat"><small data-i18n="statReceipt">Received → played</small><b id="stat-receipt">—</b></div>
+          </div>
+          <section class="panel-section" id="calls-section">
+            <div class="section-head">
+              <h3 data-i18n="callsTitle">Tool calls</h3>
+              <span class="section-count" id="calls-count"></span>
+            </div>
+            <div id="call-list" class="call-list"></div>
+          </section>
+          <section class="panel-section">
+            <div class="section-head">
+              <h3 data-i18n="logTitle">Stream log</h3>
+              <button id="clear-log" class="text-button" data-i18n="clearLog">Clear</button>
+            </div>
+            <div id="agency-log" class="stream-log" aria-live="polite">
+              <p class="empty-copy small" data-i18n="logEmpty">Events appear here as the session runs.</p>
+            </div>
+          </section>
+        </section>
+        <section class="sheet-pane" data-pane="personal" role="tabpanel" hidden><div id="personal-panel"></div></section>
+      </div>
+    </aside>
+    <dialog
+      id="history-dialog"
+      class="dialog history-dialog"
+      aria-labelledby="history-title"
+    >
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow" data-i18n="yourConversation">YOUR CONVERSATION</p>
+          <h2 id="history-title" data-i18n="historyTitle">
+            A thread of moments.
+          </h2>
+        </div>
+        <button
+          class="icon-button dialog-close"
+          data-label="close"
+          aria-label="Close"
+        >
+          <svg class="icon"><use href="#i-close" /></svg>
+        </button>
+      </div>
+      <div id="transcript" class="transcript">
+        <p class="empty-copy" data-i18n="historyEmpty">
+          What Duopra says will find a home here.
+        </p>
+      </div>
+      <div class="dialog-footer">
+        <button id="reset-button" class="secondary-button pressable">
+          <svg class="icon"><use href="#i-reset" /></svg
+          ><span data-i18n="newConversation">Start fresh</span></button
+        ><button
+          id="save-transcript"
+          class="text-button"
+          data-i18n="saveTranscript"
+        >
+          Save conversation
+        </button>
+      </div>
+    </dialog>
+    <dialog
+      id="settings-dialog"
+      class="dialog settings-dialog"
+      aria-label="Settings" data-label="settings"
+    >
+      <div class="dialog-heading">
+        <div>
+          <p class="eyebrow" data-i18n="makeItYours">MAKE IT YOURS</p>
+        </div>
+        <button
+          class="icon-button dialog-close"
+          data-label="close"
+          aria-label="Close"
+        >
+          <svg class="icon"><use href="#i-close" /></svg>
+        </button>
+      </div>
+      <form id="settings-form">
+        <fieldset>
+          <legend data-i18n="devices">Your devices</legend>
+          <label
+            ><span data-i18n="microphone">Microphone</span
+            ><select id="microphone-device">
+              <option value="" data-i18n="defaultDevice">System default</option>
+            </select></label
+          >
+          <p class="field-hint" data-i18n="deviceHint">
+            Device names appear after you allow access.
+          </p>
+        </fieldset>
+        <p id="settings-message" class="field-hint" role="status"></p>
+        <div class="dialog-footer">
+          <span class="connection"
+            ><span class="status-dot"></span>Duopra Runtime</span
+          ><button
+            type="submit"
+            class="secondary-button pressable"
+            id="save-settings"
+            data-i18n="saveSettings"
+          >
+            Save settings
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <div id="toast" class="toast" role="status" hidden></div>
+    <script type="module" src="/static/app.js?v=20261027-duopra-r9-personal"></script>
+    <script type="module" src="/static/harness.js?v=20261106-webtools-safe"></script>
+  </body>
+</html>

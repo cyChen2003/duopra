@@ -1,0 +1,53 @@
+.env
+.env.*
+!.env.example
+.venv/
+.conda/
+.conda-*/
+.cache/
+__pycache__/
+*.py[cod]
+node_modules/
+.secrets/
+private/
+state/
+runs/
+logs/
+models/
+*.sqlite*
+*.db
+*.pt
+*.pth
+*.safetensors
+*.bin
+*.wav
+*.flac
+*.ogg
+*.mp3
+*.mp4
+*.pem
+*.key
+*.log
+*.jsonl
+*.tar*
+*.zip
+coverage/
+.pytest_cache/
+release.json
+access.json
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# macOS
+.DS_Store
+
+# The project page (docs/, GitHub Pages) publishes its recordings and demo video
+!docs/assets/audio/*.mp3
+!docs/assets/video/*.mp4
+!docs/assets/video/*.webm
+
+# Your own tools are local configuration (backend/tools/custom/README.md)
+backend/tools/custom/*.json

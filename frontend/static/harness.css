@@ -1,0 +1,63 @@
+.harness-launch{position:fixed;right:24px;bottom:24px;z-index:35;display:flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid #ffffff24;border-radius:18px;background:#17191ced;color:#f2f3f5;box-shadow:0 8px 32px #0003;font:500 13px system-ui;cursor:pointer;backdrop-filter:blur(16px);transition:transform .12s,background .12s}
+.harness-launch:active,.h-button:active{transform:scale(.98)}.h-dot{width:7px;height:7px;border-radius:50%;background:#8a8c91}.h-dot.ready{background:#81cfad}.h-dot.running{background:#9cbfff}
+.harness-dialog{padding:0;width:min(820px,calc(100vw - 32px));max-height:88dvh;overflow:auto;border:1px solid #ffffff20;border-radius:24px;background:#141518;color:#f2f3f5;box-shadow:0 28px 100px #0007;font:14px/1.6 system-ui}.harness-dialog::backdrop{background:#0008;backdrop-filter:blur(8px)}
+.h-top{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:22px 26px 16px;background:#141518f5;border-bottom:1px solid #ffffff10}.h-top h2{margin:0;font-size:20px;font-weight:600;letter-spacing:-.4px}.h-eyebrow{font-size:10px;letter-spacing:1.6px;color:#99a0aa;margin-bottom:5px}.h-close{border:0;background:#ffffff0e;border-radius:50%;width:30px;height:30px;color:inherit;font-size:20px;cursor:pointer}
+.h-tabs{display:flex;padding:14px 26px 0;gap:6px}.h-tabs button{border:0;background:transparent;color:#a8acb4;padding:8px 14px;border-radius:10px;font:inherit;cursor:pointer}.h-tabs button[aria-selected=true]{background:#ffffff12;color:#fff}.h-page{padding:18px 26px 26px}.h-page[hidden]{display:none}.h-note{color:#a6acb6;font-size:12px;margin:8px 0 16px}.h-fields{display:grid;grid-template-columns:1fr 1fr;gap:16px}.h-fields label{display:grid;gap:6px;font-size:12px;color:#c6cad2}.h-wide{grid-column:1/-1}
+.h-fields input,.h-fields select,.h-test-input{box-sizing:border-box;width:100%;background:#090a0c;border:1px solid #ffffff20;border-radius:11px;color:#f3f4f6;padding:10px 12px;font:14px system-ui;min-width:0}.h-fields input:focus,.h-fields select:focus,.h-test-input:focus{outline:2px solid #b9d5ff;outline-offset:2px}.h-actions{display:flex;align-items:center;gap:12px;margin-top:18px;flex-wrap:wrap}.h-button{border:1px solid #ffffff20;border-radius:11px;background:#eef0f4;color:#17191c;padding:10px 16px;font:600 13px system-ui;cursor:pointer;transition:transform .12s}.h-button.secondary{background:#ffffff09;color:#d4d7dd}.h-button:disabled{opacity:.45;cursor:wait}.h-message{color:#a9d9bd;font-size:12px}.h-message.error{color:#ffb1ab}.h-tools{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}.h-chip{border:1px solid #ffffff15;background:#ffffff05;border-radius:9px;padding:5px 9px;font:11px ui-monospace,monospace;color:#b3bac5}
+.h-protocol{padding:15px;background:#090a0c;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.7 ui-monospace,monospace}.h-test-input{min-height:80px;resize:vertical}.h-task{border:1px solid #ffffff15;border-radius:16px;background:#ffffff03;margin-bottom:12px;padding:16px}.h-task-head{display:flex;justify-content:space-between;gap:12px;font-size:12px;color:#a6adba}.h-task p{margin:9px 0;overflow-wrap:anywhere}.h-status{color:#b9d5ff}.h-task details{margin-top:12px;font-size:12px}.h-task pre{white-space:pre-wrap;overflow-wrap:anywhere;font:11px/1.7 ui-monospace,monospace;max-height:260px;overflow:auto}.h-step{display:flex;align-items:flex-start;gap:9px;margin:9px 0;font-size:12px}.h-step::before{content:' ';flex:0 0 5px;height:5px;margin-top:7px;border-radius:50%;background:#a9bacf}.h-empty{padding:32px 12px;color:#a1a8b3;text-align:center}.h-source{font-size:10px;border:1px solid #ffffff20;border-radius:5px;padding:2px 6px;color:#a6adba}.h-result{padding:10px 12px;border-left:2px solid #81cfad;background:#81cfad08;border-radius:0 8px 8px 0}
+@media(max-width:600px){.harness-launch{right:14px;bottom:18px;padding:10px 13px}.harness-dialog{width:calc(100vw - 16px);max-height:94dvh;border-radius:20px}.h-top,.h-page{padding-left:18px;padding-right:18px}.h-tabs{padding-left:18px;padding-right:18px}.h-fields{grid-template-columns:1fr}.h-fields input,.h-fields select,.h-test-input,.h-hero input{font-size:16px}}
+:root[data-theme=light] .harness-dialog{background:#fafbfc;color:#20242b;border-color:#cdd1d8}
+:root[data-theme=light] .h-top{background:#fafbfcf5;border-color:#dce0e6}
+:root[data-theme=light] .harness-launch{background:#fafbfced;color:#20242b;border-color:#cdd1d8}
+:root[data-theme=light] .h-close,:root[data-theme=light] .h-tabs button[aria-selected=true]{background:#e6e9ee;color:#20242b}
+:root[data-theme=light] .h-tabs button,:root[data-theme=light] .h-note,:root[data-theme=light] .h-eyebrow,:root[data-theme=light] .h-empty,:root[data-theme=light] .h-task-head{color:#596272}
+:root[data-theme=light] .h-fields label{color:#384252}
+:root[data-theme=light] .h-fields input,:root[data-theme=light] .h-fields select,:root[data-theme=light] .h-test-input,:root[data-theme=light] .h-protocol{background:#f0f2f5;color:#20242b;border-color:#bdc4ce}
+:root[data-theme=light] .h-button{background:#20242b;color:#fff;border-color:#20242b}
+:root[data-theme=light] .h-button.secondary{background:#e9edf2;color:#20242b;border-color:#cdd1d8}
+:root[data-theme=light] .h-task,:root[data-theme=light] .h-chip,:root[data-theme=light] .h-source{background:#f0f2f5;color:#455164;border-color:#cdd1d8}
+:root[data-theme=light] .h-status{color:#315c92}
+:root[data-theme=light] .h-message{color:#216342}
+:root[data-theme=light] .h-message.error{color:#9b3029}
+@media(prefers-contrast:more){.harness-dialog,.h-fields input,.h-fields select,.h-test-input,.h-task{border-width:2px}.h-note,.h-eyebrow{color:inherit}}
+@media(prefers-reduced-transparency:reduce){.harness-launch,.h-top{backdrop-filter:none}.harness-dialog::backdrop{backdrop-filter:none}}
+@media(prefers-reduced-motion:reduce){.harness-launch,.h-button{transition:none}}
+.h-stages{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0;color:#959dac;font-size:11px}.h-stages span{padding:5px 8px;border-radius:8px;background:#ffffff06}.h-stages .active{color:#b5d0f5;background:#92baff13}.h-section-label{font-size:11px;letter-spacing:.03em;color:#a5adba;margin-top:16px}.h-task-request{font-weight:550}.h-tool-detail{padding:9px 11px;background:#ffffff04;border:1px solid #ffffff0d;border-radius:10px}.h-tool-detail summary{cursor:pointer;overflow-wrap:anywhere}.h-observation{border-top:1px solid #ffffff12;padding-top:10px}.h-evidence{display:flex;flex-direction:column;gap:7px}.h-source-link{color:#b5d0f5;font-size:12px;overflow-wrap:anywhere}.h-next-action{font-size:12px;color:#b8c6da}.h-handoff-rules{border:1px solid #ffffff14;border-radius:12px;padding:10px 14px;margin:14px 0;font-size:12px}.h-chip.live{border-color:#86cda84d;color:#9fd9b9}.h-note.error{color:#ffb1ab}
+:root[data-theme=light] .h-stages span,:root[data-theme=light] .h-tool-detail{background:#e9edf2;color:#47556b;border-color:#d4dbe4}:root[data-theme=light] .h-stages .active{color:#274e80;background:#dae6f7}:root[data-theme=light] .h-section-label,:root[data-theme=light] .h-next-action{color:#47556b}:root[data-theme=light] .h-source-link{color:#24598f}:root[data-theme=light] .h-handoff-rules{border-color:#cdd1d8}:root[data-theme=light] .h-chip.live{color:#246243;border-color:#80b69b}
+
+/* --- Key-first configuration surface (r4) ---------------------------------
+   The server already defaults protocol=deepseek and the DeepSeek base URL, so
+   pasting a key is the only required step. The layout now says so: API Key is
+   the hero field, everything else folds away. The fold uses grid-template-rows
+   rather than display:none so the collapsed inputs stay rendered, measurable
+   and reachable by the acceptance gate. */
+.h-hero{display:grid;gap:7px;font-size:12px;color:#c6cad2}
+.h-hero input{box-sizing:border-box;width:100%;background:#090a0c;border:1px solid #ffffff2e;border-radius:13px;color:#f3f4f6;padding:14px;font:15px system-ui;min-width:0;letter-spacing:.01em}
+.h-hero input:focus{outline:2px solid #b9d5ff;outline-offset:2px}
+.h-endpoint{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 0}
+.h-endpoint-summary{font:11px/1.6 ui-monospace,monospace;color:#b3bac5;background:#ffffff06;border:1px solid #ffffff14;border-radius:8px;padding:4px 8px;overflow-wrap:anywhere}
+.h-endpoint-hint{font-size:12px;color:#e8c98b}
+.h-presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.h-preset,.h-disclose,.h-inline-fix{border:1px solid #ffffff20;background:#ffffff08;color:#d4d7dd;border-radius:10px;padding:7px 12px;font:500 12px system-ui;cursor:pointer;transition:transform .12s,background .12s}
+.h-inline-fix{color:#b5d0f5;padding:3px 9px}
+.h-preset:active,.h-disclose:active,.h-inline-fix:active{transform:scale(.97)}
+.h-disclose::after{content:' \25BE';opacity:.6}
+.h-disclose[aria-expanded=true]::after{content:' \25B4'}
+.h-advanced{display:grid;grid-template-rows:0fr;opacity:0;margin-top:0;transition:grid-template-rows .34s cubic-bezier(.32,.72,0,1),opacity .22s ease,margin-top .34s cubic-bezier(.32,.72,0,1)}
+.h-advanced>.h-fields{overflow:hidden;min-height:0}
+.h-advanced[data-open=true]{grid-template-rows:1fr;opacity:1;margin-top:16px}
+.h-message{color:#a6acb6}.h-message.done{color:#a9d9bd}.h-message.warn{color:#e8c98b}
+.harness-dialog.h-in{animation:h-materialize .4s cubic-bezier(.32,.72,0,1)}
+@keyframes h-materialize{from{opacity:0;transform:scale(.97) translateY(8px)}to{opacity:1;transform:none}}
+@keyframes h-appear{from{opacity:0}to{opacity:1}}
+:root[data-theme=light] .h-hero{color:#384252}
+:root[data-theme=light] .h-hero input{background:#f0f2f5;color:#20242b;border-color:#b3bbc7}
+:root[data-theme=light] .h-endpoint-summary{background:#eef1f5;color:#47556b;border-color:#cdd1d8}
+:root[data-theme=light] .h-endpoint-hint{color:#8a5a12}
+:root[data-theme=light] .h-preset,:root[data-theme=light] .h-disclose,:root[data-theme=light] .h-inline-fix{background:#e9edf2;color:#20242b;border-color:#cdd1d8}
+:root[data-theme=light] .h-inline-fix{color:#24598f}
+:root[data-theme=light] .h-message{color:#596272}
+:root[data-theme=light] .h-message.done{color:#216342}
+:root[data-theme=light] .h-message.warn{color:#8a5a12}
+@media(prefers-contrast:more){.h-hero input,.h-preset,.h-disclose,.h-inline-fix,.h-endpoint-summary{border-width:2px}.h-endpoint-hint,.h-message{color:inherit}}
+@media(prefers-reduced-motion:reduce){.h-preset,.h-disclose,.h-inline-fix{transition:none}.h-advanced{transition:opacity .15s ease}.harness-dialog.h-in{animation:h-appear .2s ease}}

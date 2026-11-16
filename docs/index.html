@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Project page of github.com/cyChen2003/duopra, served by GitHub Pages from
+     main /docs at https://cychen2003.github.io/duopra/ (zh/ is the Chinese page).
+     The demo video, the paper, the weights and the public code link are switched
+     on in both pages at once with site-work/build/release.py; by hand, set
+     data-src on <figure id="film"> and turn the matching <li data-res> pill into
+     a link. Authors follow the paper's main.tex: keep .authors, .affils, .marks
+     and the BibTeX entry in #cite in step with it. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Duopra: From Full-Duplex Conversation to Full-Duplex Agency</title>
+<meta name="description" content="Duopra is a full-duplex voice agent: it listens and speaks at the same time and decides on its own when to act, sending tool calls mid-sentence that are never spoken aloud. The highest Pass@1 among open-source systems on Full-Duplex-Bench v3.">
+<meta property="og:title" content="Duopra: From Full-Duplex Conversation to Full-Duplex Agency">
+<meta property="og:description" content="A voice agent that listens, speaks and acts on its own: tool calls go out while it is still speaking.">
+<meta property="og:image" content="https://cychen2003.github.io/duopra/assets/og.png">
+<meta property="og:url" content="https://cychen2003.github.io/duopra/">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" type="image/svg+xml" href="assets/mark.svg">
+<link rel="canonical" href="https://cychen2003.github.io/duopra/">
+<link rel="alternate" hreflang="en" href="https://cychen2003.github.io/duopra/">
+<link rel="alternate" hreflang="zh" href="https://cychen2003.github.io/duopra/zh/">
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/inter-latin.woff2" crossorigin>
+<link rel="stylesheet" href="styles.css">
+<script>
+/* content that eases in is hidden only while the script is alive to show it */
+document.documentElement.classList.add("js");
+setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classList.remove("js"); }, 2500);
+</script>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="12" y="12" width="40" height="40" rx="10"/><path d="M22 26h18l-5.2-5.2M42 38H24l5.2 5.2"/></svg>
+      Duopra
+    </a>
+    <nav class="nav-links" id="nav-links" aria-label="Sections">
+      <a href="#overview">Overview</a>
+      <a href="#demo">Demo</a>
+      <a href="#method">How it works</a>
+      <a href="#results">Results</a>
+      <a href="#paper">Paper</a>
+    </nav>
+    <div class="nav-end">
+      <div class="lang-switch" role="group" aria-label="Language"><a href="zh/" hreflang="zh" lang="zh">中文</a><span aria-current="true">English</span></div>
+      <a class="nav-cta" data-res="code" href="https://github.com/cyChen2003/duopra" rel="noreferrer">GitHub</a>
+      <button class="nav-menu" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Sections">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6l4.5 4.5L12.5 6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============================================================ hero -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-head" data-reveal-group>
+        <span class="eyebrow">Full-duplex voice agent · native tool calling</span>
+        <h1 class="title"><span class="word">Duopra</span><span class="say">From <span class="nb">full-duplex</span> conversation<br><em>to <span class="nb">full-duplex</span> agency.</em></span></h1>
+        <p class="lead">It listens and speaks at the same time, and decides on its own when to act.</p>
+      </div>
+
+      <!-- authors, as in the paper (main.tex) -->
+      <div class="hero-meta" data-reveal-group>
+        <p class="authors"><span class="au">Chiyu Chen<sup>1,2*</sup></span> <span class="au">Pengzhou Cheng<sup>3*</sup></span> <span class="au">Yuezhao Ma<sup>1</sup></span> <span class="au">Xiaocheng Li<sup>1</sup></span> <span class="au">Can Liu<sup>1</sup></span> <span class="au">Haonan Hu<sup>2</sup></span> <span class="au">Yao Yao<sup>1</sup></span> <span class="au">Yifei Yang<sup>1</sup></span> <span class="au">Yijie Lu<sup>1</sup></span> <span class="au">Taolei Wang<sup>1</sup></span> <span class="au">Yansi Li<sup>1</sup></span> <span class="au">Muhuan Wu<sup>4</sup></span> <span class="au">Zhuosheng Zhang<sup>1†</sup></span> <span class="au">Gongshen Liu<sup>1†</sup></span> <span class="au">Chenglu Sun<sup>2‡</sup></span></p>
+        <p class="affils"><span><sup>1</sup>Shanghai Jiao Tong University</span> <span><sup>2</sup>Tencent</span> <span><sup>3</sup>Shanghai University</span> <span><sup>4</sup>Independent Researcher</span></p>
+        <p class="marks"><span><sup>*</sup>Equal contribution</span> <span><sup>†</sup>Corresponding authors</span> <span><sup>‡</sup>Project lead</span></p>
+        <ul class="links" aria-label="Paper resources">
+          <li data-res="paper"><span class="chip-link is-soon" aria-disabled="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.5 1.75H4.25A1.5 1.5 0 0 0 2.75 3.25v9.5a1.5 1.5 0 0 0 1.5 1.5h7.5a1.5 1.5 0 0 0 1.5-1.5v-7.5zM9.5 1.75v3.5h3.75M5.5 8.75h5M5.5 11.25h3.5"/></svg>Paper <small>soon</small></span></li>
+          <li data-res="code"><a class="chip-link" href="https://github.com/cyChen2003/duopra" rel="noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4.5L2 8l3.5 3.5M10.5 4.5L14 8l-3.5 3.5"/></svg>Code</a></li>
+          <li data-res="weights"><a class="chip-link" href="https://huggingface.co/Chechen123/Duopra" rel="noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.75l5.5 3.1v6.3L8 14.25l-5.5-3.1v-6.3zM2.5 4.85L8 8l5.5-3.15M8 8v6.25"/></svg>Weights</a></li>
+          <li><a class="chip-link" href="#cite"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6"/></svg>BibTeX</a></li>
+        </ul>
+      </div>
+
+      <!-- the app's orb, playing one recorded session (main.js) -->
+      <figure class="orb" id="orb" data-reveal>
+        <div class="orb-stage"><canvas aria-hidden="true"></canvas></div>
+        <figcaption class="orb-cap">
+          <div class="orb-line"><span class="vl you" aria-hidden="true"><i></i><b>You</b></span><span class="vl agent" aria-hidden="true"><i></i><b>Duopra</b></span><span class="vl tool" aria-hidden="true"><i></i><b>Action</b></span><span class="rule" aria-hidden="true"></span><span class="orb-state">Recorded session</span></div>
+          <div class="orb-say"><q>It's actually 150 euros, not 100.</q>Duopra hears the correction, decides on its own to call the tool, and sends the call while it is still speaking.</div>
+          <button class="orb-play" type="button" aria-pressed="false"><svg class="i-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.4 1.7a.6.6 0 0 0-.9.5z"/></svg><svg class="i-pause" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 2.5h2v9H4zM8 2.5h2v9H8z"/></svg><span>Play the session</span><small>0:30</small></button>
+        </figcaption>
+      </figure>
+
+      <!-- demo video: set data-src (and optionally data-poster), see main.js setupFilm -->
+      <figure class="film" id="film" data-src="assets/video/duopra-demo.mp4" data-poster="assets/video/duopra-poster.webp" style="--film-ar:2560/1320" data-reveal>
+        <div class="film-frame">
+          <div class="film-empty">
+            <span class="film-glyph" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3.5 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.4 1.7a.6.6 0 0 0-.9.5z"/></svg></span>
+            <b>Demo video</b>
+            <span>Coming soon</span>
+          </div>
+        </div>
+        <figcaption>Recorded in the Duopra app (in Chinese; English at the end). While it talks, Duopra checks tomorrow&#x27;s weather in Shanghai with a tool, hands the day&#x27;s itinerary and a small budget sum to the backend model as one more tool, and keeps up when the user cuts in to turn its story from spring to autumn, then into English.</figcaption>
+      </figure>
+
+      <div class="bignums" data-reveal-group>
+        <div class="bn"><b><span class="h">#</span>1</b><span class="k">among open-source systems on Full-Duplex-Bench v3</span><small>49.3% Pass@1 with an open backend. The next open-source result, 48.0%, is self-reported with another harness and judge.</small></div>
+        <div class="bn"><b><span class="count" data-to="47.7">47.7</span><i>%</i></b><span class="k">of tasks passed, calling tools itself</span><small>Pass@1 over 300 sessions, with no backend involved.</small></div>
+        <div class="bn"><b><span class="count" data-to="1.8">1.8</span><i>×</i></b><span class="k">the pass rate, from full-duplex RL</span><small>26.0% after supervised fine-tuning, 47.7% after reinforcement learning, on the same 300 sessions.</small></div>
+        <div class="bn"><b><span class="count" data-to="91.3">91.3</span><i>%</i></b><span class="k">of interruptions answered</span><small>Full-Duplex-Bench v1.0, three seeds, in our streaming pipeline.</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================= overview -->
+  <section class="intro" id="overview">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="eyebrow">Overview</span>
+        <h2 class="statement" data-lit>Listen. Speak. <span class="hl-w">Act.</span></h2>
+        <p>Full-duplex models already know when to listen and when to speak. Duopra also knows when to act — it calls tools itself, mid-sentence, through actions that are never voiced.</p>
+      </div>
+
+      <div class="caps" data-reveal-group>
+        <article class="cap">
+          <div class="cap-vis units" aria-hidden="true">
+            <div class="u-row"><i class="l"></i><i class="l"></i><i class="l"></i><i class="l"></i><i class="l"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="l"></i><i class="l"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i></div>
+            <div class="u-key"><span><i class="l"></i>listen</span><span><i class="s"></i>speak</span><span class="u-cap">one cell, one second</span></div>
+          </div>
+          <h3>Listens while it speaks</h3>
+          <p>Every second, Duopra decides whether to listen or to speak. It takes the turn when you finish, holds back in a mid-sentence pause and gives way when you cut in.</p>
+          <div class="cap-ev"><button class="hear" type="button" data-hear="1@6.9"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.4 1.7a.6.6 0 0 0-.9.5z"/></svg>Hear it hold back from 0:07</button></div>
+        </article>
+        <article class="cap">
+          <div class="cap-vis mini" aria-hidden="true" data-lane="0"></div>
+          <h3>Acts mid-sentence, silently</h3>
+          <p>Tool calls go out on a private channel while Duopra is still talking. The call itself is never spoken — only its result is.</p>
+          <div class="cap-ev"><button class="hear" type="button" data-hear="0@18.56"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.4 1.7a.6.6 0 0 0-.9.5z"/></svg>Hear the call at 0:19</button></div>
+        </article>
+        <article class="cap">
+          <div class="cap-vis fix" aria-hidden="true">
+            <code><span class="k">amount</span>: <s>100</s> <b>150</b></code>
+            <q>It's actually 150 euros, not 100.</q>
+          </div>
+          <h3>Keeps up with corrections</h3>
+          <p>Change a value halfway through a request and only the final value reaches the tool. The abandoned 100 never does.</p>
+          <div class="cap-ev"><button class="hear" type="button" data-hear="0@6.46"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.4 1.7a.6.6 0 0 0-.9.5z"/></svg>Hear the correction at 0:06</button></div>
+        </article>
+        <article class="cap">
+          <div class="cap-vis two" aria-hidden="true">
+            <div class="calls"><code>modify_autopay(mortgage → savings)</code><code>modify_autopay(credit_card → checking)</code></div>
+            <div class="line"><i style="left:63.1%"></i><i style="left:77.7%"></i></div>
+          </div>
+          <h3>Several steps in one request</h3>
+          <p>Two changes asked for in one hesitant breath become two calls, and each is reported only after its result comes back.</p>
+          <div class="cap-ev"><button class="hear" type="button" data-hear="1@26.58"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.4 1.7a.6.6 0 0 0-.9.5z"/></svg>Hear both calls from 0:26</button></div>
+        </article>
+        <article class="cap">
+          <div class="cap-vis via" aria-hidden="true">
+            <div class="cl"><code>flight.status(flight: "CA1701")</code><span>a tool</span></div>
+            <div class="cl q"><code>query(task: "Rebook me for Friday")</code><span>your backend agent</span></div>
+          </div>
+          <h3>Calls a backend like any tool</h3>
+          <p>Connect a backend model and it becomes one more tool, <code>query(task)</code>. Duopra hands work over the way it calls any tool: mid-conversation, with no pause and no hand-off you can hear.</p>
+        </article>
+        <article class="cap">
+          <div class="cap-vis schema" aria-hidden="true">
+            <pre>{ <span class="k">"name":</span> <span class="n">"home.lights"</span>,
+  <span class="k">"description":</span> "Lights on or off",
+  <span class="k">"parameters":</span> {
+    "room": "string",
+    "on": "boolean" } }<span class="yours">your tool</span></pre>
+          </div>
+          <h3>Bring your own tools</h3>
+          <p>A tool is a JSON schema: a name, a description and its parameters, supplied at run time. Write your own — your calendar, your database, your home — and Duopra can call it.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================== recordings -->
+  <section id="demo" class="alt">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="eyebrow">Recorded sessions</span>
+        <h2>Watch one arrive, second by second.</h2>
+        <p>Two sessions from the evaluation, replayed in recorded time.</p>
+      </div>
+      <div id="replay" data-reveal></div>
+      <dl class="notes" data-reveal>
+        <div><dt>The recordings</dt><dd>Two selected sessions, not a success rate. Transcripts, tool calls and the order they happened in come from the saved run; the bars are measured from the audio.</dd></div>
+        <div><dt>The audio</dt><dd>User audio comes from <a href="https://github.com/DanielLin94144/Full-Duplex-Bench/tree/main/v3" rel="noreferrer">Full-Duplex-Bench v3</a>. The assistant audio is recorded output from the same run, voiced with the original projector rather than the final one.</dd></div>
+        <div><dt>Tools and text</dt><dd>The tools are benchmark mocks — no live financial service is involved. The assistant transcript comes from ASR and may contain recognition errors.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ======================================================== method -->
+  <section id="method">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="eyebrow">How it works</span>
+        <h2>One policy decides what to say and what to do.</h2>
+        <p>Every second, Duopra reads the new audio and any tool results, then emits three things at once.</p>
+      </div>
+
+      <div class="bento" data-reveal-group>
+        <div class="tile eq span-6">
+          <div class="formula" aria-label="y sub t equals m sub t, w sub t, a sub t"><i>y</i><sub>t</sub> <span class="op">=</span> ( <i>m</i><sub>t</sub> <span class="op">,</span> <i>w</i><sub>t</sub> <span class="op">,</span> <i>a</i><sub>t</sub> )</div>
+          <div class="parts">
+            <div class="m"><b>Turn state</b>listen or speak</div>
+            <div class="w"><b>Words</b>voiced by the talker</div>
+            <div class="a"><b>Action</b>never voiced</div>
+          </div>
+          <p class="cap">One causal policy, conditioned on the audio so far, the observations injected so far and its own past outputs. Conversation and tool use are decided together, not handed between components.</p>
+        </div>
+        <div class="tile span-3">
+          <h3>The backend is one more tool.</h3>
+          <p>A background agent is exposed as <code>query(task)</code>, whose argument is a self-contained description of the user's task. Calling a tool directly or delegating is the same kind of decision, made by the same policy — there is no external dispatcher.</p>
+        </div>
+        <div class="tile span-3">
+          <h3>Results land on unit boundaries.</h3>
+          <p>A runtime executes each call asynchronously and injects the result at the first one-second boundary after it returns. The model keeps listening and speaking while it waits, and reports a value only once it has arrived.</p>
+        </div>
+      </div>
+
+      <figure class="paperfig" data-reveal>
+        <a href="assets/paper/fig1-timeline.webp" target="_blank" rel="noopener"><img src="assets/paper/fig1-timeline.webp" width="2240" height="894" loading="lazy" decoding="async" alt="Two timelines of the same request. In the frontend–backend design the frontend, which cannot see the tool schemas, hands the task to the backend three times; Duopra sees the schemas, asks for the flight and the date, and calls flight.status itself, twice."></a>
+        <figcaption><b>Figure 1.</b> Why the frontend has to act (schematic, 1-s units). (a) With tool schemas visible only to the backend, the frontend knows <em>what</em> to do but not <em>how</em>: it hands off at once, and the answer and the change each cost another hand-off. (b) Duopra sees the schemas — the backend tool <code>query(task)</code> included — asks for both values and calls <code>flight.status</code> itself, then again with the new date.</figcaption>
+      </figure>
+
+      <div class="subhead" data-reveal>
+        <h3>Trained in three stages</h3>
+        <p>One stage for each problem: the form of an action, the decision to act, and a voice that drifts when the thinker changes.</p>
+      </div>
+      <div class="rail" data-reveal aria-hidden="true"><i></i></div>
+      <ol class="stages" data-reveal-group>
+        <li class="stage">
+          <span class="st-n"><i>1</i>Stage 1</span>
+          <h3>Protocol SFT</h3>
+          <p class="what">Teaches the form of an action.</p>
+          <p>Supervised fine-tuning of the thinker on synthetic sessions that demonstrate the protocol: call tools by schema, wait for the result before reporting it, ask only for missing values.</p>
+          <div class="st-out"><div><span>Duopra-SFT · Pass@1</span><b>26.0%</b><small>Calls are well formed, but 55% of sessions still end without one.</small></div></div>
+        </li>
+        <li class="stage">
+          <span class="st-n"><i>2</i>Stage 2</span>
+          <h3>Full-duplex RL</h3>
+          <p class="what">Teaches the decision to act.</p>
+          <p>Dr. GRPO on a thinker LoRA, eight rollouts per task, in a sandbox that plays the same scripted user to every rollout. Time-anchored deadlines and outcome tiers reward calls that are timely, complete and grounded.</p>
+          <div class="st-out"><div><span>Duopra · Pass@1</span><b><span class="from">26.0→</span>47.7%</b><small>Sessions without a call fall from 55% to 19%.</small></div></div>
+        </li>
+        <li class="stage">
+          <span class="st-n"><i>3</i>Stage 3</span>
+          <h3>Projector-only repair</h3>
+          <p class="what">Keeps the voice intelligible.</p>
+          <p>Post-training shifts the thinker's hidden states, which condition the talker. Only the projector between them is retrained, on cached features; the text, control tokens and calls are untouched.</p>
+          <div class="st-out"><div><span>Pilot · Chinese character error rate</span><b><span class="from">5.17→</span>1.78%</b><small>88 pilot samples; 2.05% before post-training.</small></div></div>
+        </li>
+      </ol>
+      <figure class="paperfig" data-reveal>
+        <a href="assets/paper/fig2-method.webp" target="_blank" rel="noopener"><img src="assets/paper/fig2-method.webp" width="2240" height="955" loading="lazy" decoding="async" alt="The three training stages. Stage 1 trains the thinker on unit-level sessions. Stage 2 trains a thinker LoRA with Dr. GRPO in a sandbox with a scripted user, a backend agent, simulated tools and a scorer. Stage 3 trains only the projector on cached hidden states."></a>
+        <figcaption><b>Figure 2.</b> Duopra's three training stages on Realtime-Venus-Audio; each row marks what its stage trains. <i>h<sub>t</sub></i>: thinker hidden state; <i>P</i>: projector; <i>c<sub>t</sub></i>: talker conditioning.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ======================================================= results -->
+  <section id="results" class="alt">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="eyebrow">Results</span>
+        <h2>Tools that actually get called.</h2>
+        <p>The highest pass rate among open-source systems on Full-Duplex-Bench v3.</p>
+      </div>
+
+      <div class="tile chart" data-reveal>
+        <h3>Pass@1 on Full-Duplex-Bench v3</h3>
+        <p class="sub">A session passes only when every executed call matches the gold call: right tool, every argument, no extra call.</p>
+        <div class="legend" aria-hidden="true">
+          <span><i class="ours"></i>Duopra, our harness</span><span><i class="rep"></i>As reported</span><span class="star-key"><b>*</b>Commercial system</span>
+        </div>
+        <div class="bars rank">
+          <div class="bl"><b>GPT-Realtime</b><span class="star">*</span></div><div class="bt rep" style="--w:100%" tabindex="0" role="img" data-tip="GPT-Realtime|60.0% Pass@1|Commercial system · as reported"><i></i></div><div class="bv">60.0<small>reported</small></div>
+          <div class="bl"><b>Gemini Live 3.1</b><span class="star">*</span></div><div class="bt rep" style="--w:90%" tabindex="0" role="img" data-tip="Gemini Live 3.1|54.0% Pass@1|Commercial system · as reported"><i></i></div><div class="bv">54.0<small>reported</small></div>
+          <div class="bl"><b>MOSS-Live</b><span class="star">*</span></div><div class="bt rep" style="--w:85%" tabindex="0" role="img" data-tip="MOSS-Live|51.0% Pass@1|Commercial system · as reported|A tool-call success rate in the developer's report"><i></i></div><div class="bv">51.0<small>reported</small></div>
+          <div class="bl ours"><b>Duopra</b> <span class="cfg">· DeepSeek backend</span></div><div class="bt ours" style="--w:82.17%" tabindex="0" role="img" data-tip="Duopra, DeepSeek backend|49.3% ± 3.5 Pass@1|Our harness, three seeds"><i></i><em class="no1">#1 open-source</em></div><div class="bv ours">49.3<small>± 3.5</small></div>
+          <div class="bl"><b>Gemini Live 2.5</b><span class="star">*</span></div><div class="bt rep" style="--w:81.67%" tabindex="0" role="img" data-tip="Gemini Live 2.5|49.0% Pass@1|Commercial system · as reported"><i></i></div><div class="bv">49.0<small>reported</small></div>
+          <div class="bl"><b>Hu et al.</b> <span class="cfg">· Qwen3-235B backend</span></div><div class="bt rep" style="--w:80%" tabindex="0" role="img" data-tip="Hu et al., Qwen3-235B backend|48.0% Pass@1|As reported, with another harness and judge"><i></i></div><div class="bv">48.0<small>reported</small></div>
+          <div class="bl ours"><b>Duopra</b> <span class="cfg">· calling tools itself</span></div><div class="bt ours" style="--w:79.5%" tabindex="0" role="img" data-tip="Duopra, calling tools itself|47.7% ± 3.5 Pass@1|Our harness, three seeds"><i></i></div><div class="bv ours">47.7<small>± 3.5</small></div>
+          <div class="bl"><b>DuplexAgent-RSI</b></div><div class="bt rep" style="--w:78.33%" tabindex="0" role="img" data-tip="DuplexAgent-RSI|47.0% Pass@1|As reported, with another harness and judge|On VoiceChat, with exact-string argument matching"><i></i></div><div class="bv">47.0<small>reported</small></div>
+          <div class="bl"><b>Cascaded</b><span class="star">*</span></div><div class="bt rep" style="--w:75%" tabindex="0" role="img" data-tip="Cascaded|45.0% Pass@1|Commercial system · as reported"><i></i></div><div class="bv">45.0<small>reported</small></div>
+          <div class="bl ours"><b>Duopra</b> <span class="cfg">· Qwen3-8B backend</span></div><div class="bt ours" style="--w:74.5%" tabindex="0" role="img" data-tip="Duopra, Qwen3-8B backend|44.7% ± 5.7 Pass@1|Our harness, three seeds"><i></i></div><div class="bv ours">44.7<small>± 5.7</small></div>
+          <div class="bl"><b>Grok</b><span class="star">*</span></div><div class="bt rep" style="--w:71.67%" tabindex="0" role="img" data-tip="Grok|43.0% Pass@1|Commercial system · as reported"><i></i></div><div class="bv">43.0<small>reported</small></div>
+          <div class="bl"><b>Realtime-Venus-Audio</b> <span class="cfg">· offline</span></div><div class="bt rep" style="--w:70%" tabindex="0" role="img" data-tip="Realtime-Venus-Audio, offline|42.0% Pass@1|As reported, with another harness and judge|Offline, with the tool definitions in the prompt"><i></i></div><div class="bv">42.0<small>reported</small></div>
+          <div class="bl"><b>Ultravox v0.7</b><span class="star">*</span></div><div class="bt rep" style="--w:68.33%" tabindex="0" role="img" data-tip="Ultravox v0.7|41.0% Pass@1|Commercial system · as reported"><i></i></div><div class="bv">41.0<small>reported</small></div>
+          <div class="bl"><b>Gander</b> <span class="cfg">· GPT-5.6</span></div><div class="bt rep" style="--w:66.67%" tabindex="0" role="img" data-tip="Gander, GPT-5.6|40.0% Pass@1|As reported, with another harness and judge"><i></i></div><div class="bv">40.0<small>reported</small></div>
+          <div class="bl"><b>NemotronLabs VoiceChat</b></div><div class="bt rep" style="--w:55%" tabindex="0" role="img" data-tip="NemotronLabs VoiceChat|33.0% Pass@1|As reported, with another harness and judge"><i></i></div><div class="bv">33.0<small>reported</small></div>
+          <div class="bx" aria-hidden="true"></div><div class="ba" aria-hidden="true"><i style="left:0">0</i><i style="left:33.333%">20</i><i style="left:66.667%">40</i><i style="left:100%">60%</i></div><div class="bx" aria-hidden="true"></div>
+        </div>
+        <p class="foot">Full-Duplex-Bench v3: 100 real, disfluent English recordings and 12 simulated APIs. Duopra runs in our harness — three seeds, 300 sessions per configuration, judged by Qwen3.8-27B; ± is the standard deviation across seeds. Hatched bars are reported numbers, measured with each source's own harness and judge (mostly GPT-4o), so they compare only approximately. * Commercial system.</p>
+      </div>
+
+
+      <div class="grid2">
+        <div class="tile chart" data-reveal>
+          <h3>Training removes failures to act.</h3>
+          <p class="sub">The outcome of each of 300 sessions, Duopra models calling tools themselves.</p>
+          <div class="legend" aria-hidden="true">
+            <span><i class="p"></i>Passed</span><span><i class="f"></i>Called, but did not pass</span><span><i class="n"></i>No call</span>
+          </div>
+          <div class="stack">
+            <div class="sl ours"><b>Duopra-SFT</b>after Stage 1</div>
+            <div class="sb" role="group" aria-label="Duopra-SFT: passed 78, called but did not pass 56, no call 166 of 300 sessions">
+              <span class="seg p" style="width:26%" tabindex="0" data-tip="Passed|78 of 300 · 26.0%"><span>26%</span></span><span class="seg f" style="width:18.67%" tabindex="0" data-tip="Called, did not pass|56 of 300|wrong argument 17 · missing call 38 · extra call 1"></span><span class="seg n" style="width:55.33%" tabindex="0" data-tip="No call|166 of 300 · 55.3%|spoke 118 · silent 48"><span>55%</span></span>
+            </div>
+            <div class="sl ours"><b>Duopra-RL1</b>after Stage 2a</div>
+            <div class="sb" role="group" aria-label="Duopra-RL1: passed 80, called but did not pass 89, no call 131 of 300 sessions">
+              <span class="seg p" style="width:26.67%" tabindex="0" data-tip="Passed|80 of 300 · 26.7%"><span>27%</span></span><span class="seg f" style="width:29.67%" tabindex="0" data-tip="Called, did not pass|89 of 300|wrong argument 17 · missing call 72 · extra call 0"></span><span class="seg n" style="width:43.67%" tabindex="0" data-tip="No call|131 of 300 · 43.7%|spoke 85 · silent 46"><span>44%</span></span>
+            </div>
+            <div class="sl ours"><b>Duopra</b>after Stage 2b</div>
+            <div class="sb" role="group" aria-label="Duopra: passed 143, called but did not pass 101, no call 56 of 300 sessions">
+              <span class="seg p" style="width:47.67%" tabindex="0" data-tip="Passed|143 of 300 · 47.7%"><span>48%</span></span><span class="seg f" style="width:33.67%" tabindex="0" data-tip="Called, did not pass|101 of 300|wrong argument 58 · missing call 40 · extra call 3"><span>34%</span></span><span class="seg n" style="width:18.67%" tabindex="0" data-tip="No call|56 of 300 · 18.7%|spoke 39 · silent 17"><span>19%</span></span>
+            </div>
+          </div>
+          <p class="foot">Multi-call requests become solvable: Duopra passes <b>28 of 102</b> sessions that need two or three calls, against 2 after SFT. The remaining headroom is in arguments — wrong arguments (19.3% of sessions) are now as common as sessions without a call (18.7%).</p>
+          <details class="data">
+            <summary>Show as a table</summary>
+            <div class="scroll-x">
+              <table>
+                <thead><tr><th>Run (300 sessions)</th><th>Pass</th><th>Wrong arg.</th><th>Missing</th><th>Extra</th><th>No call</th></tr></thead>
+                <tbody>
+                  <tr><td>Duopra-SFT</td><td>78</td><td>17</td><td>38</td><td>1</td><td>166</td></tr>
+                  <tr><td>Duopra-RL1</td><td>80</td><td>17</td><td>72</td><td>0</td><td>131</td></tr>
+                  <tr><td>Duopra</td><td>143</td><td>58</td><td>40</td><td>3</td><td>56</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+
+        <div class="tile chart" data-reveal>
+          <h3>Learning to act, without forgetting to converse.</h3>
+          <p class="sub">FDB v1.0 takeover rates of Duopra and the model it is built on, Realtime-Venus-Audio, in the same pipeline (%).</p>
+          <div class="legend" aria-hidden="true"><span><i class="base"></i>Base model</span><span><i class="ours"></i>Duopra</span></div>
+          <div class="pairs">
+            <div class="pair">
+              <h4>Takes the turn when the user finishes <small>higher is better</small></h4>
+              <div class="row"><div class="tr"><i style="width:59.1%"></i></div><span class="v">59.1</span></div>
+              <div class="row ours"><div class="tr"><i style="width:75.6%"></i></div><span class="v">75.6</span></div>
+            </div>
+            <div class="pair">
+              <h4>Takes the turn in a mid-sentence pause <small>lower is better</small></h4>
+              <div class="row"><div class="tr"><i style="width:18.1%"></i></div><span class="v">18.1</span></div>
+              <div class="row ours"><div class="tr"><i style="width:5.4%"></i></div><span class="v">5.4</span></div>
+            </div>
+            <div class="pair">
+              <h4>Responds after an interruption <small>higher is better</small></h4>
+              <div class="row"><div class="tr"><i style="width:79.5%"></i></div><span class="v">79.5</span></div>
+              <div class="row ours"><div class="tr"><i style="width:91.3%"></i></div><span class="v">91.3</span></div>
+            </div>
+          </div>
+          <p class="foot">Not every behaviour survives: Duopra answers fewer interruptions than Duopra-RL1 (96.5%) and, like every post-trained stage, no longer backchannels.</p>
+        </div>
+      </div>
+
+      <details class="more allnums" data-reveal>
+        <summary><span>More numbers — every metric for the systems above, and Duopra's conversational scores</span><span class="x">Show <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></span></summary>
+        <div class="inner">
+          <div class="scroll-x numtable">
+            <table>
+              <caption>Full-Duplex-Bench v3 — tool selection, arguments, response quality and Pass@1 (%)</caption>
+              <thead><tr><th>System</th><th>Tool</th><th>Arg.</th><th>Resp.</th><th>Pass@1</th></tr></thead>
+              <tbody>
+                <tr class="grp"><td colspan="5">Commercial systems*, as reported</td></tr>
+                <tr><td>GPT-Realtime</td><td><b>87.6</b></td><td><b>68.0</b></td><td><b>79.2</b></td><td><b>60.0</b></td></tr>
+                <tr><td>Gemini Live 3.1</td><td>81.7</td><td>58.8</td><td>71.8</td><td>54.0</td></tr>
+                <tr><td>MOSS-Live</td><td><span class="na">n/a</span></td><td><span class="na">n/a</span></td><td><span class="na">n/a</span></td><td>51.0</td></tr>
+                <tr><td>Gemini Live 2.5</td><td>78.6</td><td>59.3</td><td>55.4</td><td>49.0</td></tr>
+                <tr><td>Cascaded</td><td>80.3</td><td>56.2</td><td>60.0</td><td>45.0</td></tr>
+                <tr><td>Grok</td><td>79.7</td><td>54.2</td><td>61.7</td><td>43.0</td></tr>
+                <tr><td>Ultravox v0.7</td><td>79.4</td><td>51.3</td><td>51.0</td><td>41.0</td></tr>
+                <tr class="grp"><td colspan="5">Open-source systems, as reported</td></tr>
+                <tr><td>Hu et al., Qwen3-235B backend</td><td>71.7</td><td>55.2</td><td><b>67.0</b></td><td><b>48.0</b></td></tr>
+                <tr><td>DuplexAgent-RSI</td><td><b>97.4</b></td><td><b>57.0</b></td><td><span class="na">n/a</span></td><td>47.0</td></tr>
+                <tr><td>Realtime-Venus-Audio, offline</td><td>82.0</td><td>52.2</td><td><span class="na">n/a</span></td><td>42.0</td></tr>
+                <tr><td>Gander, GPT-5.6</td><td>75.9</td><td>50.3</td><td>49.0</td><td>40.0</td></tr>
+                <tr><td>NemotronLabs VoiceChat</td><td>82.5</td><td>42.2</td><td><span class="na">n/a</span></td><td>33.0</td></tr>
+                <tr class="grp"><td colspan="5">Duopra, our harness</td></tr>
+                <tr class="ours"><td>Duopra, calling tools itself</td><td>76.7</td><td>56.2</td><td>66.3</td><td>47.7 <small>± 3.5</small></td></tr>
+                <tr class="ours"><td>Duopra, Qwen3-8B backend</td><td><b>81.8</b></td><td><b>57.0</b></td><td><b>70.6</b></td><td>44.7 <small>± 5.7</small></td></tr>
+                <tr class="ours"><td>Duopra, DeepSeek backend</td><td>71.8</td><td>55.0</td><td>69.0</td><td><b>49.3</b> <small>± 3.5</small></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note">Tool: tool-selection F1, which involves no judge (Hu et al. report tool-selection accuracy). Arg.: argument accuracy. Resp.: response quality. n/a: not reported. Bold: best within each group. Reported rows use each source's harness and judge, mostly GPT-4o; Duopra's use Qwen3.8-27B. DuplexAgent-RSI is measured on VoiceChat (49.0 on Qwen-Realtime) with exact-string argument matching; Realtime-Venus-Audio offline has the tool definitions in the prompt; MOSS-Live reports a tool-call success rate. Further open-source systems that we ran in our harness are listed in the paper's Table 1.</p>
+
+          <div class="scroll-x numtable">
+            <table>
+              <caption>Conversational control and general ability — Duopra</caption>
+              <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+              <tbody>
+                <tr><td>Takes the turn after the user finishes ↑ <small>FDB v1.0</small></td><td>75.6</td></tr>
+                <tr><td>Takes the turn during a pause ↓ <small>FDB v1.0</small></td><td>5.4</td></tr>
+                <tr><td>Responds after an interruption ↑ <small>FDB v1.0</small></td><td>91.3</td></tr>
+                <tr><td>Takes the turn at all ↑ <small>FDB v3, calling tools itself</small></td><td>93.0</td></tr>
+                <tr><td>VoiceBench, mean of nine categories ↑</td><td>55.9</td></tr>
+                <tr><td>Task-completion latency ↓ <small>domain tools and backend both visible, Qwen3-8B</small></td><td>10.42 s</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note">Pass@1 is read from the call log rather than the transcript. ± is the standard deviation across three seeds. Judged metrics use Qwen3.8-27B; tool-selection F1 involves no judge. Delegating every request instead raises the task-completion latency to 14.85 s.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===================================================== paper/cite -->
+  <section id="paper">
+    <div class="wrap narrow">
+      <div data-reveal>
+        <span class="eyebrow">Paper</span>
+        <h2 class="paper-title">Duopra: From Full-Duplex Conversation to Full-Duplex Agency</h2>
+        <p class="paper-meta">The code and the weights are available now; the preprint will follow.</p>
+        <details class="abstract">
+          <summary>Read the abstract <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></summary>
+          <p>Full-duplex interaction models exhibit strong conversational intelligence, enabling natural, low-latency turn-taking, backchannels, and interruptions. However, successful task completion further requires task agency—timely tool invocation and argument revision following user corrections. In frontend–backend architectures, delegation and execution errors are often entangled, obscuring the primary bottleneck. We first investigate this question on Full-Duplex-Bench (FDB) v3. Realtime-Venus-Audio with its original Harness delegates only 11.0% of sessions and passes 4.7%; even a perfect backend could improve performance by at most 6.3 points. We then introduce Duopra, which directly performs non-verbalized tool calls and treats backend delegation as tool selection. Its three-stage training combines supervised fine-tuning, full-duplex reinforcement learning with time-anchored deadlines and tiered rewards, and projector-only talker repair. With a fixed backend, Duopra raises the pass rate from 4.7% to 44.7%, compared with a 4.7-point gain from a much larger backend. It achieves 47.7% standalone and 49.3% with an open backend, outperforming all compared open-source systems. Complementary evaluations show improved turn-taking control and overlap handling over the base model, though with reduced backchanneling, showing that task agency can build on conversational agency.</p>
+        </details>
+      </div>
+      <div id="cite" class="cite" data-reveal>
+        <h3>BibTeX</h3>
+        <div class="bib">
+          <button class="copy" type="button" data-copy>Copy</button>
+          <pre class="code"><code>@misc{duopra2026,
+  title  = {Duopra: From Full-Duplex Conversation
+            to Full-Duplex Agency},
+  author = {Chen, Chiyu and Cheng, Pengzhou and Ma, Yuezhao and Li, Xiaocheng
+            and Liu, Can and Hu, Haonan and Yao, Yao and Yang, Yifei
+            and Lu, Yijie and Wang, Taolei and Li, Yansi and Wu, Muhuan
+            and Zhang, Zhuosheng and Liu, Gongshen and Sun, Chenglu},
+  year   = {2026},
+  note   = {Preprint forthcoming},
+  url    = {https://cychen2003.github.io/duopra/}
+}</code></pre>
+        </div>
+        <p class="note" style="margin-top:.9rem">The entry will be updated with a link once the preprint is public.</p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Duopra · Listen. Speak. Act.</span>
+    <span><a href="zh/" hreflang="zh">中文</a><span data-res="code"> · <a href="https://github.com/cyChen2003/duopra" rel="noreferrer">GitHub</a></span> · <a href="#top">Back to top</a></span>
+  </div>
+</footer>
+
+<script src="assets/peaks.js"></script>
+<script src="assets/cases.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="300" viewBox="0 0 880 300" role="img" aria-labelledby="t d">
+  <title id="t">Pass@1 on Full-Duplex-Bench v3</title>
+  <desc id="d">Pass@1 in percent. Commercial systems, as reported: GPT-Realtime 60.0; Gemini Live 3.1 54.0; MOSS-Live 51.0; Gemini Live 2.5 49.0; Cascaded 45.0; Grok 43.0; Ultravox v0.7 41.0. Open-source systems and Duopra: Duopra, DeepSeek backend 49.3 ± 3.5; Hu et al., Qwen3-235B backend 48.0 (reported); Duopra, calling tools itself 47.7 ± 3.5; DuplexAgent-RSI 47.0 (reported); Duopra, Qwen3-8B backend 44.7 ± 5.7; Realtime-Venus-Audio, offline 42.0 (reported); Gander, GPT-5.6 40.0 (reported); NemotronLabs VoiceChat 33.0 (reported). Duopra with a DeepSeek backend is the highest open-source result.</desc>
+  <defs><pattern id="hatch-light" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" fill="#e4e8ee"/><path d="M0 0V5" stroke="#b4bcc8" stroke-width="2"/></pattern></defs>
+  <rect width="880" height="300" rx="18" fill="#f6f8fb"/>
+  <rect x=".5" y=".5" width="879" height="299" rx="17.5" fill="none" stroke="#18202d" stroke-opacity=".12"/>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+    <text x="36" y="40" fill="#1d1d1f" font-size="16.5" font-weight="600" letter-spacing="-.2">Pass@1 on Full-Duplex-Bench v3</text>
+    <text x="36" y="60" fill="#6b7280" font-size="12.5">A session passes only when every executed call matches the gold call.</text>
+    <text x="731.8" y="40" fill="#424245" font-size="12">Commercial system</text>
+    <text x="721.8" y="40.5" fill="#6b7280" font-size="12.5" font-weight="600">*</text>
+    <text x="631.2" y="40" fill="#424245" font-size="12">As reported</text>
+    <rect x="610.2" y="31" width="15" height="9" rx="2.5" fill="url(#hatch-light)"/>
+    <text x="466.8" y="40" fill="#424245" font-size="12">Duopra, our harness</text>
+    <rect x="445.8" y="31" width="15" height="9" rx="2.5" fill="#4a74c2"/>
+    <text x="36" y="90" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10.5" letter-spacing="1.8" text-anchor="start">COMMERCIAL SYSTEMS* · AS REPORTED</text>
+    <path d="M228.0 101V272" stroke="#18202d" stroke-opacity=".16"/>
+    <text x="228.0" y="288" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" text-anchor="middle">0</text>
+    <path d="M274.7 101V272" stroke="#18202d" stroke-opacity=".07"/>
+    <text x="274.7" y="288" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" text-anchor="middle">20</text>
+    <path d="M321.3 101V272" stroke="#18202d" stroke-opacity=".07"/>
+    <text x="321.3" y="288" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" text-anchor="middle">40</text>
+    <path d="M368.0 101V272" stroke="#18202d" stroke-opacity=".07"/>
+    <text x="368.0" y="288" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" text-anchor="middle">60%</text>
+    <text x="36" y="118.5" fill="#424245" font-size="12.5" font-weight="400">GPT-Realtime<tspan fill="#6b7280" font-weight="600">*</tspan></text>
+    <path d="M228 109.5H365.0Q368.0 109.5 368.0 112.5V116.5Q368.0 119.5 365.0 119.5H228Z" fill="url(#hatch-light)"/>
+    <text x="375.0" y="118.5" fill="#424245" font-size="12" font-weight="400">60.0</text>
+    <text x="36" y="139.5" fill="#424245" font-size="12.5" font-weight="400">Gemini Live 3.1<tspan fill="#6b7280" font-weight="600">*</tspan></text>
+    <path d="M228 130.5H351.0Q354.0 130.5 354.0 133.5V137.5Q354.0 140.5 351.0 140.5H228Z" fill="url(#hatch-light)"/>
+    <text x="375.0" y="139.5" fill="#424245" font-size="12" font-weight="400">54.0</text>
+    <text x="36" y="160.5" fill="#424245" font-size="12.5" font-weight="400">MOSS-Live<tspan fill="#6b7280" font-weight="600">*</tspan></text>
+    <path d="M228 151.5H344.0Q347.0 151.5 347.0 154.5V158.5Q347.0 161.5 344.0 161.5H228Z" fill="url(#hatch-light)"/>
+    <text x="375.0" y="160.5" fill="#424245" font-size="12" font-weight="400">51.0</text>
+    <text x="36" y="181.5" fill="#424245" font-size="12.5" font-weight="400">Gemini Live 2.5<tspan fill="#6b7280" font-weight="600">*</tspan></text>
+    <path d="M228 172.5H339.3Q342.3 172.5 342.3 175.5V179.5Q342.3 182.5 339.3 182.5H228Z" fill="url(#hatch-light)"/>
+    <text x="375.0" y="181.5" fill="#424245" font-size="12" font-weight="400">49.0</text>
+    <text x="36" y="202.5" fill="#424245" font-size="12.5" font-weight="400">Cascaded<tspan fill="#6b7280" font-weight="600">*</tspan></text>
+    <path d="M228 193.5H330.0Q333.0 193.5 333.0 196.5V200.5Q333.0 203.5 330.0 203.5H228Z" fill="url(#hatch-light)"/>
+    <text x="375.0" y="202.5" fill="#424245" font-size="12" font-weight="400">45.0</text>
+    <text x="36" y="223.5" fill="#424245" font-size="12.5" font-weight="400">Grok<tspan fill="#6b7280" font-weight="600">*</tspan></text>
+    <path d="M228 214.5H325.3Q328.3 214.5 328.3 217.5V221.5Q328.3 224.5 325.3 224.5H228Z" fill="url(#hatch-light)"/>
+    <text x="375.0" y="223.5" fill="#424245" font-size="12" font-weight="400">43.0</text>
+    <text x="36" y="244.5" fill="#424245" font-size="12.5" font-weight="400">Ultravox v0.7<tspan fill="#6b7280" font-weight="600">*</tspan></text>
+    <path d="M228 235.5H320.7Q323.7 235.5 323.7 238.5V242.5Q323.7 245.5 320.7 245.5H228Z" fill="url(#hatch-light)"/>
+    <text x="375.0" y="244.5" fill="#424245" font-size="12" font-weight="400">41.0</text>
+    <text x="456" y="90" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10.5" letter-spacing="1.8" text-anchor="start">OPEN-SOURCE SYSTEMS · DUOPRA IN OUR HARNESS</text>
+    <path d="M648.0 101V272" stroke="#18202d" stroke-opacity=".16"/>
+    <text x="648.0" y="288" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" text-anchor="middle">0</text>
+    <path d="M694.7 101V272" stroke="#18202d" stroke-opacity=".07"/>
+    <text x="694.7" y="288" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" text-anchor="middle">20</text>
+    <path d="M741.3 101V272" stroke="#18202d" stroke-opacity=".07"/>
+    <text x="741.3" y="288" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" text-anchor="middle">40</text>
+    <path d="M788.0 101V272" stroke="#18202d" stroke-opacity=".07"/>
+    <text x="788.0" y="288" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" text-anchor="middle">60%</text>
+    <text x="456" y="118.5" fill="#1d1d1f" font-size="12.5" font-weight="600">Duopra<tspan fill="#6b7280" font-size="11.5" font-weight="400"> · DeepSeek backend</tspan></text>
+    <path d="M648 109.5H760.0Q763.0 109.5 763.0 112.5V116.5Q763.0 119.5 760.0 119.5H648Z" fill="#4a74c2"/>
+    <text x="795.0" y="118.5" fill="#1d1d1f" font-size="12" font-weight="600">49.3<tspan fill="#6b7280" font-size="10" font-weight="400"> ±3.5</tspan></text>
+    <text x="757.0" y="117.5" fill="#ffffff" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="8" font-weight="600" letter-spacing=".8" text-anchor="end">#1 OPEN-SOURCE</text>
+    <text x="456" y="139.5" fill="#424245" font-size="12.5" font-weight="400">Hu et al.<tspan fill="#6b7280" font-size="11.5" font-weight="400"> · Qwen3-235B backend</tspan></text>
+    <path d="M648 130.5H757.0Q760.0 130.5 760.0 133.5V137.5Q760.0 140.5 757.0 140.5H648Z" fill="url(#hatch-light)"/>
+    <text x="795.0" y="139.5" fill="#424245" font-size="12" font-weight="400">48.0</text>
+    <text x="456" y="160.5" fill="#1d1d1f" font-size="12.5" font-weight="600">Duopra<tspan fill="#6b7280" font-size="11.5" font-weight="400"> · calling tools itself</tspan></text>
+    <path d="M648 151.5H756.3Q759.3 151.5 759.3 154.5V158.5Q759.3 161.5 756.3 161.5H648Z" fill="#4a74c2"/>
+    <text x="795.0" y="160.5" fill="#1d1d1f" font-size="12" font-weight="600">47.7<tspan fill="#6b7280" font-size="10" font-weight="400"> ±3.5</tspan></text>
+    <text x="456" y="181.5" fill="#424245" font-size="12.5" font-weight="400">DuplexAgent-RSI</text>
+    <path d="M648 172.5H754.7Q757.7 172.5 757.7 175.5V179.5Q757.7 182.5 754.7 182.5H648Z" fill="url(#hatch-light)"/>
+    <text x="795.0" y="181.5" fill="#424245" font-size="12" font-weight="400">47.0</text>
+    <text x="456" y="202.5" fill="#1d1d1f" font-size="12.5" font-weight="600">Duopra<tspan fill="#6b7280" font-size="11.5" font-weight="400"> · Qwen3-8B backend</tspan></text>
+    <path d="M648 193.5H749.3Q752.3 193.5 752.3 196.5V200.5Q752.3 203.5 749.3 203.5H648Z" fill="#4a74c2"/>
+    <text x="795.0" y="202.5" fill="#1d1d1f" font-size="12" font-weight="600">44.7<tspan fill="#6b7280" font-size="10" font-weight="400"> ±5.7</tspan></text>
+    <text x="456" y="223.5" fill="#424245" font-size="12.5" font-weight="400">Realtime-Venus-Audio<tspan fill="#6b7280" font-size="11.5" font-weight="400"> · offline</tspan></text>
+    <path d="M648 214.5H743.0Q746.0 214.5 746.0 217.5V221.5Q746.0 224.5 743.0 224.5H648Z" fill="url(#hatch-light)"/>
+    <text x="795.0" y="223.5" fill="#424245" font-size="12" font-weight="400">42.0</text>
+    <text x="456" y="244.5" fill="#424245" font-size="12.5" font-weight="400">Gander<tspan fill="#6b7280" font-size="11.5" font-weight="400"> · GPT-5.6</tspan></text>
+    <path d="M648 235.5H738.3Q741.3 235.5 741.3 238.5V242.5Q741.3 245.5 738.3 245.5H648Z" fill="url(#hatch-light)"/>
+    <text x="795.0" y="244.5" fill="#424245" font-size="12" font-weight="400">40.0</text>
+    <text x="456" y="265.5" fill="#424245" font-size="12.5" font-weight="400">NemotronLabs VoiceChat</text>
+    <path d="M648 256.5H722.0Q725.0 256.5 725.0 259.5V263.5Q725.0 266.5 722.0 266.5H648Z" fill="url(#hatch-light)"/>
+    <text x="795.0" y="265.5" fill="#424245" font-size="12" font-weight="400">33.0</text>
+  </g>
+</svg>

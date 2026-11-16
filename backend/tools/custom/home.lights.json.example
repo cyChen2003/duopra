@@ -1,0 +1,21 @@
+{
+  "name": "home.lights",
+  "description": "Turn the lights in one room of the home on or off",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "room": { "type": "string", "description": "The room, such as kitchen or bedroom" },
+      "on": { "type": "boolean", "description": "true to switch the lights on, false to switch them off" }
+    },
+    "required": ["room", "on"],
+    "additionalProperties": false
+  },
+  "returns": {
+    "type": "object",
+    "properties": { "room": { "type": "string" }, "on": { "type": "boolean" } },
+    "required": ["room", "on"]
+  },
+  "endpoint": "http://127.0.0.1:8765/lights",
+  "read_only": false,
+  "example": { "arguments": { "room": "kitchen", "on": true }, "result": { "room": "kitchen", "on": true } }
+}

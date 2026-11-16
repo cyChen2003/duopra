@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Duopra：从全双工对话，到全双工行动</title>
+<meta name="description" content="Duopra 是一个全双工语音智能体：边听边说，还会自己判断什么时候该动手，在话说到一半时发出不出声的工具调用。在 Full-Duplex-Bench v3 上，Pass@1 位列开源系统第一。">
+<meta property="og:title" content="Duopra：从全双工对话，到全双工行动">
+<meta property="og:description" content="边听、边说，还会自己动手的语音智能体：工具调用在它说话时就已发出。">
+<meta property="og:image" content="https://cychen2003.github.io/duopra/assets/og.png">
+<meta property="og:url" content="https://cychen2003.github.io/duopra/zh/">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" type="image/svg+xml" href="../assets/mark.svg">
+<link rel="canonical" href="https://cychen2003.github.io/duopra/zh/">
+<link rel="alternate" hreflang="en" href="https://cychen2003.github.io/duopra/">
+<link rel="alternate" hreflang="zh" href="https://cychen2003.github.io/duopra/zh/">
+<link rel="preload" as="font" type="font/woff2" href="../assets/fonts/noto-sans-sc-subset.woff2" crossorigin>
+<link rel="stylesheet" href="../styles.css">
+<script>
+/* 只有脚本在运行时，渐入的内容才先隐藏 */
+document.documentElement.classList.add("js");
+setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classList.remove("js"); }, 2500);
+</script>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><rect x="12" y="12" width="40" height="40" rx="10"/><path d="M22 26h18l-5.2-5.2M42 38H24l5.2 5.2"/></svg>
+      Duopra
+    </a>
+    <nav class="nav-links" id="nav-links" aria-label="页面分节">
+      <a href="#overview">概览</a>
+      <a href="#demo">演示</a>
+      <a href="#method">工作方式</a>
+      <a href="#results">实测结果</a>
+      <a href="#paper">论文</a>
+    </nav>
+    <div class="nav-end">
+      <div class="lang-switch" role="group" aria-label="语言"><span aria-current="true">中文</span><a href="../" hreflang="en" lang="en">English</a></div>
+      <a class="nav-cta" data-res="code" href="https://github.com/cyChen2003/duopra" rel="noreferrer">GitHub</a>
+      <button class="nav-menu" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="页面分节">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 6l4.5 4.5L12.5 6"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============================================================ hero -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-head" data-reveal-group>
+        <span class="eyebrow">全双工语音智能体 · 原生工具调用</span>
+        <h1 class="title"><span class="word">Duopra</span><span class="say">从全双工对话，<br><em>到全双工行动。</em></span></h1>
+        <p class="lead">它边听边说，还会自己判断什么时候该动手。</p>
+      </div>
+
+      <!-- 作者，与论文 main.tex 一致 -->
+      <div class="hero-meta" data-reveal-group>
+        <p class="authors" lang="en"><span class="au">Chiyu Chen<sup>1,2*</sup></span> <span class="au">Pengzhou Cheng<sup>3*</sup></span> <span class="au">Yuezhao Ma<sup>1</sup></span> <span class="au">Xiaocheng Li<sup>1</sup></span> <span class="au">Can Liu<sup>1</sup></span> <span class="au">Haonan Hu<sup>2</sup></span> <span class="au">Yao Yao<sup>1</sup></span> <span class="au">Yifei Yang<sup>1</sup></span> <span class="au">Yijie Lu<sup>1</sup></span> <span class="au">Taolei Wang<sup>1</sup></span> <span class="au">Yansi Li<sup>1</sup></span> <span class="au">Muhuan Wu<sup>4</sup></span> <span class="au">Zhuosheng Zhang<sup>1†</sup></span> <span class="au">Gongshen Liu<sup>1†</sup></span> <span class="au">Chenglu Sun<sup>2‡</sup></span></p>
+        <p class="affils"><span><sup>1</sup>上海交通大学</span> <span><sup>2</sup>腾讯</span> <span><sup>3</sup>上海大学</span> <span><sup>4</sup>独立研究者</span></p>
+        <p class="marks"><span><sup>*</sup>同等贡献</span> <span><sup>†</sup>通讯作者</span> <span><sup>‡</sup>项目负责人</span></p>
+        <ul class="links" aria-label="论文资源">
+          <li data-res="paper"><span class="chip-link is-soon" aria-disabled="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.5 1.75H4.25A1.5 1.5 0 0 0 2.75 3.25v9.5a1.5 1.5 0 0 0 1.5 1.5h7.5a1.5 1.5 0 0 0 1.5-1.5v-7.5zM9.5 1.75v3.5h3.75M5.5 8.75h5M5.5 11.25h3.5"/></svg>论文 <small>即将公开</small></span></li>
+          <li data-res="code"><a class="chip-link" href="https://github.com/cyChen2003/duopra" rel="noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4.5L2 8l3.5 3.5M10.5 4.5L14 8l-3.5 3.5"/></svg>代码</a></li>
+          <li data-res="weights"><a class="chip-link" href="https://huggingface.co/Chechen123/Duopra" rel="noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.75l5.5 3.1v6.3L8 14.25l-5.5-3.1v-6.3zM2.5 4.85L8 8l5.5-3.15M8 8v6.25"/></svg>模型权重</a></li>
+          <li><a class="chip-link" href="#cite"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6"/></svg>BibTeX</a></li>
+        </ul>
+      </div>
+
+      <!-- 应用里的那颗球，播放一段真实录音（main.js） -->
+      <figure class="orb" id="orb" data-reveal>
+        <div class="orb-stage"><canvas aria-hidden="true"></canvas></div>
+        <figcaption class="orb-cap">
+          <div class="orb-line"><span class="vl you" aria-hidden="true"><i></i><b>你</b></span><span class="vl agent" aria-hidden="true"><i></i><b>Duopra</b></span><span class="vl tool" aria-hidden="true"><i></i><b>动作</b></span><span class="rule" aria-hidden="true"></span><span class="orb-state">真实录音</span></div>
+          <div class="orb-say"><q>其实是 150 欧元，不是 100。</q>Duopra 听到改口，自己决定调用工具，并在还在说话时就把调用发了出去。</div>
+          <button class="orb-play" type="button" aria-pressed="false"><svg class="i-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.4 1.7a.6.6 0 0 0-.9.5z"/></svg><svg class="i-pause" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 2.5h2v9H4zM8 2.5h2v9H8z"/></svg><span>播放这段会话</span><small>0:30</small></button>
+        </figcaption>
+      </figure>
+
+      <!-- 演示视频：设置 data-src（可选 data-poster），见 main.js 的 setupFilm -->
+      <figure class="film" id="film" data-src="assets/video/duopra-demo.mp4" data-poster="assets/video/duopra-poster.webp" style="--film-ar:2560/1320" data-reveal>
+        <div class="film-frame">
+          <div class="film-empty">
+            <span class="film-glyph" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3.5 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.4 1.7a.6.6 0 0 0-.9.5z"/></svg></span>
+            <b>演示视频</b>
+            <span>即将上线</span>
+          </div>
+        </div>
+        <figcaption>在 Duopra 应用中录制（中文，结尾为英文）。Duopra 一边说话，一边用工具查明天上海的天气；把一天的行程和一笔小账交给后台模型，就像调用又一个工具；用户中途插话，让它把故事从春天改成秋天、再改用英文，它都接得上。</figcaption>
+      </figure>
+
+      <div class="bignums" data-reveal-group>
+        <div class="bn"><b><span class="h">#</span>1</b><span class="k">开源系统中排名第一</span><small>Full-Duplex-Bench v3，接开放后台时 Pass@1 为 49.3%；开源系统中其次是自报的 48.0%，评测流程与 judge 都不同。</small></div>
+        <div class="bn"><b><span class="count" data-to="47.7">47.7</span><i>%</i></b><span class="k">自己调用工具时的任务通过率</span><small>300 个会话的 Pass@1，不经过后台。</small></div>
+        <div class="bn"><b><span class="count" data-to="1.8">1.8</span><i>×</i></b><span class="k">全双工强化学习带来的通过率提升</span><small>监督微调后为 26.0%，强化学习后为 47.7%，同一批 300 个会话。</small></div>
+        <div class="bn"><b><span class="count" data-to="91.3">91.3</span><i>%</i></b><span class="k">被打断后作出回应</span><small>Full-Duplex-Bench v1.0，3 个种子，在我们的流式评测流程中测得。</small></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================= overview -->
+  <section class="intro" id="overview">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="eyebrow">概览</span>
+        <h2 class="statement" data-lit>边听，边说，<span class="hl-w">边做。</span></h2>
+        <p>全双工模型已经知道什么时候听、什么时候说。Duopra 还知道什么时候动手——它在话说到一半时自己调用工具，这些动作从不出声。</p>
+      </div>
+
+      <div class="caps" data-reveal-group>
+        <article class="cap">
+          <div class="cap-vis units" aria-hidden="true">
+            <div class="u-row"><i class="l"></i><i class="l"></i><i class="l"></i><i class="l"></i><i class="l"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="l"></i><i class="l"></i><i class="s"></i><i class="s"></i><i class="s"></i><i class="s"></i></div>
+            <div class="u-key"><span><i class="l"></i>听</span><span><i class="s"></i>说</span><span class="u-cap">一格一秒</span></div>
+          </div>
+          <h3>边听边说</h3>
+          <p>每一秒，Duopra 都在决定这一秒是听还是说。你说完它接话，你句中停顿它不抢，你插话它就让。</p>
+          <div class="cap-ev"><button class="hear" type="button" data-hear="1@6.9"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.4 1.7a.6.6 0 0 0-.9.5z"/></svg>从 0:07 听它在停顿里不抢话</button></div>
+        </article>
+        <article class="cap">
+          <div class="cap-vis mini" aria-hidden="true" data-lane="0"></div>
+          <h3>说着话就动手</h3>
+          <p>工具调用走一条私有通道，在 Duopra 还在说话时就发出。调用本身从不被念出来，念出来的只有结果。</p>
+          <div class="cap-ev"><button class="hear" type="button" data-hear="0@18.56"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.4 1.7a.6.6 0 0 0-.9.5z"/></svg>听 0:19 的那次调用</button></div>
+        </article>
+        <article class="cap">
+          <div class="cap-vis fix" aria-hidden="true">
+            <code><span class="k">amount</span>: <s>100</s> <b>150</b></code>
+            <q>其实是 150 欧元，不是 100。</q>
+          </div>
+          <h3>跟得上改口</h3>
+          <p>请求说到一半改了数值，进入工具的只有最后那个值——被放弃的 100 不会。</p>
+          <div class="cap-ev"><button class="hear" type="button" data-hear="0@6.46"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.4 1.7a.6.6 0 0 0-.9.5z"/></svg>听 0:06 的改口</button></div>
+        </article>
+        <article class="cap">
+          <div class="cap-vis two" aria-hidden="true">
+            <div class="calls"><code>modify_autopay(mortgage → savings)</code><code>modify_autopay(credit_card → checking)</code></div>
+            <div class="line"><i style="left:63.1%"></i><i style="left:77.7%"></i></div>
+          </div>
+          <h3>一句话里的多步任务</h3>
+          <p>一口气说出的两项修改，变成两次调用；每一项都等结果返回之后才念出。</p>
+          <div class="cap-ev"><button class="hear" type="button" data-hear="1@26.58"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3.5 2.2v9.6a.6.6 0 0 0 .9.5l7.6-4.8a.6.6 0 0 0 0-1L4.4 1.7a.6.6 0 0 0-.9.5z"/></svg>从 0:26 听两次调用</button></div>
+        </article>
+        <article class="cap">
+          <div class="cap-vis via" aria-hidden="true">
+            <div class="cl"><code>flight.status(flight: "CA1701")</code><span>一个工具</span></div>
+            <div class="cl q"><code>query(task: "帮我改签到周五")</code><span>你的后台 agent</span></div>
+          </div>
+          <h3>后台模型，像工具一样调用</h3>
+          <p>接上一个后台模型，它就成了又一个工具 <code>query(task)</code>。Duopra 把事情交给后台，和调用任何工具一样：对话不停，也听不到任何交接。</p>
+        </article>
+        <article class="cap">
+          <div class="cap-vis schema" aria-hidden="true">
+            <pre>{ <span class="k">"name":</span> <span class="n">"home.lights"</span>,
+  <span class="k">"description":</span> "开关某个房间的灯",
+  <span class="k">"parameters":</span> {
+    "room": "string",
+    "on": "boolean" } }<span class="yours">你的工具</span></pre>
+          </div>
+          <h3>工具由你来定</h3>
+          <p>一个工具就是一份 JSON schema：名字、描述和参数，在运行时提供。写下你自己的工具——日程、数据库、家里的设备——Duopra 就能调用它。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================================================== recordings -->
+  <section id="demo" class="alt">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="eyebrow">真实录音</span>
+        <h2>逐秒看它是怎么发生的。</h2>
+        <p>两段评测中的会话，按录音时间重放。</p>
+      </div>
+      <div id="replay" data-reveal></div>
+      <dl class="notes" data-reveal>
+        <div><dt>关于录音</dt><dd>这是挑选出来的两段会话，不代表成功率。转写、工具调用和发生的先后来自保存的运行记录；波形由音频测得。</dd></div>
+        <div><dt>关于音频</dt><dd>用户音频来自 <a href="https://github.com/DanielLin94144/Full-Duplex-Bench/tree/main/v3" rel="noreferrer">Full-Duplex-Bench v3</a>。助手音频是同一次运行录下的输出，用的是原 projector，不是最终版。</dd></div>
+        <div><dt>工具与转写</dt><dd>工具都是基准里的模拟接口，不涉及任何真实金融服务。助手转写来自 ASR，可能有识别错误。</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ======================================================== method -->
+  <section id="method">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="eyebrow">工作方式</span>
+        <h2>说什么、做什么，由同一个策略决定。</h2>
+        <p>每一秒，Duopra 读入新的音频和已返回的工具结果，同时输出三样东西。</p>
+      </div>
+
+      <div class="bento" data-reveal-group>
+        <div class="tile eq span-6">
+          <div class="formula" aria-label="y t 等于 m t、w t、a t"><i>y</i><sub>t</sub> <span class="op">=</span> ( <i>m</i><sub>t</sub> <span class="op">,</span> <i>w</i><sub>t</sub> <span class="op">,</span> <i>a</i><sub>t</sub> )</div>
+          <div class="parts">
+            <div class="m"><b>话轮状态</b>听还是说</div>
+            <div class="w"><b>文字</b>由 talker 念出</div>
+            <div class="a"><b>动作</b>从不出声</div>
+          </div>
+          <p class="cap">这是一个因果策略，条件是到目前为止的音频、已注入的观测和它自己之前的输出。对话与工具调用一起决定，不在组件之间来回传递。</p>
+        </div>
+        <div class="tile span-3">
+          <h3>后台也只是一个工具。</h3>
+          <p>后台 agent 以 <code>query(task)</code> 的形式出现，参数是对用户任务的完整描述。直接调用还是委派，是同一个策略做出的同一类决定——没有外部调度器。</p>
+        </div>
+        <div class="tile span-3">
+          <h3>结果落在单元边界上。</h3>
+          <p>运行时异步执行每次调用，并在结果返回后的第一个 1 秒边界注入上下文。等待期间模型照常听、照常说，结果到了才报出数值。</p>
+        </div>
+      </div>
+
+      <figure class="paperfig" data-reveal>
+        <a href="../assets/paper/fig1-timeline.webp" target="_blank" rel="noopener"><img src="../assets/paper/fig1-timeline.webp" width="2240" height="894" loading="lazy" decoding="async" alt="同一个请求的两条时间线。前后台分离时，看不到工具 schema 的前台把任务交给后台三次；Duopra 能看到 schema，先问清航班和日期，再自己调用两次 flight.status。"></a>
+        <figcaption><b>图 1.</b> 为什么前台必须自己动手（示意，1 秒单元）。(a) 工具 schema 只对后台可见，前台知道要做<em>什么</em>，却不知道<em>怎么</em>做：它立刻把请求交出去，之后用户的回答和改口又各要再交一次。(b) Duopra 能看到这些 schema，包括后台工具 <code>query(task)</code>：它先问清两个值，再自己调用 <code>flight.status</code>，改期后再调一次。</figcaption>
+      </figure>
+
+      <div class="subhead" data-reveal>
+        <h3>分三个阶段训练</h3>
+        <p>每个阶段解决一个问题：动作的格式、要不要动手，以及 thinker 一变就会跑偏的声音。</p>
+      </div>
+      <div class="rail" data-reveal aria-hidden="true"><i></i></div>
+      <ol class="stages" data-reveal-group>
+        <li class="stage">
+          <span class="st-n"><i>1</i>Stage 1</span>
+          <h3>协议 SFT</h3>
+          <p class="what">学会动作的格式。</p>
+          <p>在合成会话上对 thinker 做监督微调，示范完整的协议：按 schema 调用工具，结果返回前不播报，只追问缺失的值。</p>
+          <div class="st-out"><div><span>Duopra-SFT · Pass@1</span><b>26.0%</b><small>调用格式正确，但仍有 55% 的会话一次也没调用。</small></div></div>
+        </li>
+        <li class="stage">
+          <span class="st-n"><i>2</i>Stage 2</span>
+          <h3>全双工强化学习</h3>
+          <p class="what">学会何时动手。</p>
+          <p>在 thinker 的 LoRA 上做 Dr. GRPO，每个任务 8 个 rollout；沙盒给每个 rollout 播放同一个脚本化用户。时间锚定的截止与结果分级，奖励及时、完整、有依据的调用。</p>
+          <div class="st-out"><div><span>Duopra · Pass@1</span><b><span class="from">26.0→</span>47.7%</b><small>没有调用的会话从 55% 降到 19%。</small></div></div>
+        </li>
+        <li class="stage">
+          <span class="st-n"><i>3</i>Stage 3</span>
+          <h3>只修 projector</h3>
+          <p class="what">让声音保持清晰。</p>
+          <p>后训练会改变 thinker 的隐藏状态，而这些状态决定 talker 怎么发音。只在缓存特征上重训两者之间的 projector；文字、控制 token 和调用都不受影响。</p>
+          <div class="st-out"><div><span>试点 · 中文字错误率</span><b><span class="from">5.17→</span>1.78%</b><small>88 条试点样本；后训练前为 2.05%。</small></div></div>
+        </li>
+      </ol>
+      <figure class="paperfig" data-reveal>
+        <a href="../assets/paper/fig2-method.webp" target="_blank" rel="noopener"><img src="../assets/paper/fig2-method.webp" width="2240" height="955" loading="lazy" decoding="async" alt="三个训练阶段。Stage 1 在单元级会话上训练 thinker；Stage 2 在包含脚本化用户、后台 agent、模拟工具和评分器的沙盒里，用 Dr. GRPO 训练 thinker 的 LoRA；Stage 3 只在缓存的隐藏状态上训练 projector。"></a>
+        <figcaption><b>图 2.</b> Duopra 在 Realtime-Venus-Audio 上的三个训练阶段，每行标出该阶段训练的部分。<i>h<sub>t</sub></i>：thinker 隐藏状态；<i>P</i>：projector；<i>c<sub>t</sub></i>：talker 的条件输入。</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ======================================================= results -->
+  <section id="results" class="alt">
+    <div class="wrap">
+      <div class="head" data-reveal>
+        <span class="eyebrow">实测结果</span>
+        <h2>工具是真的被调起来了。</h2>
+        <p>在 Full-Duplex-Bench v3 上，通过率在开源系统中最高。</p>
+      </div>
+
+      <div class="tile chart" data-reveal>
+        <h3>Full-Duplex-Bench v3 上的 Pass@1</h3>
+        <p class="sub">一次会话里实际执行的调用与金标完全一致——工具正确、参数全对、没有多余调用——才算通过。</p>
+        <div class="legend" aria-hidden="true">
+          <span><i class="ours"></i>Duopra，我们的评测流程</span><span><i class="rep"></i>文献报告值</span><span class="star-key"><b>*</b>商业系统</span>
+        </div>
+        <div class="bars rank">
+          <div class="bl"><b>GPT-Realtime</b><span class="star">*</span></div><div class="bt rep" style="--w:100%" tabindex="0" role="img" data-tip="GPT-Realtime|Pass@1 60.0%|商业系统 · 文献报告值"><i></i></div><div class="bv">60.0<small>报告值</small></div>
+          <div class="bl"><b>Gemini Live 3.1</b><span class="star">*</span></div><div class="bt rep" style="--w:90%" tabindex="0" role="img" data-tip="Gemini Live 3.1|Pass@1 54.0%|商业系统 · 文献报告值"><i></i></div><div class="bv">54.0<small>报告值</small></div>
+          <div class="bl"><b>MOSS-Live</b><span class="star">*</span></div><div class="bt rep" style="--w:85%" tabindex="0" role="img" data-tip="MOSS-Live|Pass@1 51.0%|商业系统 · 文献报告值|开发者报告中的工具调用成功率"><i></i></div><div class="bv">51.0<small>报告值</small></div>
+          <div class="bl ours"><b>Duopra</b> <span class="cfg">· DeepSeek 后台</span></div><div class="bt ours" style="--w:82.17%" tabindex="0" role="img" data-tip="Duopra，DeepSeek 后台|Pass@1 49.3% ± 3.5|我们的评测流程，3 个种子"><i></i><em class="no1">开源第一</em></div><div class="bv ours">49.3<small>± 3.5</small></div>
+          <div class="bl"><b>Gemini Live 2.5</b><span class="star">*</span></div><div class="bt rep" style="--w:81.67%" tabindex="0" role="img" data-tip="Gemini Live 2.5|Pass@1 49.0%|商业系统 · 文献报告值"><i></i></div><div class="bv">49.0<small>报告值</small></div>
+          <div class="bl"><b>Hu et al.</b> <span class="cfg">· Qwen3-235B 后台</span></div><div class="bt rep" style="--w:80%" tabindex="0" role="img" data-tip="Hu et al.，Qwen3-235B 后台|Pass@1 48.0%|文献报告值，评测流程与 judge 不同"><i></i></div><div class="bv">48.0<small>报告值</small></div>
+          <div class="bl ours"><b>Duopra</b> <span class="cfg">· 自己调用工具</span></div><div class="bt ours" style="--w:79.5%" tabindex="0" role="img" data-tip="Duopra，自己调用工具|Pass@1 47.7% ± 3.5|我们的评测流程，3 个种子"><i></i></div><div class="bv ours">47.7<small>± 3.5</small></div>
+          <div class="bl"><b>DuplexAgent-RSI</b></div><div class="bt rep" style="--w:78.33%" tabindex="0" role="img" data-tip="DuplexAgent-RSI|Pass@1 47.0%|文献报告值，评测流程与 judge 不同|基于 VoiceChat，参数按字符串精确匹配"><i></i></div><div class="bv">47.0<small>报告值</small></div>
+          <div class="bl"><b>Cascaded</b><span class="star">*</span></div><div class="bt rep" style="--w:75%" tabindex="0" role="img" data-tip="Cascaded|Pass@1 45.0%|商业系统 · 文献报告值"><i></i></div><div class="bv">45.0<small>报告值</small></div>
+          <div class="bl ours"><b>Duopra</b> <span class="cfg">· Qwen3-8B 后台</span></div><div class="bt ours" style="--w:74.5%" tabindex="0" role="img" data-tip="Duopra，Qwen3-8B 后台|Pass@1 44.7% ± 5.7|我们的评测流程，3 个种子"><i></i></div><div class="bv ours">44.7<small>± 5.7</small></div>
+          <div class="bl"><b>Grok</b><span class="star">*</span></div><div class="bt rep" style="--w:71.67%" tabindex="0" role="img" data-tip="Grok|Pass@1 43.0%|商业系统 · 文献报告值"><i></i></div><div class="bv">43.0<small>报告值</small></div>
+          <div class="bl"><b>Realtime-Venus-Audio</b> <span class="cfg">· 离线</span></div><div class="bt rep" style="--w:70%" tabindex="0" role="img" data-tip="Realtime-Venus-Audio，离线|Pass@1 42.0%|文献报告值，评测流程与 judge 不同|离线，工具定义写在提示词里"><i></i></div><div class="bv">42.0<small>报告值</small></div>
+          <div class="bl"><b>Ultravox v0.7</b><span class="star">*</span></div><div class="bt rep" style="--w:68.33%" tabindex="0" role="img" data-tip="Ultravox v0.7|Pass@1 41.0%|商业系统 · 文献报告值"><i></i></div><div class="bv">41.0<small>报告值</small></div>
+          <div class="bl"><b>Gander</b> <span class="cfg">· GPT-5.6</span></div><div class="bt rep" style="--w:66.67%" tabindex="0" role="img" data-tip="Gander，GPT-5.6|Pass@1 40.0%|文献报告值，评测流程与 judge 不同"><i></i></div><div class="bv">40.0<small>报告值</small></div>
+          <div class="bl"><b>NemotronLabs VoiceChat</b></div><div class="bt rep" style="--w:55%" tabindex="0" role="img" data-tip="NemotronLabs VoiceChat|Pass@1 33.0%|文献报告值，评测流程与 judge 不同"><i></i></div><div class="bv">33.0<small>报告值</small></div>
+          <div class="bx" aria-hidden="true"></div><div class="ba" aria-hidden="true"><i style="left:0">0</i><i style="left:33.333%">20</i><i style="left:66.667%">40</i><i style="left:100%">60%</i></div><div class="bx" aria-hidden="true"></div>
+        </div>
+        <p class="foot">Full-Duplex-Bench v3：100 条真实、不流利的英文录音，12 个模拟 API。Duopra 由我们的评测流程跑出——3 个种子，每种配置 300 个会话，judge 为 Qwen3.8-27B；± 为种子间的标准差。斜线条为文献报告值，用的是各自来源的评测流程和 judge（多为 GPT-4o），只能粗略比较。* 为商业系统。</p>
+      </div>
+
+
+      <div class="grid2">
+        <div class="tile chart" data-reveal>
+          <h3>训练消除了「不动手」。</h3>
+          <p class="sub">300 个会话各自的结局，Duopra 各阶段均为自己调用工具。</p>
+          <div class="legend" aria-hidden="true">
+            <span><i class="p"></i>通过</span><span><i class="f"></i>调用了但未通过</span><span><i class="n"></i>没有调用</span>
+          </div>
+          <div class="stack">
+            <div class="sl ours"><b>Duopra-SFT</b>Stage 1 之后</div>
+            <div class="sb" role="group" aria-label="Duopra-SFT：300 个会话中通过 78、调用了但未通过 56、没有调用 166">
+              <span class="seg p" style="width:26%" tabindex="0" data-tip="通过|300 个中的 78 个 · 26.0%"><span>26%</span></span><span class="seg f" style="width:18.67%" tabindex="0" data-tip="调用了但未通过|300 个中的 56 个|参数错误 17 · 漏调用 38 · 多调用 1"></span><span class="seg n" style="width:55.33%" tabindex="0" data-tip="没有调用|300 个中的 166 个 · 55.3%|说了话 118 · 沉默 48"><span>55%</span></span>
+            </div>
+            <div class="sl ours"><b>Duopra-RL1</b>Stage 2a 之后</div>
+            <div class="sb" role="group" aria-label="Duopra-RL1：300 个会话中通过 80、调用了但未通过 89、没有调用 131">
+              <span class="seg p" style="width:26.67%" tabindex="0" data-tip="通过|300 个中的 80 个 · 26.7%"><span>27%</span></span><span class="seg f" style="width:29.67%" tabindex="0" data-tip="调用了但未通过|300 个中的 89 个|参数错误 17 · 漏调用 72 · 多调用 0"></span><span class="seg n" style="width:43.67%" tabindex="0" data-tip="没有调用|300 个中的 131 个 · 43.7%|说了话 85 · 沉默 46"><span>44%</span></span>
+            </div>
+            <div class="sl ours"><b>Duopra</b>Stage 2b 之后</div>
+            <div class="sb" role="group" aria-label="Duopra：300 个会话中通过 143、调用了但未通过 101、没有调用 56">
+              <span class="seg p" style="width:47.67%" tabindex="0" data-tip="通过|300 个中的 143 个 · 47.7%"><span>48%</span></span><span class="seg f" style="width:33.67%" tabindex="0" data-tip="调用了但未通过|300 个中的 101 个|参数错误 58 · 漏调用 40 · 多调用 3"><span>34%</span></span><span class="seg n" style="width:18.67%" tabindex="0" data-tip="没有调用|300 个中的 56 个 · 18.7%|说了话 39 · 沉默 17"><span>19%</span></span>
+            </div>
+          </div>
+          <p class="foot">多步请求变得可解：在需要两到三次调用的 102 个会话里，Duopra 通过 <b>28 个</b>，SFT 之后只有 2 个。剩下的提升空间在参数上——参数错误（占全部会话 19.3%）已经和没有调用（18.7%）一样多。</p>
+          <details class="data">
+            <summary>以表格查看</summary>
+            <div class="scroll-x">
+              <table>
+                <thead><tr><th>运行（300 个会话）</th><th>通过</th><th>参数错误</th><th>漏调用</th><th>多调用</th><th>没有调用</th></tr></thead>
+                <tbody>
+                  <tr><td>Duopra-SFT</td><td>78</td><td>17</td><td>38</td><td>1</td><td>166</td></tr>
+                  <tr><td>Duopra-RL1</td><td>80</td><td>17</td><td>72</td><td>0</td><td>131</td></tr>
+                  <tr><td>Duopra</td><td>143</td><td>58</td><td>40</td><td>3</td><td>56</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+
+        <div class="tile chart" data-reveal>
+          <h3>学会动手，没有忘记对话。</h3>
+          <p class="sub">FDB v1.0 接管率：Duopra 与它所基于的模型 Realtime-Venus-Audio，在同一流程下测得（%）。</p>
+          <div class="legend" aria-hidden="true"><span><i class="base"></i>基座模型</span><span><i class="ours"></i>Duopra</span></div>
+          <div class="pairs">
+            <div class="pair">
+              <h4>用户说完后接话 <small>越高越好</small></h4>
+              <div class="row"><div class="tr"><i style="width:59.1%"></i></div><span class="v">59.1</span></div>
+              <div class="row ours"><div class="tr"><i style="width:75.6%"></i></div><span class="v">75.6</span></div>
+            </div>
+            <div class="pair">
+              <h4>用户句中停顿时抢话 <small>越低越好</small></h4>
+              <div class="row"><div class="tr"><i style="width:18.1%"></i></div><span class="v">18.1</span></div>
+              <div class="row ours"><div class="tr"><i style="width:5.4%"></i></div><span class="v">5.4</span></div>
+            </div>
+            <div class="pair">
+              <h4>被打断后作出回应 <small>越高越好</small></h4>
+              <div class="row"><div class="tr"><i style="width:79.5%"></i></div><span class="v">79.5</span></div>
+              <div class="row ours"><div class="tr"><i style="width:91.3%"></i></div><span class="v">91.3</span></div>
+            </div>
+          </div>
+          <p class="foot">并非所有行为都保住了：Duopra 回应打断的比例低于 Duopra-RL1（96.5%），而且和所有后训练阶段一样，不再附和。</p>
+        </div>
+      </div>
+
+      <details class="more allnums" data-reveal>
+        <summary><span>更多数字——上面各系统的全部指标，以及 Duopra 的对话指标</span><span class="x">展开 <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></span></summary>
+        <div class="inner">
+          <div class="scroll-x numtable">
+            <table>
+              <caption>Full-Duplex-Bench v3——工具选择、参数、回复质量与 Pass@1（%）</caption>
+              <thead><tr><th>系统</th><th>工具</th><th>参数</th><th>回复</th><th>Pass@1</th></tr></thead>
+              <tbody>
+                <tr class="grp"><td colspan="5">商业系统*，文献报告值</td></tr>
+                <tr><td>GPT-Realtime</td><td><b>87.6</b></td><td><b>68.0</b></td><td><b>79.2</b></td><td><b>60.0</b></td></tr>
+                <tr><td>Gemini Live 3.1</td><td>81.7</td><td>58.8</td><td>71.8</td><td>54.0</td></tr>
+                <tr><td>MOSS-Live</td><td><span class="na">n/a</span></td><td><span class="na">n/a</span></td><td><span class="na">n/a</span></td><td>51.0</td></tr>
+                <tr><td>Gemini Live 2.5</td><td>78.6</td><td>59.3</td><td>55.4</td><td>49.0</td></tr>
+                <tr><td>Cascaded</td><td>80.3</td><td>56.2</td><td>60.0</td><td>45.0</td></tr>
+                <tr><td>Grok</td><td>79.7</td><td>54.2</td><td>61.7</td><td>43.0</td></tr>
+                <tr><td>Ultravox v0.7</td><td>79.4</td><td>51.3</td><td>51.0</td><td>41.0</td></tr>
+                <tr class="grp"><td colspan="5">开源系统，文献报告值</td></tr>
+                <tr><td>Hu et al.，Qwen3-235B 后台</td><td>71.7</td><td>55.2</td><td><b>67.0</b></td><td><b>48.0</b></td></tr>
+                <tr><td>DuplexAgent-RSI</td><td><b>97.4</b></td><td><b>57.0</b></td><td><span class="na">n/a</span></td><td>47.0</td></tr>
+                <tr><td>Realtime-Venus-Audio，离线</td><td>82.0</td><td>52.2</td><td><span class="na">n/a</span></td><td>42.0</td></tr>
+                <tr><td>Gander，GPT-5.6</td><td>75.9</td><td>50.3</td><td>49.0</td><td>40.0</td></tr>
+                <tr><td>NemotronLabs VoiceChat</td><td>82.5</td><td>42.2</td><td><span class="na">n/a</span></td><td>33.0</td></tr>
+                <tr class="grp"><td colspan="5">Duopra，我们的评测流程</td></tr>
+                <tr class="ours"><td>Duopra，自己调用工具</td><td>76.7</td><td>56.2</td><td>66.3</td><td>47.7 <small>± 3.5</small></td></tr>
+                <tr class="ours"><td>Duopra，Qwen3-8B 后台</td><td><b>81.8</b></td><td><b>57.0</b></td><td><b>70.6</b></td><td>44.7 <small>± 5.7</small></td></tr>
+                <tr class="ours"><td>Duopra，DeepSeek 后台</td><td>71.8</td><td>55.0</td><td>69.0</td><td><b>49.3</b> <small>± 3.5</small></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note">工具：工具选择 F1，不需要 judge（Hu et al. 报告的是工具选择准确率）。参数：参数准确率。回复：回复质量。n/a：未报告。加粗：各组内最好。文献报告值来自各自来源的评测流程和 judge（多为 GPT-4o）；Duopra 的结果用 Qwen3.8-27B 作 judge。DuplexAgent-RSI 基于 VoiceChat（在 Qwen-Realtime 上为 49.0），参数按字符串精确匹配；Realtime-Venus-Audio 离线评测时工具定义写在提示词里；MOSS-Live 报告的是工具调用成功率。我们在自己的评测流程中运行的其他开源系统，列在论文的表 1 中。</p>
+
+          <div class="scroll-x numtable">
+            <table>
+              <caption>对话控制与通用能力——Duopra</caption>
+              <thead><tr><th>指标</th><th>数值</th></tr></thead>
+              <tbody>
+                <tr><td>用户说完后接话 ↑ <small>FDB v1.0</small></td><td>75.6</td></tr>
+                <tr><td>用户句中停顿时抢话 ↓ <small>FDB v1.0</small></td><td>5.4</td></tr>
+                <tr><td>被打断后作出回应 ↑ <small>FDB v1.0</small></td><td>91.3</td></tr>
+                <tr><td>接话率 ↑ <small>FDB v3，自己调用工具</small></td><td>93.0</td></tr>
+                <tr><td>VoiceBench 九类均值 ↑</td><td>55.9</td></tr>
+                <tr><td>任务完成延迟 ↓ <small>领域工具与后台同时可见，Qwen3-8B</small></td><td>10.42 s</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="note">Pass@1 只看调用记录，不看语音转写。± 为 3 个种子的标准差。涉及判分的指标由 Qwen3.8-27B 作 judge；工具选择 F1 不需要 judge。若所有请求都委派给后台，任务完成延迟会升到 14.85 秒。</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===================================================== paper/cite -->
+  <section id="paper">
+    <div class="wrap narrow">
+      <div data-reveal>
+        <span class="eyebrow">论文</span>
+        <h2 class="paper-title" lang="en">Duopra: From Full-Duplex Conversation to Full-Duplex Agency</h2>
+        <p class="paper-meta">代码与模型权重现已公开，预印本即将公开。</p>
+        <details class="abstract">
+          <summary>阅读摘要 <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></summary>
+          <p>全双工交互模型已经展现出很强的对话智能，能够自然、低延迟地完成话轮转换、附和与打断。然而，要成功完成任务，还需要任务能力（task agency）——及时调用工具，并在用户改口后修正参数。在前后台架构中，委派错误与执行错误往往纠缠在一起，掩盖了主要瓶颈。我们首先在 Full-Duplex-Bench（FDB）v3 上研究这一问题：Realtime-Venus-Audio 搭配其原始 Harness 只在 11.0% 的会话中委派，通过率为 4.7%；即使后台完美，最多也只能提升 6.3 个百分点。随后我们提出 Duopra，它直接执行不出声的工具调用，并把委派后台视为一次工具选择。三阶段训练结合了监督微调、带时间锚定截止与分级奖励的全双工强化学习，以及只训练 projector 的 talker 修复。后台固定时，Duopra 把通过率从 4.7% 提高到 44.7%，而换用大得多的后台只带来 4.7 个百分点的提升。它独立运行时达到 47.7%，接开放后台时达到 49.3%，超过所有参与比较的开源系统。补充评测显示，相比基座模型，它的话轮控制与重叠处理更好，但附和有所减少，说明任务能力可以建立在对话能力之上。</p>
+        </details>
+      </div>
+      <div id="cite" class="cite" data-reveal>
+        <h3>BibTeX</h3>
+        <div class="bib">
+          <button class="copy" type="button" data-copy>复制</button>
+          <pre class="code"><code>@misc{duopra2026,
+  title  = {Duopra: From Full-Duplex Conversation
+            to Full-Duplex Agency},
+  author = {Chen, Chiyu and Cheng, Pengzhou and Ma, Yuezhao and Li, Xiaocheng
+            and Liu, Can and Hu, Haonan and Yao, Yao and Yang, Yifei
+            and Lu, Yijie and Wang, Taolei and Li, Yansi and Wu, Muhuan
+            and Zhang, Zhuosheng and Liu, Gongshen and Sun, Chenglu},
+  year   = {2026},
+  note   = {Preprint forthcoming},
+  url    = {https://cychen2003.github.io/duopra/}
+}</code></pre>
+        </div>
+        <p class="note" style="margin-top:.9rem">预印本公开后，这条记录会补上链接。</p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Duopra · Listen. Speak. Act.</span>
+    <span><a href="../" hreflang="en">English</a><span data-res="code"> · <a href="https://github.com/cyChen2003/duopra" rel="noreferrer">GitHub</a></span> · <a href="#top">回到顶部</a></span>
+  </div>
+</footer>
+
+<script src="../assets/peaks.js"></script>
+<script src="../assets/cases.js"></script>
+<script src="../main.js"></script>
+</body>
+</html>

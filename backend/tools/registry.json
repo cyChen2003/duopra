@@ -1,0 +1,4820 @@
+{
+  "version": "venus-tools-v2",
+  "tools": [
+    {
+      "name": "weather.day",
+      "family": "weather.day",
+      "domain": "出行",
+      "version": "2",
+      "description": "查询指定城市某天的气温与降水",
+      "excluded": "不提供空气质量或灾害预警",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "city",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "temperature_c": {
+            "type": "integer"
+          },
+          "rain_probability": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "temperature_c",
+          "rain_probability"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "city": "杭州",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "temperature_c": 18,
+          "rain_probability": 0.2
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "sun.daylight",
+      "family": "sun.daylight",
+      "domain": "出行",
+      "version": "2",
+      "description": "查询指定地点当天日出日落时刻",
+      "excluded": "不提供天气预报",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "city",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "sunrise": {
+            "type": "string"
+          },
+          "sunset": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sunrise",
+          "sunset"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "city": "杭州",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "sunrise": "06:20",
+          "sunset": "17:10"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "rail.departures",
+      "family": "rail.departures",
+      "domain": "出行",
+      "version": "2",
+      "description": "查询两座火车站之间指定日期的列车班次",
+      "excluded": "不查询市内公交或代售票",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "type": "string"
+          },
+          "destination": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "origin",
+          "destination",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "train": {
+            "type": "string"
+          },
+          "departure": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "train",
+          "departure"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "origin": "杭州东",
+          "destination": "上海虹桥",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "train": "G100",
+          "departure": "10:00"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "bus.next_arrival",
+      "family": "bus.next_arrival",
+      "domain": "出行",
+      "version": "2",
+      "description": "查询公交站指定线路下一班到站时间",
+      "excluded": "不规划跨城铁路",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "stop": {
+            "type": "string"
+          },
+          "route": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "stop",
+          "route"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "minutes": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "minutes"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "stop": "市民中心",
+          "route": 108
+        },
+        "result": {
+          "minutes": 6
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "flight.status",
+      "family": "flight.status",
+      "domain": "出行",
+      "version": "2",
+      "description": "查询指定航班当天起降状态",
+      "excluded": "不搜索机票价格",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "flight": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "flight",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "delay_minutes": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "status",
+          "delay_minutes"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "flight": "CA1701",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "status": "delayed",
+          "delay_minutes": 20
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "parking.vacancy",
+      "family": "parking.vacancy",
+      "domain": "出行",
+      "version": "2",
+      "description": "查询指定停车场剩余车位",
+      "excluded": "不提供充电桩状态",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "parking_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "parking_id"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "available_spaces": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "available_spaces"
+        ],
+        "additionalProperties": false
+      },
+      "split": "valid",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "parking_id": "P101"
+        },
+        "result": {
+          "available_spaces": 12
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "charging.connector",
+      "family": "charging.connector",
+      "domain": "出行",
+      "version": "2",
+      "description": "查询充电站指定接口的空闲充电枪数",
+      "excluded": "不提供普通停车位",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "station_id": {
+            "type": "string"
+          },
+          "connector": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "station_id",
+          "connector"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "available_connectors": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "available_connectors"
+        ],
+        "additionalProperties": false
+      },
+      "split": "test",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "station_id": "C101",
+          "connector": "CCS2"
+        },
+        "result": {
+          "available_connectors": 3
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "road.closure",
+      "family": "road.closure",
+      "domain": "出行",
+      "version": "2",
+      "description": "查询指定道路当前封闭路段及期限",
+      "excluded": "不推断完整导航路线",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "road": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "road"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "segment": {
+            "type": "string"
+          },
+          "reopens_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "segment",
+          "reopens_at"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "road": "湖滨路"
+        },
+        "result": {
+          "segment": "北段",
+          "reopens_at": "2026-11-12T08:00+08:00"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "store.hours",
+      "family": "store.hours",
+      "domain": "生活",
+      "version": "2",
+      "description": "查询门店指定日期营业时段",
+      "excluded": "不提供商品库存",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "store_id": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "store_id",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "opens": {
+            "type": "string"
+          },
+          "closes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "opens",
+          "closes"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "store_id": "S101",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "opens": "09:00",
+          "closes": "21:00"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "stock.item",
+      "family": "stock.item",
+      "domain": "生活",
+      "version": "2",
+      "description": "查询指定门店单个SKU的现货数量",
+      "excluded": "不推荐商品或比较价格",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "store_id": {
+            "type": "string"
+          },
+          "sku": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "store_id",
+          "sku"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "quantity"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "store_id": "S101",
+          "sku": "SKU101"
+        },
+        "result": {
+          "quantity": 5
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "parcel.status",
+      "family": "parcel.status",
+      "domain": "生活",
+      "version": "2",
+      "description": "查询指定运单最近物流节点",
+      "excluded": "不修改地址或推算保证送达日",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "tracking_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "tracking_id"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "last_location": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "last_location"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "tracking_id": "PKG101"
+        },
+        "result": {
+          "status": "in_transit",
+          "last_location": "杭州分拨中心"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "locker.hours",
+      "family": "locker.hours",
+      "domain": "生活",
+      "version": "2",
+      "description": "查询指定自提柜的取件开放时间",
+      "excluded": "不泄漏取件码",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "locker_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "locker_id"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "opens": {
+            "type": "string"
+          },
+          "closes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "opens",
+          "closes"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "locker_id": "L101"
+        },
+        "result": {
+          "opens": "07:00",
+          "closes": "23:00"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "waste.collection",
+      "family": "waste.collection",
+      "domain": "生活",
+      "version": "2",
+      "description": "查询社区指定垃圾类别下次收运时间",
+      "excluded": "不判断物品垃圾分类",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "community": {
+            "type": "string"
+          },
+          "waste_type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "community",
+          "waste_type"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "next_collection": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "next_collection"
+        ],
+        "additionalProperties": false
+      },
+      "split": "valid",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "community": "湖滨社区",
+          "waste_type": "可回收物"
+        },
+        "result": {
+          "next_collection": "2026-11-12T09:00+08:00"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "water.outage",
+      "family": "water.outage",
+      "domain": "生活",
+      "version": "2",
+      "description": "查询指定地址已公告的停水时段",
+      "excluded": "不提供停电信息",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "address"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "start",
+          "end"
+        ],
+        "additionalProperties": false
+      },
+      "split": "test",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "address": "湖滨路10号"
+        },
+        "result": {
+          "start": "2026-11-12T10:00+08:00",
+          "end": "2026-11-12T12:00+08:00"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "power.outage",
+      "family": "power.outage",
+      "domain": "生活",
+      "version": "2",
+      "description": "查询指定地址已公告的停电时段",
+      "excluded": "不提供停水信息",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "address"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "start",
+          "end"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "address": "湖滨路10号"
+        },
+        "result": {
+          "start": "2026-11-13T10:00+08:00",
+          "end": "2026-11-13T12:00+08:00"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "laundry.machine",
+      "family": "laundry.machine",
+      "domain": "生活",
+      "version": "2",
+      "description": "查询洗衣房指定类型设备的空闲数量",
+      "excluded": "不控制或预约设备",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "room": {
+            "type": "string"
+          },
+          "machine_type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "room",
+          "machine_type"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "available"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "room": "一号洗衣房",
+          "machine_type": "烘干机"
+        },
+        "result": {
+          "available": 2
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "library.copy",
+      "family": "library.copy",
+      "domain": "文化",
+      "version": "2",
+      "description": "查询指定分馆图书在馆可借副本数",
+      "excluded": "不生成图书内容",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "branch": {
+            "type": "string"
+          },
+          "isbn": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "branch",
+          "isbn"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "available_copies": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "available_copies"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "branch": "中心馆",
+          "isbn": 9780000000001
+        },
+        "result": {
+          "available_copies": 2
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "museum.exhibition",
+      "family": "museum.exhibition",
+      "domain": "文化",
+      "version": "2",
+      "description": "查询指定博物馆某日的展览目录",
+      "excluded": "不提供电影或剧场节目",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "museum": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "museum",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "exhibition": {
+            "type": "string"
+          },
+          "hall": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "exhibition",
+          "hall"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "museum": "城市博物馆",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "exhibition": "城市记忆",
+          "hall": "二号厅"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "cinema.showtime",
+      "family": "cinema.showtime",
+      "domain": "文化",
+      "version": "2",
+      "description": "查询指定影院某日某电影场次",
+      "excluded": "不售票或查询演唱会",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "cinema": {
+            "type": "string"
+          },
+          "movie": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "cinema",
+          "movie",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "showtime": {
+            "type": "string"
+          },
+          "screen": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "showtime",
+          "screen"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "cinema": "湖滨影院",
+          "movie": "示例电影",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "showtime": "19:00",
+          "screen": 3
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "theatre.performance",
+      "family": "theatre.performance",
+      "domain": "文化",
+      "version": "2",
+      "description": "查询指定剧院某日舞台演出安排",
+      "excluded": "不查询电影放映",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "theatre": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "theatre",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "performance": {
+            "type": "string"
+          },
+          "starts": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "performance",
+          "starts"
+        ],
+        "additionalProperties": false
+      },
+      "split": "valid",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "theatre": "城市剧院",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "performance": "示例话剧",
+          "starts": "19:30"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "sports.fixture",
+      "family": "sports.fixture",
+      "domain": "文化",
+      "version": "2",
+      "description": "查询指定球队某日的比赛安排",
+      "excluded": "不预测胜负",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "team": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "team",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "opponent": {
+            "type": "string"
+          },
+          "starts": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "opponent",
+          "starts"
+        ],
+        "additionalProperties": false
+      },
+      "split": "test",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "team": "示例队",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "opponent": "客队",
+          "starts": "20:00"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "park.access",
+      "family": "park.access",
+      "domain": "文化",
+      "version": "2",
+      "description": "查询公园指定入口当前开放状态",
+      "excluded": "不查询野外步道风险",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "park": {
+            "type": "string"
+          },
+          "entrance": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "park",
+          "entrance"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "open": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "open",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "park": "湖滨公园",
+          "entrance": "北门"
+        },
+        "result": {
+          "open": true,
+          "reason": "正常开放"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "trail.status",
+      "family": "trail.status",
+      "domain": "文化",
+      "version": "2",
+      "description": "查询指定徒步线路官方开放状态",
+      "excluded": "不作个体安全保障",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "trail": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "trail"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "reason"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "trail": "示例山径"
+        },
+        "result": {
+          "status": "closed",
+          "reason": "维护"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "pool.lanes",
+      "family": "pool.lanes",
+      "domain": "文化",
+      "version": "2",
+      "description": "查询泳馆指定时间公众可用泳道数量",
+      "excluded": "不预约或修改泳道",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "pool": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "pool",
+          "time"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "public_lanes": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "public_lanes"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "pool": "市民泳馆",
+          "time": "2026-11-11T18:00+08:00"
+        },
+        "result": {
+          "public_lanes": 4
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "calendar.agenda",
+      "family": "calendar.agenda",
+      "domain": "个人",
+      "version": "2",
+      "description": "查看本地工作区某天日程；calendar_id使用personal。返回完整events列表及event_id，后续改期或删除必须使用这些ID。需授权个人工具。",
+      "excluded": "只读本地日历，不连接Apple/企业日历、不发送邀请、不预订会议室。",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "calendar_id": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "calendar_id",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "starts": {
+            "type": "string"
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "event_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "start": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "end": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 40
+                },
+                "calendar_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 80
+                },
+                "location": {
+                  "type": "string",
+                  "maxLength": 500
+                },
+                "notes": {
+                  "type": "string",
+                  "maxLength": 500,
+                  "multiline": true
+                },
+                "revision": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "event_id",
+                "title",
+                "start",
+                "end",
+                "calendar_id",
+                "location",
+                "notes",
+                "revision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "count": {
+            "type": "integer"
+          },
+          "date": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 10
+          },
+          "timezone": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          }
+        },
+        "required": [
+          "title",
+          "starts"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": true,
+      "example": {
+        "arguments": {
+          "calendar_id": "personal",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "title": "暂无日程",
+          "starts": "",
+          "events": [],
+          "count": 0,
+          "date": "2026-11-11",
+          "timezone": "Asia/Shanghai"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "meeting.room",
+      "family": "meeting.room",
+      "domain": "个人",
+      "version": "2",
+      "description": "查询会议室指定时段是否可用",
+      "excluded": "不执行预订",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "room": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "room",
+          "start",
+          "end"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "available"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": true,
+      "example": {
+        "arguments": {
+          "room": "R101",
+          "start": "2026-11-11T14:00+08:00",
+          "end": "2026-11-11T15:00+08:00"
+        },
+        "result": {
+          "available": true
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "leave.balance",
+      "family": "leave.balance",
+      "domain": "个人",
+      "version": "2",
+      "description": "读取已授权本人指定年份剩余年假天数",
+      "excluded": "不查询他人或提交请假",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "year"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "remaining_days": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "remaining_days"
+        ],
+        "additionalProperties": false
+      },
+      "split": "valid",
+      "requires_session_authorization": true,
+      "example": {
+        "arguments": {
+          "year": 2026
+        },
+        "result": {
+          "remaining_days": 5
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "expense.status",
+      "family": "expense.status",
+      "domain": "个人",
+      "version": "2",
+      "description": "读取已授权本人报销单审批状态",
+      "excluded": "不审批或修改报销单",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "claim_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "claim_id"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "split": "test",
+      "requires_session_authorization": true,
+      "example": {
+        "arguments": {
+          "claim_id": "E101"
+        },
+        "result": {
+          "status": "approved"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "order.delivery",
+      "family": "order.delivery",
+      "domain": "个人",
+      "version": "2",
+      "description": "读取已授权订单的商家承诺送达窗口",
+      "excluded": "不查询承运商物流节点",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "order_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_id"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "window_start": {
+            "type": "string"
+          },
+          "window_end": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "window_start",
+          "window_end"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": true,
+      "example": {
+        "arguments": {
+          "order_id": "O101"
+        },
+        "result": {
+          "window_start": "2026-11-12",
+          "window_end": "2026-11-13"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "warranty.coverage",
+      "family": "warranty.coverage",
+      "domain": "个人",
+      "version": "2",
+      "description": "查询已授权产品保修截止日和项目",
+      "excluded": "不裁定具体故障赔付",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "serial_number": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "serial_number"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "expires": {
+            "type": "string"
+          },
+          "coverage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "expires",
+          "coverage"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": true,
+      "example": {
+        "arguments": {
+          "serial_number": "SN101"
+        },
+        "result": {
+          "expires": "2027-11-11",
+          "coverage": "制造缺陷"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "subscription.renewal",
+      "family": "subscription.renewal",
+      "domain": "个人",
+      "version": "2",
+      "description": "读取已授权订阅的下次续费日和金额",
+      "excluded": "不取消订阅或扣款",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "subscription_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "subscription_id"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "renews": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "integer"
+          },
+          "currency": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "renews",
+          "amount",
+          "currency"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": true,
+      "example": {
+        "arguments": {
+          "subscription_id": "SUB101"
+        },
+        "result": {
+          "renews": "2026-12-01",
+          "amount": 20,
+          "currency": "CNY"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "utility.bill",
+      "family": "utility.bill",
+      "domain": "个人",
+      "version": "2",
+      "description": "读取已授权账户指定账期应缴费用",
+      "excluded": "不执行支付或查他人账单",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string"
+          },
+          "period": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id",
+          "period"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "integer"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "due": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "amount",
+          "currency",
+          "due"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": true,
+      "example": {
+        "arguments": {
+          "account_id": "A101",
+          "period": "2026-10"
+        },
+        "result": {
+          "amount": 88,
+          "currency": "CNY",
+          "due": "2026-11-20"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "currency.reference",
+      "family": "currency.reference",
+      "domain": "信息",
+      "version": "2",
+      "description": "查询指定日期货币对参考汇率",
+      "excluded": "不交易或给投资建议",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "type": "string"
+          },
+          "quote": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "base",
+          "quote",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "rate": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "rate"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "base": "USD",
+          "quote": "CNY",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "rate": 7.1
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "postcode.address",
+      "family": "postcode.address",
+      "domain": "信息",
+      "version": "2",
+      "description": "查询结构化地址的邮政编码",
+      "excluded": "不查询个人住址",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "district": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "city",
+          "district",
+          "street"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "postcode": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "postcode"
+        ],
+        "additionalProperties": false
+      },
+      "split": "valid",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "city": "杭州",
+          "district": "上城区",
+          "street": "湖滨路"
+        },
+        "result": {
+          "postcode": 310000
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "timezone.offset",
+      "family": "timezone.offset",
+      "domain": "信息",
+      "version": "2",
+      "description": "查询城市指定时刻的UTC偏移",
+      "excluded": "不查询日出日落",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "instant": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "city",
+          "instant"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "offset_minutes": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "offset_minutes"
+        ],
+        "additionalProperties": false
+      },
+      "split": "test",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "city": "London",
+          "instant": "2026-11-11T12:00Z"
+        },
+        "result": {
+          "offset_minutes": 0
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "holiday.calendar",
+      "family": "holiday.calendar",
+      "domain": "信息",
+      "version": "2",
+      "description": "查询地区指定日期是否官方公共假日",
+      "excluded": "不查询个人休假",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "region",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "is_holiday": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "is_holiday"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "region": "CN",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "is_holiday": false
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "word.definition",
+      "family": "word.definition",
+      "domain": "信息",
+      "version": "2",
+      "description": "查询指定词语在指定语言词典中的释义",
+      "excluded": "不通用翻译或问答",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "word": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "word",
+          "language"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "definition": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "definition"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "word": "river",
+          "language": "en"
+        },
+        "result": {
+          "definition": "A natural stream of water."
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "name.pronunciation",
+      "family": "name.pronunciation",
+      "domain": "信息",
+      "version": "2",
+      "description": "查询指定人名语言词典中的音标",
+      "excluded": "不克隆真人声音",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "language"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "ipa": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ipa"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "name": "Demo",
+          "language": "en"
+        },
+        "result": {
+          "ipa": "/ˈdɛmoʊ/"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "food.allergen",
+      "family": "food.allergen",
+      "domain": "信息",
+      "version": "2",
+      "description": "读取指定包装SKU的官方过敏原标签",
+      "excluded": "不提供医疗诊断或保证个人食用安全",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "sku": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sku"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "allergens": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "allergens"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "sku": "FOOD101"
+        },
+        "result": {
+          "allergens": "milk"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "device.port",
+      "family": "device.port",
+      "domain": "信息",
+      "version": "2",
+      "description": "查询指定型号硬件端口规格",
+      "excluded": "不执行任意代码或通用技术问答",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "model": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "model"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "usb_c_ports": {
+            "type": "integer"
+          },
+          "hdmi_ports": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "usb_c_ports",
+          "hdmi_ports"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "model": "Device101"
+        },
+        "result": {
+          "usb_c_ports": 2,
+          "hdmi_ports": 1
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "air.quality",
+      "family": "air.quality",
+      "domain": "环境",
+      "version": "2",
+      "description": "查询指定监测站最新空气质量指数",
+      "excluded": "不提供天气或个体健康建议",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "station": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "station"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "aqi": {
+            "type": "integer"
+          },
+          "category": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "aqi",
+          "category"
+        ],
+        "additionalProperties": false
+      },
+      "split": "valid",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "station": "AQ101"
+        },
+        "result": {
+          "aqi": 42,
+          "category": "good"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "pollen.level",
+      "family": "pollen.level",
+      "domain": "环境",
+      "version": "2",
+      "description": "查询地区当日花粉监测等级",
+      "excluded": "不诊断过敏",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "region",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "level"
+        ],
+        "additionalProperties": false
+      },
+      "split": "test",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "region": "杭州",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "level": "low"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "uv.index",
+      "family": "uv.index",
+      "domain": "环境",
+      "version": "2",
+      "description": "查询地点指定时刻紫外线指数",
+      "excluded": "不生成综合天气预报",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "time": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "city",
+          "time"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "uv_index": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "uv_index"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "city": "杭州",
+          "time": "2026-11-11T12:00+08:00"
+        },
+        "result": {
+          "uv_index": 3
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "river.level",
+      "family": "river.level",
+      "domain": "环境",
+      "version": "2",
+      "description": "查询水文站最近水位及测量时间",
+      "excluded": "不预测洪水",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "station": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "station"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "level_m": {
+            "type": "number"
+          },
+          "measured_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "level_m",
+          "measured_at"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "station": "HY101"
+        },
+        "result": {
+          "level_m": 3.2,
+          "measured_at": "2026-11-11T12:00+08:00"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "beach.tide",
+      "family": "beach.tide",
+      "domain": "环境",
+      "version": "2",
+      "description": "查询海滩指定日期高潮时刻",
+      "excluded": "不保证下水安全",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "beach": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "beach",
+          "date"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "high_tide": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "high_tide"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "beach": "示例海滩",
+          "date": "2026-11-11"
+        },
+        "result": {
+          "high_tide": "13:20"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "noise.measurement",
+      "family": "noise.measurement",
+      "domain": "环境",
+      "version": "2",
+      "description": "查询监测点最近环境噪声读数",
+      "excluded": "不录音或识别人声",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "station": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "station"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "decibels": {
+            "type": "integer"
+          },
+          "measured_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "decibels",
+          "measured_at"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "station": "N101"
+        },
+        "result": {
+          "decibels": 48,
+          "measured_at": "2026-11-11T12:00+08:00"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "recycling.category",
+      "family": "recycling.category",
+      "domain": "环境",
+      "version": "2",
+      "description": "查询本地分类规则下某物品的垃圾类别",
+      "excluded": "不查询收运时间",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "city": {
+            "type": "string"
+          },
+          "item": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "city",
+          "item"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "category"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "city": "杭州",
+          "item": "玻璃瓶"
+        },
+        "result": {
+          "category": "可回收物"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "alert.bulletin",
+      "family": "alert.bulletin",
+      "domain": "环境",
+      "version": "2",
+      "description": "读取地区当前官方灾害预警公告",
+      "excluded": "不自行预测或发出预警",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "region"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "active": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "active"
+        ],
+        "additionalProperties": false
+      },
+      "split": "valid",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "region": "杭州"
+        },
+        "result": {
+          "active": false
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "venue.accessibility",
+      "family": "venue.accessibility",
+      "domain": "设施",
+      "version": "2",
+      "description": "查询场馆指定入口无障碍坡道信息",
+      "excluded": "不查询开放时间",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "venue": {
+            "type": "string"
+          },
+          "entrance": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "venue",
+          "entrance"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "ramp": {
+            "type": "boolean"
+          },
+          "elevator": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ramp",
+          "elevator"
+        ],
+        "additionalProperties": false
+      },
+      "split": "test",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "venue": "城市展馆",
+          "entrance": "东门"
+        },
+        "result": {
+          "ramp": true,
+          "elevator": true
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "wifi.access",
+      "family": "wifi.access",
+      "domain": "设施",
+      "version": "2",
+      "description": "查询场馆访客无线网络公开连接说明",
+      "excluded": "不返回私有密码或扫描网络",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "venue": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "venue"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "ssid": {
+            "type": "string"
+          },
+          "method": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ssid",
+          "method"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "venue": "城市展馆"
+        },
+        "result": {
+          "ssid": "Guest",
+          "method": "captive_portal"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "lostfound.hours",
+      "family": "lostfound.hours",
+      "domain": "设施",
+      "version": "2",
+      "description": "查询指定失物招领处服务时间",
+      "excluded": "不检索个人遗失物详情",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "office": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "office"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "opens": {
+            "type": "string"
+          },
+          "closes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "opens",
+          "closes"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "office": "车站失物处"
+        },
+        "result": {
+          "opens": "09:00",
+          "closes": "17:00"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "restroom.facility",
+      "family": "restroom.facility",
+      "domain": "设施",
+      "version": "2",
+      "description": "查询指定站点无障碍卫生间位置",
+      "excluded": "不查询其他场馆设施",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "station": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "station"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "location"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "station": "市民中心站"
+        },
+        "result": {
+          "location": "站厅东侧"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "luggage.capacity",
+      "family": "luggage.capacity",
+      "domain": "设施",
+      "version": "2",
+      "description": "查询指定寄存点可用大件行李柜数",
+      "excluded": "不办理寄存或返回柜码",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "location"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "large_lockers": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "large_lockers"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "location": "东站寄存点"
+        },
+        "result": {
+          "large_lockers": 8
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "ferry.operation",
+      "family": "ferry.operation",
+      "domain": "设施",
+      "version": "2",
+      "description": "查询指定渡口当前是否运营",
+      "excluded": "不查询铁路班次",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "terminal": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "terminal"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "operating": {
+            "type": "boolean"
+          },
+          "next_departure": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "operating",
+          "next_departure"
+        ],
+        "additionalProperties": false
+      },
+      "split": "train",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "terminal": "示例渡口"
+        },
+        "result": {
+          "operating": true,
+          "next_departure": "14:20"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "bike.docks",
+      "family": "bike.docks",
+      "domain": "设施",
+      "version": "2",
+      "description": "查询公共自行车站点可还车空桩数",
+      "excluded": "不解锁车辆",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "station": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "station"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "empty_docks": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "empty_docks"
+        ],
+        "additionalProperties": false
+      },
+      "split": "valid",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "station": "BIKE101"
+        },
+        "result": {
+          "empty_docks": 7
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "canteen.menu",
+      "family": "canteen.menu",
+      "domain": "设施",
+      "version": "2",
+      "description": "查询指定食堂某日某餐菜单",
+      "excluded": "不提供营养治疗方案",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "canteen": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "meal": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "canteen",
+          "date",
+          "meal"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "main": {
+            "type": "string"
+          },
+          "side": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "main",
+          "side"
+        ],
+        "additionalProperties": false
+      },
+      "split": "test",
+      "requires_session_authorization": false,
+      "example": {
+        "arguments": {
+          "canteen": "一号食堂",
+          "date": "2026-11-11",
+          "meal": "lunch"
+        },
+        "result": {
+          "main": "番茄炒蛋",
+          "side": "青菜"
+        }
+      },
+      "source": "synthetic_sandbox_not_live_api",
+      "production_ready": false,
+      "scenario_constraints": {
+        "cancel_pending": "requires simulated execution delay",
+        "revise_pending": "requires a changed argument and distinct fixture",
+        "interrupt_result_reading": "requires enough spoken result duration",
+        "missing_argument_clarify": "omit a required argument",
+        "no_tool_needed": "do not call solely because this tool is listed"
+      }
+    },
+    {
+      "name": "stock.quote",
+      "domain": "信息",
+      "version": "1",
+      "read_only": true,
+      "requires_session_authorization": false,
+      "description": "查询一只股票、指数或ETF的最新行情（A股、港股、美股），按名称或代码匹配；行情可能有延迟，仅供参考，不构成投资建议",
+      "excluded": "不提供投资建议，不交易，不预测涨跌",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "用户说的证券名称或代码，例如 贵州茅台、600519、腾讯、AAPL；不要自行改写成别的公司",
+            "minLength": 1,
+            "maxLength": 40
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "market": {
+            "type": "string",
+            "enum": [
+              "cn",
+              "hk",
+              "us"
+            ]
+          },
+          "currency": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "change": {
+            "type": "number"
+          },
+          "change_pct": {
+            "type": "number"
+          },
+          "open": {
+            "type": "number"
+          },
+          "high": {
+            "type": "number"
+          },
+          "low": {
+            "type": "number"
+          },
+          "prev_close": {
+            "type": "number"
+          },
+          "as_of": {
+            "type": "string"
+          },
+          "market_state": {
+            "type": "string",
+            "enum": [
+              "open",
+              "closed",
+              "unknown"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "symbol",
+          "market",
+          "currency",
+          "price",
+          "change",
+          "change_pct",
+          "prev_close",
+          "as_of",
+          "market_state"
+        ],
+        "additionalProperties": false
+      },
+      "ui_provenance": {
+        "chart": {
+          "prev_close": "number",
+          "points": "[[HH:MM, price], ...] 1-minute closes for today",
+          "time_zone": "IANA zone"
+        },
+        "resolved": "{query, symbol, name, type}",
+        "notice": "string",
+        "urls": "[string]"
+      },
+      "example": {
+        "arguments": {
+          "query": "贵州茅台"
+        },
+        "result": {
+          "name": "贵州茅台",
+          "symbol": "600519.SH",
+          "market": "cn",
+          "currency": "CNY",
+          "price": 1349.98,
+          "change": 14.98,
+          "change_pct": 1.12,
+          "open": 1325.4,
+          "high": 1350.0,
+          "low": 1324.79,
+          "prev_close": 1335.0,
+          "as_of": "2026-10-26T16:14:50+08:00",
+          "market_state": "closed"
+        }
+      },
+      "family": "stock.quote",
+      "split": "runtime_only",
+      "source": "live_readonly_dashboard",
+      "production_ready": false
+    },
+    {
+      "name": "market.indices",
+      "domain": "信息",
+      "version": "1",
+      "read_only": true,
+      "requires_session_authorization": false,
+      "description": "查看一个市场主要指数的行情看板：cn=上证、深证成指、创业板指、沪深300；hk=恒生、恒生科技、国企指数；us=道琼斯、纳斯达克、标普500；仅供参考",
+      "excluded": "不提供投资建议，不预测走势",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string",
+            "enum": [
+              "cn",
+              "hk",
+              "us"
+            ],
+            "description": "cn=A股，hk=港股，us=美股；用户说大盘且未指明时用 cn"
+          }
+        },
+        "required": [
+          "region"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "string"
+          },
+          "as_of": {
+            "type": "string"
+          },
+          "market_state": {
+            "type": "string",
+            "enum": [
+              "open",
+              "closed",
+              "unknown"
+            ]
+          },
+          "indices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "symbol": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "change": {
+                  "type": "number"
+                },
+                "change_pct": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "name",
+                "symbol",
+                "price",
+                "change_pct"
+              ]
+            }
+          }
+        },
+        "required": [
+          "region",
+          "market_state",
+          "indices"
+        ],
+        "additionalProperties": false
+      },
+      "ui_provenance": {
+        "charts": "{symbol: {prev_close, points: [[HH:MM, price], ...]}}",
+        "time_zone": "IANA zone",
+        "notice": "string",
+        "urls": "[string]"
+      },
+      "example": {
+        "arguments": {
+          "region": "cn"
+        },
+        "result": {
+          "region": "cn",
+          "as_of": "2026-10-26T16:14:57+08:00",
+          "market_state": "closed",
+          "indices": [
+            {
+              "name": "上证指数",
+              "symbol": "000001",
+              "price": 3697.52,
+              "change": 7.04,
+              "change_pct": 0.19
+            },
+            {
+              "name": "深证成指",
+              "symbol": "399001",
+              "price": 11534.38,
+              "change": -139.45,
+              "change_pct": -1.19
+            },
+            {
+              "name": "创业板指",
+              "symbol": "399006",
+              "price": 2638.23,
+              "change": -45.87,
+              "change_pct": -1.71
+            },
+            {
+              "name": "沪深300",
+              "symbol": "000300",
+              "price": 4103.54,
+              "change": -1.79,
+              "change_pct": -0.04
+            }
+          ]
+        }
+      },
+      "family": "market.indices",
+      "split": "runtime_only",
+      "source": "live_readonly_dashboard",
+      "production_ready": false
+    },
+    {
+      "name": "currency.trend",
+      "domain": "信息",
+      "version": "1",
+      "read_only": true,
+      "requires_session_authorization": false,
+      "description": "查询货币对最近若干天的参考汇率走势（欧洲央行工作日参考价）：起止汇率、涨跌幅、最高最低；base是原币，quote是目标币",
+      "excluded": "不交易，不提供投资建议，不是成交报价",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "type": "string",
+            "description": "原币 ISO 4217 三字母代码，例如 USD"
+          },
+          "quote": {
+            "type": "string",
+            "description": "目标币 ISO 4217 三字母代码，例如 CNY；不要颠倒方向"
+          },
+          "days": {
+            "type": "integer",
+            "minimum": 7,
+            "maximum": 365,
+            "description": "回看天数：一周=7，一个月=30，三个月=90，一年=365"
+          }
+        },
+        "required": [
+          "base",
+          "quote",
+          "days"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "base": {
+            "type": "string"
+          },
+          "quote": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "first": {
+            "type": "number"
+          },
+          "last": {
+            "type": "number"
+          },
+          "change_pct": {
+            "type": "number"
+          },
+          "high": {
+            "type": "number"
+          },
+          "high_date": {
+            "type": "string"
+          },
+          "low": {
+            "type": "number"
+          },
+          "low_date": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "base",
+          "quote",
+          "start",
+          "end",
+          "first",
+          "last",
+          "change_pct",
+          "high",
+          "low"
+        ],
+        "additionalProperties": false
+      },
+      "ui_provenance": {
+        "series": "[[YYYY-MM-DD, rate], ...]",
+        "url": "string",
+        "not_transaction_quote": true
+      },
+      "example": {
+        "arguments": {
+          "base": "USD",
+          "quote": "CNY",
+          "days": 30
+        },
+        "result": {
+          "base": "USD",
+          "quote": "CNY",
+          "start": "2026-09-25",
+          "end": "2026-10-26",
+          "first": 6.7132,
+          "last": 6.6681,
+          "change_pct": -0.67,
+          "high": 6.7132,
+          "high_date": "2026-09-25",
+          "low": 6.6681,
+          "low_date": "2026-10-26"
+        }
+      },
+      "family": "currency.trend",
+      "split": "runtime_only",
+      "source": "live_readonly_dashboard",
+      "production_ready": false
+    },
+    {
+      "name": "calendar.create",
+      "family": "calendar.create",
+      "domain": "个人",
+      "version": "1",
+      "description": "创建日程，必须明确标题、开始和结束时间；不清楚时先追问。 仅本地个人工作区，需授权；不发送通知或对外同步。",
+      "excluded": "不访问外部账号、不发送邀请、不执行支付；ID必须来自当前工作区的真实返回。",
+      "read_only": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "start": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40,
+            "description": "含时区的ISO时间，例如2026-10-28T14:00+08:00"
+          },
+          "end": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40,
+            "description": "必须晚于start，含时区"
+          },
+          "calendar_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "description": "默认personal"
+          },
+          "location": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 500,
+            "multiline": true
+          }
+        },
+        "required": [
+          "title",
+          "start",
+          "end"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "start": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "end": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "calendar_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "location": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 500,
+                "multiline": true
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "event_id",
+              "title",
+              "start",
+              "end",
+              "calendar_id",
+              "location",
+              "notes",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "state": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          },
+          "undo_available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "item",
+          "state",
+          "undo_available"
+        ],
+        "additionalProperties": false
+      },
+      "split": "runtime",
+      "requires_session_authorization": true,
+      "source": "local_personal_store",
+      "production_ready": true,
+      "example": {
+        "arguments": {
+          "title": "项目讨论",
+          "start": "2026-10-28T14:00+08:00",
+          "end": "2026-10-28T14:30+08:00"
+        },
+        "result": {
+          "item": {
+            "event_id": "ev_example",
+            "title": "项目讨论",
+            "start": "2026-10-28T14:00+08:00",
+            "end": "2026-10-28T14:30+08:00",
+            "calendar_id": "personal",
+            "location": "",
+            "notes": "",
+            "revision": 1
+          },
+          "state": "created",
+          "undo_available": false
+        }
+      }
+    },
+    {
+      "name": "calendar.update",
+      "family": "calendar.update",
+      "domain": "个人",
+      "version": "1",
+      "description": "修改或改期已有日程；先查日程得到event_id。 仅本地个人工作区，需授权；不发送通知或对外同步。",
+      "excluded": "不访问外部账号、不发送邀请、不执行支付；ID必须来自当前工作区的真实返回。",
+      "read_only": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "start": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40,
+            "description": "含时区的ISO时间，例如2026-10-28T14:00+08:00"
+          },
+          "end": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40,
+            "description": "必须晚于start，含时区"
+          },
+          "calendar_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "description": "默认personal"
+          },
+          "location": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 500,
+            "multiline": true
+          },
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "可选，用于防止覆盖旧版本"
+          }
+        },
+        "required": [
+          "event_id"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "start": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "end": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "calendar_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "location": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 500,
+                "multiline": true
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "event_id",
+              "title",
+              "start",
+              "end",
+              "calendar_id",
+              "location",
+              "notes",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "state": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          },
+          "undo_available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "item",
+          "state",
+          "undo_available"
+        ],
+        "additionalProperties": false
+      },
+      "split": "runtime",
+      "requires_session_authorization": true,
+      "source": "local_personal_store",
+      "production_ready": true,
+      "example": {
+        "arguments": {
+          "event_id": "ev_example",
+          "title": "项目复盘"
+        },
+        "result": {
+          "item": {
+            "event_id": "ev_example",
+            "title": "项目讨论",
+            "start": "2026-10-28T14:00+08:00",
+            "end": "2026-10-28T14:30+08:00",
+            "calendar_id": "personal",
+            "location": "",
+            "notes": "",
+            "revision": 1
+          },
+          "state": "updated",
+          "undo_available": false
+        }
+      }
+    },
+    {
+      "name": "calendar.delete",
+      "family": "calendar.delete",
+      "domain": "个人",
+      "version": "1",
+      "description": "删除已有日程，可撤销 仅本地个人工作区，需授权；不发送通知或对外同步。",
+      "excluded": "不访问外部账号、不发送邀请、不执行支付；ID必须来自当前工作区的真实返回。",
+      "read_only": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "可选，用于防止覆盖旧版本"
+          }
+        },
+        "required": [
+          "event_id"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "start": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "end": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "calendar_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "location": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 500,
+                "multiline": true
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "event_id",
+              "title",
+              "start",
+              "end",
+              "calendar_id",
+              "location",
+              "notes",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "state": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          },
+          "undo_available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "item",
+          "state",
+          "undo_available"
+        ],
+        "additionalProperties": false
+      },
+      "split": "runtime",
+      "requires_session_authorization": true,
+      "source": "local_personal_store",
+      "production_ready": true,
+      "example": {
+        "arguments": {
+          "event_id": "ev_example"
+        },
+        "result": {
+          "item": {
+            "event_id": "ev_example",
+            "title": "项目讨论",
+            "start": "2026-10-28T14:00+08:00",
+            "end": "2026-10-28T14:30+08:00",
+            "calendar_id": "personal",
+            "location": "",
+            "notes": "",
+            "revision": 1
+          },
+          "state": "deleted",
+          "undo_available": true
+        }
+      }
+    },
+    {
+      "name": "calendar.restore",
+      "family": "calendar.restore",
+      "domain": "个人",
+      "version": "1",
+      "description": "恢复刚删除的日程 仅本地个人工作区，需授权；不发送通知或对外同步。",
+      "excluded": "不访问外部账号、不发送邀请、不执行支付；ID必须来自当前工作区的真实返回。",
+      "read_only": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "可选，用于防止覆盖旧版本"
+          }
+        },
+        "required": [
+          "event_id"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "object",
+            "properties": {
+              "event_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "start": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "end": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 40
+              },
+              "calendar_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 80
+              },
+              "location": {
+                "type": "string",
+                "maxLength": 500
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 500,
+                "multiline": true
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "event_id",
+              "title",
+              "start",
+              "end",
+              "calendar_id",
+              "location",
+              "notes",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "state": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          },
+          "undo_available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "item",
+          "state",
+          "undo_available"
+        ],
+        "additionalProperties": false
+      },
+      "split": "runtime",
+      "requires_session_authorization": true,
+      "source": "local_personal_store",
+      "production_ready": true,
+      "example": {
+        "arguments": {
+          "event_id": "ev_example"
+        },
+        "result": {
+          "item": {
+            "event_id": "ev_example",
+            "title": "项目讨论",
+            "start": "2026-10-28T14:00+08:00",
+            "end": "2026-10-28T14:30+08:00",
+            "calendar_id": "personal",
+            "location": "",
+            "notes": "",
+            "revision": 1
+          },
+          "state": "restored",
+          "undo_available": false
+        }
+      }
+    },
+    {
+      "name": "task.list",
+      "family": "task.list",
+      "domain": "个人",
+      "version": "1",
+      "description": "查看本地待办事项；status可选pending未完成、done已完成、all全部。 仅本地个人工作区，需授权；不发送通知或对外同步。",
+      "excluded": "不访问外部账号、不发送邀请、不执行支付；ID必须来自当前工作区的真实返回。",
+      "read_only": true,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "done",
+              "all"
+            ]
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "task_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "title": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "due": {
+                  "type": "string",
+                  "maxLength": 40
+                },
+                "completed": {
+                  "type": "boolean"
+                },
+                "notes": {
+                  "type": "string",
+                  "maxLength": 500,
+                  "multiline": true
+                },
+                "revision": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "required": [
+                "task_id",
+                "title",
+                "due",
+                "completed",
+                "notes",
+                "revision"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "count": {
+            "type": "integer"
+          },
+          "has_more": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "items",
+          "count",
+          "has_more"
+        ],
+        "additionalProperties": false
+      },
+      "split": "runtime",
+      "requires_session_authorization": true,
+      "source": "local_personal_store",
+      "production_ready": true,
+      "example": {
+        "arguments": {
+          "status": "all"
+        },
+        "result": {
+          "items": [],
+          "count": 0,
+          "has_more": false
+        }
+      }
+    },
+    {
+      "name": "task.create",
+      "family": "task.create",
+      "domain": "个人",
+      "version": "1",
+      "description": "创建本地待办事项，不设置系统闹钟。 仅本地个人工作区，需授权；不发送通知或对外同步。",
+      "excluded": "不访问外部账号、不发送邀请、不执行支付；ID必须来自当前工作区的真实返回。",
+      "read_only": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "due": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "可省略；有值时必须是含时区的ISO时间，空串表示无截止时间"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 500,
+            "multiline": true
+          }
+        },
+        "required": [
+          "title"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "object",
+            "properties": {
+              "task_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "due": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "completed": {
+                "type": "boolean"
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 500,
+                "multiline": true
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "task_id",
+              "title",
+              "due",
+              "completed",
+              "notes",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "state": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          },
+          "undo_available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "item",
+          "state",
+          "undo_available"
+        ],
+        "additionalProperties": false
+      },
+      "split": "runtime",
+      "requires_session_authorization": true,
+      "source": "local_personal_store",
+      "production_ready": true,
+      "example": {
+        "arguments": {
+          "title": "准备讨论材料"
+        },
+        "result": {
+          "item": {
+            "task_id": "task_example",
+            "title": "准备讨论材料",
+            "due": "",
+            "completed": false,
+            "notes": "",
+            "revision": 1
+          },
+          "state": "created",
+          "undo_available": false
+        }
+      }
+    },
+    {
+      "name": "task.update",
+      "family": "task.update",
+      "domain": "个人",
+      "version": "1",
+      "description": "修改、完成或重新打开待办；先查看得到task_id。 仅本地个人工作区，需授权；不发送通知或对外同步。",
+      "excluded": "不访问外部账号、不发送邀请、不执行支付；ID必须来自当前工作区的真实返回。",
+      "read_only": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "due": {
+            "type": "string",
+            "maxLength": 40,
+            "description": "可省略；有值时必须是含时区的ISO时间，空串表示无截止时间"
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 500,
+            "multiline": true
+          },
+          "task_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "可选，用于防止覆盖旧版本"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "object",
+            "properties": {
+              "task_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "due": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "completed": {
+                "type": "boolean"
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 500,
+                "multiline": true
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "task_id",
+              "title",
+              "due",
+              "completed",
+              "notes",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "state": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          },
+          "undo_available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "item",
+          "state",
+          "undo_available"
+        ],
+        "additionalProperties": false
+      },
+      "split": "runtime",
+      "requires_session_authorization": true,
+      "source": "local_personal_store",
+      "production_ready": true,
+      "example": {
+        "arguments": {
+          "task_id": "task_example",
+          "completed": true
+        },
+        "result": {
+          "item": {
+            "task_id": "task_example",
+            "title": "准备讨论材料",
+            "due": "",
+            "completed": false,
+            "notes": "",
+            "revision": 1
+          },
+          "state": "updated",
+          "undo_available": false
+        }
+      }
+    },
+    {
+      "name": "task.delete",
+      "family": "task.delete",
+      "domain": "个人",
+      "version": "1",
+      "description": "删除待办，可撤销 仅本地个人工作区，需授权；不发送通知或对外同步。",
+      "excluded": "不访问外部账号、不发送邀请、不执行支付；ID必须来自当前工作区的真实返回。",
+      "read_only": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "可选，用于防止覆盖旧版本"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "object",
+            "properties": {
+              "task_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "due": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "completed": {
+                "type": "boolean"
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 500,
+                "multiline": true
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "task_id",
+              "title",
+              "due",
+              "completed",
+              "notes",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "state": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          },
+          "undo_available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "item",
+          "state",
+          "undo_available"
+        ],
+        "additionalProperties": false
+      },
+      "split": "runtime",
+      "requires_session_authorization": true,
+      "source": "local_personal_store",
+      "production_ready": true,
+      "example": {
+        "arguments": {
+          "task_id": "task_example"
+        },
+        "result": {
+          "item": {
+            "task_id": "task_example",
+            "title": "准备讨论材料",
+            "due": "",
+            "completed": false,
+            "notes": "",
+            "revision": 1
+          },
+          "state": "deleted",
+          "undo_available": true
+        }
+      }
+    },
+    {
+      "name": "task.restore",
+      "family": "task.restore",
+      "domain": "个人",
+      "version": "1",
+      "description": "恢复刚删除的待办 仅本地个人工作区，需授权；不发送通知或对外同步。",
+      "excluded": "不访问外部账号、不发送邀请、不执行支付；ID必须来自当前工作区的真实返回。",
+      "read_only": false,
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "task_id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "expected_revision": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "可选，用于防止覆盖旧版本"
+          }
+        },
+        "required": [
+          "task_id"
+        ],
+        "additionalProperties": false
+      },
+      "returns": {
+        "type": "object",
+        "properties": {
+          "item": {
+            "type": "object",
+            "properties": {
+              "task_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              "title": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 160
+              },
+              "due": {
+                "type": "string",
+                "maxLength": 40
+              },
+              "completed": {
+                "type": "boolean"
+              },
+              "notes": {
+                "type": "string",
+                "maxLength": 500,
+                "multiline": true
+              },
+              "revision": {
+                "type": "integer",
+                "minimum": 1
+              }
+            },
+            "required": [
+              "task_id",
+              "title",
+              "due",
+              "completed",
+              "notes",
+              "revision"
+            ],
+            "additionalProperties": false
+          },
+          "state": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 20
+          },
+          "undo_available": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "item",
+          "state",
+          "undo_available"
+        ],
+        "additionalProperties": false
+      },
+      "split": "runtime",
+      "requires_session_authorization": true,
+      "source": "local_personal_store",
+      "production_ready": true,
+      "example": {
+        "arguments": {
+          "task_id": "task_example"
+        },
+        "result": {
+          "item": {
+            "task_id": "task_example",
+            "title": "准备讨论材料",
+            "due": "",
+            "completed": false,
+            "notes": "",
+            "revision": 1
+          },
+          "state": "restored",
+          "undo_available": false
+        }
+      }
+    }
+  ],
+  "sha256": "74655778a5095c034ef8487c0205daf3f36cab6df4c59aa5b627bd3e7f1cb1ec"
+}

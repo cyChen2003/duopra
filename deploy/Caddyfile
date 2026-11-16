@@ -1,0 +1,21 @@
+{
+    auto_https disable_redirects
+}
+http://{$PUBLIC_DOMAIN} {
+    redir https://{$PUBLIC_DOMAIN}{uri} 308
+}
+https://{$PUBLIC_DOMAIN} {
+    request_body {
+        max_size 10MB
+    }
+    header {
+        Strict-Transport-Security "max-age=31536000"
+        -Server
+    }
+    reverse_proxy backend:8000 {
+        header_up Host {host}
+        transport http {
+            dial_timeout 5s
+        }
+    }
+}

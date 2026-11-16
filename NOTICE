@@ -1,0 +1,10 @@
+Duopra packages an existing native duplex application and independently added deployment adapters.
+
+No blanket open-source license or redistribution permission is asserted for inherited application code, external model code, model weights, vendor runtime images, or the background SDK. The owner must verify the applicable rights before public distribution. Until then, retain the code in authorized private storage.
+
+Bundled web fonts retain their original copyright and license texts under frontend/static/fonts/ and docs/assets/fonts/ (Inter, JetBrains Mono and Noto Sans SC, each under the SIL Open Font License). Those public legal notices must accompany redistribution. They are not personal deployment metadata and must not be stripped.
+
+No model weights, vendor binaries, personal records, raw conversation histories or source-machine credentials are part of this source package.
+
+The original README presentation drew inspiration from Realtime-Venus
+(https://github.com/inclusionAI/Realtime-Venus). Duopra uses its own artwork.

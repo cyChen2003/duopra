@@ -1,0 +1,101 @@
+name: duopra-nvidia
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: deploy/nvidia/Dockerfile
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:-nvidia/cuda:12.8.1-cudnn-runtime-ubuntu22.04}
+        APT_MIRROR: ${APT_MIRROR:-https://mirrors.tuna.tsinghua.edu.cn/ubuntu}
+        MINICONDA_URL: ${MINICONDA_URL:-https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-py311_24.11.1-0-Linux-x86_64.sh}
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}
+        DUPLEX_CONDA_CHANNEL: ${DUPLEX_CONDA_CHANNEL:-https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge}
+        DUPLEX_TORCH_INDEX_URL: ${DUPLEX_TORCH_INDEX_URL:-https://mirror.sjtu.edu.cn/pytorch-wheels/cu128}
+        HTTP_PROXY: ${HTTP_PROXY:-}
+        HTTPS_PROXY: ${HTTPS_PROXY:-}
+        NO_PROXY: ${NO_PROXY:-}
+    image: duopra-nvidia:0.1.0
+    init: true
+    restart: unless-stopped
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    shm_size: 2gb
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              device_ids: ["${DUPLEX_GPU_ID:?Set the allocated NVIDIA GPU}"]
+              capabilities: [gpu]
+    expose: ["8000"]
+    environment:
+      DUPLEX_GPU_ID: "0"
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility
+      HTTP_PROXY: ${HTTP_PROXY:-}
+      HTTPS_PROXY: ${HTTPS_PROXY:-}
+      NO_PROXY: ${NO_PROXY:-127.0.0.1,localhost,backend}
+      DUPLEX_HARNESS_ALLOWED_HOSTS: ${HARNESS_ALLOWED_HOSTS:-api.deepseek.com}
+      DUPLEX_PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-https://${PUBLIC_DOMAIN:?Set the HTTPS domain}}
+      DUPLEX_ACCESS_FILE: /run/secrets/access.json
+      DUPLEX_MODEL_DIR: /models
+      DUPLEX_MODEL_INVENTORY: /run/secrets/inventory.json
+      DUPLEX_RUN_DIR: /var/lib/duopra
+      DUPLEX_PERSONAL_DB: ${PERSONAL_DB-/var/lib/duopra/personal.sqlite3}
+    volumes:
+      - type: bind
+        source: ${MODELS_DIR:?Set the Duopra merged model directory}
+        target: /models
+        read_only: true
+        bind:
+          create_host_path: false
+      - state:/var/lib/duopra
+    secrets:
+      - source: inventory
+        target: inventory.json
+        mode: 0400
+      - source: access
+        target: access.json
+        mode: 0400
+    tmpfs:
+      - /tmp:mode=1777,size=2g
+    healthcheck:
+      test: [CMD, python, -c, 'import urllib.request; urllib.request.urlopen("http://127.0.0.1:8000/healthz", timeout=5)']
+      interval: 20s
+      timeout: 10s
+      start_period: 20m
+      retries: 3
+    stop_grace_period: 30s
+    logging:
+      driver: local
+      options:
+        max-size: 10m
+        max-file: "2"
+  edge:
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    ports: ["${HTTP_PORT:-80}:80", "${HTTPS_PORT:-443}:443"]
+    environment:
+      PUBLIC_DOMAIN: ${PUBLIC_DOMAIN:?Set the HTTPS domain}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      backend:
+        condition: service_healthy
+    security_opt: [no-new-privileges:true]
+    logging:
+      driver: local
+      options:
+        max-size: 10m
+        max-file: "2"
+secrets:
+  inventory:
+    file: ${MODEL_INVENTORY_FILE:?Set the generated Duopra inventory}
+  access:
+    file: ${ACCESS_FILE:?Set the generated private access hash file}
+volumes:
+  state:
+  caddy_data:
+  caddy_config:

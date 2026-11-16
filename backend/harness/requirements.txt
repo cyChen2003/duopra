@@ -1,0 +1,9 @@
+# Isolated DeepSeek Harness Python dependencies (2026-11-11).
+# Install as a requirements file into an isolated target directory.
+annotated-types==0.8.0
+deepseek-harness-runtime-bin==0.2.1rc2
+deepseek-harness-sdk==0.2.1rc2
+pydantic==2.14.3
+pydantic-core==2.50.4
+typing-extensions==4.16.0
+typing-inspection==0.4.5

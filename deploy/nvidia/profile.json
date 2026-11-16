@@ -1,0 +1,7 @@
+{
+  "schema": "duopra.nvidia.v1",
+  "attention_backend": "llm_math_canonical",
+  "codec_attention_backend": "eager",
+  "allow_tf32": false,
+  "audio_reference_normalization_reset": true
+}
