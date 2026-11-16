@@ -8,7 +8,7 @@
 Chiyu Chen<sup>1,2*</sup> · Pengzhou Cheng<sup>3*</sup> · Yuezhao Ma<sup>1</sup> · Xiaocheng Li<sup>1</sup> · Can Liu<sup>1</sup> · Haonan Hu<sup>2</sup> · Yao Yao<sup>1</sup> · Yifei Yang<sup>1</sup><br>
 Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhuan Wu<sup>4</sup> · Zhuosheng Zhang<sup>1†</sup> · Gongshen Liu<sup>1†</sup> · Chenglu Sun<sup>2‡</sup>
 
-<sub><sup>1</sup>上海交通大学 &nbsp;·&nbsp; <sup>2</sup>腾讯 &nbsp;·&nbsp; <sup>3</sup>上海大学 &nbsp;·&nbsp; <sup>4</sup>独立研究者</sub><br>
+<sub><sup>1</sup>上海交通大学 &nbsp;·&nbsp; <sup>2</sup>腾讯 &nbsp;·&nbsp; <sup>3</sup>上海大学 &nbsp;·&nbsp; <sup>4</sup>布里斯托大学</sub><br>
 <sub><sup>*</sup>同等贡献 &nbsp;·&nbsp; <sup>†</sup>通讯作者 &nbsp;·&nbsp; <sup>‡</sup>项目负责人</sub>
 
 <br>

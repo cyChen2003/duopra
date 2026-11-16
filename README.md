@@ -8,7 +8,7 @@
 Chiyu Chen<sup>1,2*</sup> · Pengzhou Cheng<sup>3*</sup> · Yuezhao Ma<sup>1</sup> · Xiaocheng Li<sup>1</sup> · Can Liu<sup>1</sup> · Haonan Hu<sup>2</sup> · Yao Yao<sup>1</sup> · Yifei Yang<sup>1</sup><br>
 Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhuan Wu<sup>4</sup> · Zhuosheng Zhang<sup>1†</sup> · Gongshen Liu<sup>1†</sup> · Chenglu Sun<sup>2‡</sup>
 
-<sub><sup>1</sup>Shanghai Jiao Tong University &nbsp;·&nbsp; <sup>2</sup>Tencent &nbsp;·&nbsp; <sup>3</sup>Shanghai University &nbsp;·&nbsp; <sup>4</sup>Independent Researcher</sub><br>
+<sub><sup>1</sup>Shanghai Jiao Tong University &nbsp;·&nbsp; <sup>2</sup>Tencent &nbsp;·&nbsp; <sup>3</sup>Shanghai University &nbsp;·&nbsp; <sup>4</sup>University of Bristol</sub><br>
 <sub><sup>*</sup>Equal contribution &nbsp;·&nbsp; <sup>†</sup>Corresponding authors &nbsp;·&nbsp; <sup>‡</sup>Project lead</sub>
 
 <br>
