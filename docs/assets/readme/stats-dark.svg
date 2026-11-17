@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="880" height="120" viewBox="0 0 880 120" role="img" aria-labelledby="t d">
   <title id="t">Duopra in four numbers</title>
-  <desc id="d">#1 open-source system on Full-Duplex-Bench v3 (49.3% Pass@1 with an open backend); 47.7% of tasks passed calling tools itself (Pass@1 over 300 sessions); 1.8× the pass rate from full-duplex RL (26.0% after SFT, 47.7% after RL); 91.3% of interruptions answered (Full-Duplex-Bench v1.0).</desc>
+  <desc id="d">49.3% of tasks passed with a backend (Pass@1 on Full-Duplex-Bench v3, delegating through query(task) to DeepSeek); 47.7% of tasks passed calling tools itself (Pass@1 over 300 sessions); 1.8× the pass rate from full-duplex RL (26.0% after SFT, 47.7% after RL); 91.3% of interruptions answered (Full-Duplex-Bench v1.0).</desc>
   <rect width="880" height="120" rx="18" fill="#10151c"/>
   <rect x=".5" y=".5" width="879" height="119" rx="17.5" fill="none" stroke="#e9eef5" stroke-opacity=".10"/>
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif">
-    <text x="42.0" y="55" fill="#eef2f7" font-size="32" font-weight="600" letter-spacing="-1"><tspan font-size="25" font-weight="400" fill="#97a1b0">#</tspan>1</text>
-    <text x="42.0" y="78" fill="#c3cbd6" font-size="12.5" font-weight="500">open-source system</text>
-    <text x="42.0" y="95" fill="#c3cbd6" font-size="12.5" font-weight="500">on Full-Duplex-Bench v3</text>
+    <text x="42.0" y="55" fill="#eef2f7" font-size="32" font-weight="600" letter-spacing="-1">49.3<tspan dx="1.5" font-size="20" font-weight="400" fill="#97a1b0">%</tspan></text>
+    <text x="42.0" y="78" fill="#c3cbd6" font-size="12.5" font-weight="500">of tasks passed</text>
+    <text x="42.0" y="95" fill="#c3cbd6" font-size="12.5" font-weight="500">with a backend</text>
     <path d="M219.0 30V92" stroke="#e9eef5" stroke-opacity=".10"/>
     <text x="245.0" y="55" fill="#eef2f7" font-size="32" font-weight="600" letter-spacing="-1">47.7<tspan dx="1.5" font-size="20" font-weight="400" fill="#97a1b0">%</tspan></text>
     <text x="245.0" y="78" fill="#c3cbd6" font-size="12.5" font-weight="500">of tasks passed,</text>

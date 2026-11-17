@@ -35,13 +35,13 @@ Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhua
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-dark.svg">
-  <img src="docs/assets/readme/stats-light.svg" alt="#1 open-source system on Full-Duplex-Bench v3 (49.3% Pass@1 with an open backend). 47.7% of tasks passed calling tools itself (Pass@1 over 300 sessions). 1.8× the pass rate from full-duplex RL (26.0% after SFT, 47.7% after RL). 91.3% of interruptions answered (Full-Duplex-Bench v1.0)." width="100%">
+  <img src="docs/assets/readme/stats-light.svg" alt="49.3% of tasks passed with a backend (Pass@1 on Full-Duplex-Bench v3, Duopra delegating through query(task) to DeepSeek). 47.7% of tasks passed calling tools itself (Pass@1 over 300 sessions). 1.8× the pass rate from full-duplex RL (26.0% after SFT, 47.7% after RL). 91.3% of interruptions answered (Full-Duplex-Bench v1.0)." width="100%">
 </picture>
 
 ## News
 
 - **2026-11-16** &nbsp; The [demo video](#video) is out: three minutes in the Duopra app — a tool call while it talks, the backend model called as one more tool, and interruptions it keeps up with.
-- **2026-11-15** &nbsp; The [project page](https://cychen2003.github.io/duopra/) is live, with both recorded sessions replayed second by second, the full ranking and every number. Code and [model weights](https://huggingface.co/Chechen123/Duopra) are out; the preprint follows soon.
+- **2026-11-15** &nbsp; The [project page](https://cychen2003.github.io/duopra/) is live, with both recorded sessions replayed second by second, the full results and every number. Code and [model weights](https://huggingface.co/Chechen123/Duopra) are out; the preprint follows soon.
 
 <a id="overview"></a>
 
@@ -136,10 +136,10 @@ One causal policy, conditioned on the audio so far, the observations injected so
 - **Results land on unit boundaries.** A runtime executes each call asynchronously and injects the result at the first one-second boundary after it returns. The model keeps listening and speaking while it waits, and reports a value only once it has arrived.
 
 <p align="center">
-  <img src="docs/assets/paper/fig1-timeline.webp" alt="Figure 1 in two panels with the same lanes: user, frontend, backend and tools. The user says “Search for a laptop…”, “Wait, a tablet.”, “Add 2 to the cart…” and “Actually, just 1.” (a) Frontend–backend separation: the frontend says “Sure, searching.” and hands off “Search for a laptop.”, so the backend searches for a laptop; it answers “Got it, a tablet.” without a request; it hands off “Add 2 to the cart.”, and the backend calls add_to_cart(laptop_001, 2); it answers “OK, just one.” without a request. The cart ends with 2 laptops. (b) Duopra stays silent until the user has finished, says “Sure, one tablet.” and sends query(“Find a tablet, then add one to my cart.”); the backend searches for a tablet and calls add_to_cart(tablet_001, 1), and Duopra says “Done, it's $99.” The cart ends with 1 tablet." width="100%">
+  <img src="docs/assets/paper/fig1-timeline.webp" alt="Figure 1 in two panels. (a) Frontend–backend separation, four hand-offs: the frontend has no tool schemas; the backend has them, injected from a catalog of search_products, add_to_cart and more. The user says “Search for a laptop…”, “Wait, a tablet.”, “Add 2 to the cart…” and “Actually, just 1.” The frontend says “Let me check.” and hands off “Find a laptop.”; the backend thinks and calls search_products(laptop). After “Wait, a tablet.” it hands off “Make it a tablet.”; the backend thinks again, undoes the search, searches for a tablet and replies, and only then does the frontend say “OK, a tablet.” It hands off “Add 2 to the cart.”; the backend thinks and calls add_to_cart(tablet_001, 2). After “Actually, just 1.” it hands off “Make it 1.”; the backend thinks, undoes the call, adds one and replies, and the frontend says “Done, it's &#36;99.” (b) Duopra, no hand-offs: the frontend sees the tool schemas, query(task) included. It says “Sure, searching.” and calls search_products(laptop) itself; on “Wait, a tablet.” it undoes the call, searches for a tablet and says “OK, a tablet.”; it says “Adding two.” and calls add_to_cart(tablet_001, 2); on “Actually, just 1.” it undoes the call, adds one and says “Done, it's &#36;99.”, well before (a) ends." width="100%">
 </p>
 
-<sub><b>Figure 1.</b> One spoken request, corrected twice (Full-Duplex-Bench v3 task <code>ecommerce_19</code>; speech abridged; schematic, not a trace of a particular system). The user changes the product (laptop → tablet) and the quantity (2 → 1), and adding to the cart needs the product ID that the search returns. Both panels have the same capable backend and the same tools; only the frontend's requests differ. (a) A frontend that hands off at the first pause sends a stale, search-only request (hand-off 1), acknowledges the correction without sending it, and forwards “Add 2 to the cart” (hand-off 2) to a backend whose last search was for laptops; the last correction is acknowledged but not sent either. (b) Duopra waits until the request has settled, then sends one request, <code>query(task)</code>, with both corrections and both steps; it could equally make the two calls itself. In our evaluation, Duopra with a Qwen3-8B backend passed this task (paper, Table 17(a)).</sub>
+<sub><b>Figure 1.</b> Frontend responsibility in an evolving request (Full-Duplex-Bench v3 task <code>ecommerce_19</code>; schematic). The user corrects both the product (laptop → tablet) and the quantity (two → one); <code>add_to_cart</code> depends on the product ID returned by <code>search_products</code>. (a) With the domain tools' schemas behind the backend, the frontend may forward successive requests and corrections (four hand-offs illustrated). (b) With the schemas visible, Duopra can issue the corrected domain-tool calls directly, without a hand-off, while <code>query(task)</code> remains available. Crossed-out values and curved arrows denote superseded requests, not verified tool rollbacks; these are illustrative routes. Table 18(a) of the paper reports an observed delegated success on this request.</sub>
 
 ### Trained in three stages
 
@@ -160,7 +160,7 @@ One stage for each problem: the form of an action, the decision to act, and a vo
 <tr>
 <td valign="top"><b>3 · Projector-only repair</b><br><sub>a voice that stays intelligible</sub></td>
 <td valign="top">Post-training shifts the thinker's hidden states, which condition the talker. Only the projector between them is retrained, on cached features; text, control tokens and calls are untouched.</td>
-<td valign="top">Chinese character error rate 5.17 → <b>1.78%</b> on 88 pilot samples (2.05% before post-training).</td>
+<td valign="top">Chinese character error rate 6.01 → <b>2.58%</b> with the thinker held fixed; English WER 9.74 → 7.66% (221-utterance projector-selection set).</td>
 </tr>
 </table>
 
@@ -168,10 +168,10 @@ One stage for each problem: the form of an action, the decision to act, and a vo
 <summary><b>Figure 2 · the three training stages</b></summary>
 
 <p align="center">
-  <img src="docs/assets/paper/fig2-method.webp" alt="The three training stages. Stage 1 trains the thinker on unit-level sessions. Stage 2 trains a thinker LoRA with Dr. GRPO in a sandbox with a scripted user, a backend agent, simulated tools and a scorer. Stage 3 trains only the projector on cached hidden states." width="100%">
+  <img src="docs/assets/paper/fig2-method.webp" alt="Duopra's three training stages on Realtime-Venus-Audio. Stage 1 trains the thinker on unit-level sessions and yields Duopra-SFT. Stage 2 trains a thinker LoRA with Dr. GRPO in a sandbox with a scripted user, a backend agent, simulated tools and a scorer; Stage 2a yields Duopra-RL1 and Stage 2b Duopra-RL. Stage 3 freezes the Duopra-RL thinker and trains only its projector, on cached hidden states, giving the final Duopra." width="100%">
 </p>
 
-<sub><b>Figure 2.</b> Duopra's three training stages on Realtime-Venus-Audio; each row marks what its stage trains. <i>h<sub>t</sub></i>: thinker hidden state; <i>P</i>: projector; <i>c<sub>t</sub></i>: talker conditioning.</sub>
+<sub><b>Figure 2.</b> Duopra's three training stages on Realtime-Venus-Audio (<i>h<sub>t</sub></i>: thinker hidden state; <i>P</i>: projector; <i>c<sub>t</sub></i>: talker conditioning). Stage 1 trains the thinker on unit-level sessions and yields Duopra-SFT. Stage 2 trains a thinker LoRA with Dr. GRPO in the sandbox; Stage 2a yields Duopra-RL1 and Stage 2b yields Duopra-RL. Stage 3 freezes the Duopra-RL thinker and trains only its projector, producing the final Duopra model.</sub>
 
 </details>
 
@@ -179,17 +179,17 @@ One stage for each problem: the form of an action, the decision to act, and a vo
 
 ## Results
 
-**The highest pass rate among open-source systems on Full-Duplex-Bench v3** — a session passes only when every executed call matches the gold call: right tool, every argument, no extra call.
+**Pass@1 on Full-Duplex-Bench v3: 49.3% with a backend, 47.7% calling tools itself.** A session passes only when every executed call matches the gold call: right tool, every argument, no extra call. Published results are shown next to Duopra as reference points, not as a common-protocol ranking.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/ranking-dark.svg">
-  <img src="docs/assets/readme/ranking-light.svg" alt="Pass@1 on Full-Duplex-Bench v3 in two panels on one scale, commercial systems on the left and open-source systems with Duopra on the right; highest first: GPT-Realtime* 60.0, Gemini Live 3.1* 54.0, MOSS-Live* 51.0, Duopra with a DeepSeek backend 49.3 ± 3.5 (the highest open-source result), Gemini Live 2.5* 49.0, Hu et al. with a Qwen3-235B backend 48.0, Duopra calling tools itself 47.7 ± 3.5, DuplexAgent-RSI 47.0, Cascaded* 45.0, Duopra with a Qwen3-8B backend 44.7 ± 5.7, Grok* 43.0, Realtime-Venus-Audio offline 42.0, Ultravox v0.7* 41.0, Gander with GPT-5.6 40.0, NemotronLabs VoiceChat 33.0. * commercial system; other systems as reported." width="100%">
+  <img src="docs/assets/readme/ranking-light.svg" alt="Pass@1 on Full-Duplex-Bench v3 in two panels on one scale, commercial systems on the left and open-source systems with Duopra on the right; highest first: GPT-Realtime* 60.0, Gemini Live 3.1* 54.0, MOSS-Live* 51.0, Duopra with a DeepSeek backend 49.3 ± 3.5, Gemini Live 2.5* 49.0, Hu et al. with a Qwen3-235B backend 48.0, Duopra calling tools itself 47.7 ± 3.5, DuplexAgent-RSI 47.0, Cascaded* 45.0, Duopra with a Qwen3-8B backend 44.7 ± 5.7, Grok* 43.0, Realtime-Venus-Audio offline 42.0, Ultravox v0.7* 41.0, Gander with GPT-5.6 40.0, NemotronLabs VoiceChat 33.0. * commercial system; other systems as reported, as reference points rather than a common-protocol ranking." width="100%">
 </picture>
 
-<sub>Left, commercial systems as reported; right, open-source systems and Duopra; one scale for both. Full-Duplex-Bench v3: 100 real, disfluent English recordings and 12 simulated APIs. Duopra runs in our harness — three seeds, 300 sessions per configuration, judged by Qwen3.8-27B; ± is the standard deviation across seeds. Hatched bars are reported numbers, measured with each source's own harness and judge (mostly GPT-4o), so they compare only approximately: MOSS-Live reports a tool-call success rate, DuplexAgent-RSI is measured on VoiceChat with exact-string argument matching, and Realtime-Venus-Audio offline has the tool definitions in the prompt. * Commercial system.</sub>
+<sub>Left, commercial systems as reported; right, open-source systems and Duopra; one scale for both. Full-Duplex-Bench v3: 100 real, disfluent English recordings and 12 simulated APIs. Duopra runs in our harness — three seeds, 300 sessions per configuration, judged by Qwen3.8-27B; ± is the standard deviation across seeds. Hatched bars are published results, measured with each source's own harness and judge (mostly GPT-4o) — reference points, not a common-protocol ranking: MOSS-Live reports a tool-call success rate, DuplexAgent-RSI is measured on VoiceChat with exact-string argument matching, and Realtime-Venus-Audio offline has the tool definitions in the prompt. * Commercial system.</sub>
 
 <details>
-<summary><b>Every metric for the systems on the board</b></summary>
+<summary><b>Every metric for the systems in the chart</b></summary>
 
 <br>
 
@@ -214,7 +214,7 @@ One stage for each problem: the form of an action, the decision to act, and a vo
 | Duopra, Qwen3-8B backend | **81.8** | **57.0** | **70.6** | 44.7 ± 5.7 |
 | Duopra, DeepSeek backend | 71.8 | 55.0 | 69.0 | **49.3** ± 3.5 |
 
-<sub>Tool: tool-selection F1, which involves no judge (Hu et al. report tool-selection accuracy). Arg.: argument accuracy. Resp.: response quality. n/a: not reported. Bold: best within each group. DuplexAgent-RSI reaches 49.0 on Qwen-Realtime. Further open-source systems that we ran in our harness are listed in the paper's Table 1.</sub>
+<sub>Tool: tool-name F1, which involves no judge (Hu et al. report tool-selection accuracy). Arg.: argument accuracy. Resp.: response quality. n/a: not reported. Bold: best within each group. DuplexAgent-RSI reaches 49.0 on Qwen-Realtime. Calling tools itself is the paper's Direct setting; a named backend is its Backend setting, in which only <code>query(task)</code> is visible. Further open-source systems that we ran in our harness are in the paper's Tables 2 and 11.</sub>
 
 </details>
 
@@ -226,7 +226,7 @@ The outcome of each of the 300 sessions, Duopra models calling tools themselves.
 | :--- | ---: | ---: | ---: | ---: | ---: |
 | Duopra-SFT · after Stage 1 | 78 | 17 | 38 | 1 | 166 |
 | Duopra-RL1 · after Stage 2a | 80 | 17 | 72 | 0 | 131 |
-| **Duopra** · after Stage 2b | **143** | 58 | 40 | 3 | **56** |
+| **Duopra** · final model | **143** | 58 | 40 | 3 | **56** |
 
 Multi-call requests become solvable: Duopra passes **28 of 102** sessions that need two or three calls, against 2 after SFT. The remaining headroom is in arguments — wrong arguments (19.3% of sessions) are now as common as sessions without a call (18.7%).
 
@@ -241,7 +241,7 @@ Multi-call requests become solvable: Duopra passes **28 of 102** sessions that n
 | VoiceBench, mean of nine categories ↑ | 55.9 |
 | Task-completion latency ↓ <sub>domain tools and backend both visible, Qwen3-8B</sub> | 10.42 s |
 
-<sub>Three seeds, in our streaming pipeline. Pass@1 is read from the call log rather than the transcript; judged metrics use Qwen3.8-27B, tool-selection F1 involves no judge. Not every behaviour survives: Duopra answers fewer interruptions than Duopra-RL1 (96.5%) and, like every post-trained stage, no longer backchannels.</sub>
+<sub>Three seeds, in our streaming pipeline. Pass@1 is read from the call log rather than the transcript; judged metrics use Qwen3.8-27B, tool-name F1 involves no judge. Not every behaviour survives: Duopra answers fewer interruptions than Duopra-RL1 (96.5%) and, like every post-trained stage, no longer backchannels.</sub>
 
 <a id="quick-start"></a>
 

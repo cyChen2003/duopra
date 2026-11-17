@@ -35,13 +35,13 @@ Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhua
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-dark.svg">
-  <img src="docs/assets/readme/stats-light.svg" alt="Full-Duplex-Bench v3 上开源系统第一（接开放后台时 Pass@1 为 49.3%）；自己调用工具时任务通过率 47.7%（300 个会话的 Pass@1）；全双工强化学习带来 1.8 倍的通过率（SFT 后 26.0%，RL 后 47.7%）；被打断后作出回应 91.3%（Full-Duplex-Bench v1.0）。" width="100%">
+  <img src="docs/assets/readme/stats-light.svg" alt="接后台时任务通过率 49.3%（Full-Duplex-Bench v3 的 Pass@1，Duopra 通过 query(task) 委派给 DeepSeek）；自己调用工具时任务通过率 47.7%（300 个会话的 Pass@1）；全双工强化学习带来 1.8 倍的通过率（SFT 后 26.0%，RL 后 47.7%）；被打断后作出回应 91.3%（Full-Duplex-Bench v1.0）。" width="100%">
 </picture>
 
 ## 动态
 
 - **2026-11-16** &nbsp; 发布[演示视频](#video)：在 Duopra 应用中录制的三分钟会话——边说话边调用工具、把后台模型当作又一个工具来调用，以及被打断时怎样接上。
-- **2026-11-15** &nbsp; [项目主页](https://cychen2003.github.io/duopra/zh/)上线：两段真实会话的逐秒回放、完整排行和全部数字。代码与[模型权重](https://huggingface.co/Chechen123/Duopra)已经公开，预印本即将发布。
+- **2026-11-15** &nbsp; [项目主页](https://cychen2003.github.io/duopra/zh/)上线：两段真实会话的逐秒回放、完整结果和全部数字。代码与[模型权重](https://huggingface.co/Chechen123/Duopra)已经公开，预印本即将发布。
 
 <a id="overview"></a>
 
@@ -136,10 +136,10 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 - **结果落在单元边界上。** 运行时异步执行每次调用，并在结果返回后的第一个 1 秒边界注入上下文。等待期间模型照常听、照常说，结果到了才报出数值。
 
 <p align="center">
-  <img src="docs/assets/paper/fig1-timeline.webp" alt="图 1 分两栏，泳道相同：用户、前台、后台、工具。用户依次说“Search for a laptop…”“Wait, a tablet.”“Add 2 to the cart…”“Actually, just 1.”。(a) 前后台分离：前台说“Sure, searching.”，交出“Search for a laptop.”，后台于是搜索笔记本电脑；前台答“Got it, a tablet.”，却没有发出请求；又交出“Add 2 to the cart.”，后台调用 add_to_cart(laptop_001, 2)；前台答“OK, just one.”，仍然没有请求。购物车里最后是 2 台笔记本电脑。(b) Duopra 等用户说完才开口，说“Sure, one tablet.”，同时发出 query(“Find a tablet, then add one to my cart.”)；后台搜索平板，再调用 add_to_cart(tablet_001, 1)，Duopra 说“Done, it's $99.”。购物车里最后是 1 台平板。" width="100%">
+  <img src="docs/assets/paper/fig1-timeline.webp" alt="图 1 分两栏。(a) 前后台分离，4 次交接：前台没有工具 schema（no schemas）；后台有，由工具目录（search_products、add_to_cart 等）注入。用户依次说“Search for a laptop…”“Wait, a tablet.”“Add 2 to the cart…”“Actually, just 1.”。前台说“Let me check.”，交出“Find a laptop.”；后台思考后调用 search_products(laptop)。用户改口后，前台交出“Make it a tablet.”；后台再次思考，撤销这次搜索、改搜平板，然后回复，前台这才说“OK, a tablet.”。前台交出“Add 2 to the cart.”；后台思考后调用 add_to_cart(tablet_001, 2)。用户说“Actually, just 1.”后，前台交出“Make it 1.”；后台思考、撤销这次调用、改加一件，然后回复，前台说“Done, it's &#36;99.”。(b) Duopra，0 次交接：前台能看到工具 schema，包括 query(task)。它说“Sure, searching.”并自己调用 search_products(laptop)；听到“Wait, a tablet.”就撤销这次调用、改搜平板，并说“OK, a tablet.”；它说“Adding two.”并调用 add_to_cart(tablet_001, 2)；听到“Actually, just 1.”就撤销、改加一件，并说“Done, it's &#36;99.”，比 (a) 早得多结束。" width="100%">
 </p>
 
-<sub><b>图 1.</b> 一条说到一半改了两次的请求（Full-Duplex-Bench v3 的任务 <code>ecommerce_19</code>；语音有删节；示意图，不是某个系统的实际运行记录）。用户改了商品（笔记本电脑 → 平板）和数量（2 → 1），而加入购物车要用搜索返回的商品 ID。两栏的后台一样强、工具也相同，只有前台发出的请求不同。(a) 前台在用户第一次停顿时就把任务交出去：交接 1 是一条只有搜索、值也已过时的请求；用户改口后，它嘴上答应，却没有发出新请求；交接 2 只转述了“Add 2 to the cart”，而后台上一次搜的是笔记本电脑；最后一次改口同样只答应、没有请求。(b) Duopra 等请求说定之后，只发出一条请求 <code>query(task)</code>，带上两处修改和两个步骤；它也可以自己调用这两个工具。评测中，接 Qwen3-8B 后台的 Duopra 通过了这个任务（论文表 17(a)）。</sub>
+<sub><b>图 1.</b> 请求不断变化时，前台要承担的责任（Full-Duplex-Bench v3 的任务 <code>ecommerce_19</code>；示意图）。用户先后改了商品（笔记本电脑 → 平板）和数量（两件 → 一件）；<code>add_to_cart</code> 依赖 <code>search_products</code> 返回的商品 ID。(a) 领域工具的 schema 只在后台时，前台可能把一个个请求和改口逐条转交（图中示意了 4 次交接）。(b) schema 可见时，Duopra 可以不经交接、直接发出改正后的领域工具调用，同时 <code>query(task)</code> 依然可用。划掉的值和弧形箭头表示被取代的请求，不代表已验证的工具回滚；图中路线仅作示意。论文表 18(a) 记录了这条请求一次实际的委派成功。</sub>
 
 ### 分三个阶段训练
 
@@ -160,7 +160,7 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 <tr>
 <td valign="top"><b>3 · 只修 projector</b><br><sub>让声音保持清晰</sub></td>
 <td valign="top">后训练会改变 thinker 的隐藏状态，而这些状态决定 talker 怎么发音。只在缓存特征上重训两者之间的 projector；文字、控制 token 和调用都不受影响。</td>
-<td valign="top">88 条试点样本上，中文字错误率 5.17 → <b>1.78%</b>（后训练前为 2.05%）。</td>
+<td valign="top">thinker 不变、只换 projector：中文字错误率 6.01 → <b>2.58%</b>，英文 WER 9.74 → 7.66%（221 条 projector 选择集）。</td>
 </tr>
 </table>
 
@@ -168,10 +168,10 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 <summary><b>图 2 · 三个训练阶段</b></summary>
 
 <p align="center">
-  <img src="docs/assets/paper/fig2-method.webp" alt="三个训练阶段。Stage 1 在单元级会话上训练 thinker；Stage 2 在包含脚本化用户、后台 agent、模拟工具和评分器的沙盒里，用 Dr. GRPO 训练 thinker 的 LoRA；Stage 3 只在缓存的隐藏状态上训练 projector。" width="100%">
+  <img src="docs/assets/paper/fig2-method.webp" alt="Duopra 在 Realtime-Venus-Audio 上的三个训练阶段。Stage 1 在单元级会话上训练 thinker，得到 Duopra-SFT；Stage 2 在包含脚本化用户、后台 agent、模拟工具和评分器的沙盒里，用 Dr. GRPO 训练 thinker 的 LoRA，Stage 2a 得到 Duopra-RL1，Stage 2b 得到 Duopra-RL；Stage 3 冻结 Duopra-RL 的 thinker，只在缓存的隐藏状态上训练 projector，得到最终的 Duopra。" width="100%">
 </p>
 
-<sub><b>图 2.</b> Duopra 在 Realtime-Venus-Audio 上的三个训练阶段，每行标出该阶段训练的部分。<i>h<sub>t</sub></i>：thinker 隐藏状态；<i>P</i>：projector；<i>c<sub>t</sub></i>：talker 的条件输入。</sub>
+<sub><b>图 2.</b> Duopra 在 Realtime-Venus-Audio 上的三个训练阶段（<i>h<sub>t</sub></i>：thinker 隐藏状态；<i>P</i>：projector；<i>c<sub>t</sub></i>：talker 的条件输入）。Stage 1 在单元级会话上训练 thinker，得到 Duopra-SFT。Stage 2 在沙盒中用 Dr. GRPO 训练 thinker 的 LoRA：Stage 2a 得到 Duopra-RL1，Stage 2b 得到 Duopra-RL。Stage 3 冻结 Duopra-RL 的 thinker，只训练它的 projector，得到最终的 Duopra 模型。</sub>
 
 </details>
 
@@ -179,17 +179,17 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 
 ## 实测结果
 
-**在 Full-Duplex-Bench v3 上，通过率在开源系统中最高。** 一次会话里实际执行的调用与金标完全一致——工具正确、参数全对、没有多余调用——才算通过。
+**Full-Duplex-Bench v3 上的 Pass@1：接后台时 49.3%，自己调用工具时 47.7%。** 一次会话里实际执行的调用与金标完全一致——工具正确、参数全对、没有多余调用——才算通过。图中已发表的结果与 Duopra 并列，仅作参照，并非同一协议下的排名。
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/ranking-dark.svg">
-  <img src="docs/assets/readme/ranking-light.svg" alt="Full-Duplex-Bench v3 上的 Pass@1，分左右两栏、同一刻度：左栏商业系统，右栏开源系统与 Duopra；从高到低：GPT-Realtime* 60.0，Gemini Live 3.1* 54.0，MOSS-Live* 51.0，Duopra（DeepSeek 后台）49.3 ± 3.5（开源最高），Gemini Live 2.5* 49.0，Hu et al.（Qwen3-235B 后台）48.0，Duopra（自己调用工具）47.7 ± 3.5，DuplexAgent-RSI 47.0，Cascaded* 45.0，Duopra（Qwen3-8B 后台）44.7 ± 5.7，Grok* 43.0，Realtime-Venus-Audio（离线）42.0，Ultravox v0.7* 41.0，Gander（GPT-5.6）40.0，NemotronLabs VoiceChat 33.0。* 为商业系统，其余系统为文献报告值。" width="100%">
+  <img src="docs/assets/readme/ranking-light.svg" alt="Full-Duplex-Bench v3 上的 Pass@1，分左右两栏、同一刻度：左栏商业系统，右栏开源系统与 Duopra；从高到低：GPT-Realtime* 60.0，Gemini Live 3.1* 54.0，MOSS-Live* 51.0，Duopra（DeepSeek 后台）49.3 ± 3.5，Gemini Live 2.5* 49.0，Hu et al.（Qwen3-235B 后台）48.0，Duopra（自己调用工具）47.7 ± 3.5，DuplexAgent-RSI 47.0，Cascaded* 45.0，Duopra（Qwen3-8B 后台）44.7 ± 5.7，Grok* 43.0，Realtime-Venus-Audio（离线）42.0，Ultravox v0.7* 41.0，Gander（GPT-5.6）40.0，NemotronLabs VoiceChat 33.0。* 为商业系统，其余系统为文献报告值，仅作参照，并非同一协议下的排名。" width="100%">
 </picture>
 
-<sub>左栏为商业系统（文献报告值），右栏为开源系统与 Duopra，两栏同一刻度。Full-Duplex-Bench v3：100 条真实、不流利的英文录音，12 个模拟 API。Duopra 由我们的评测流程跑出——3 个种子，每种配置 300 个会话，judge 为 Qwen3.8-27B；± 为种子间的标准差。斜线条为文献报告值，用的是各自来源的评测流程和 judge（多为 GPT-4o），只能粗略比较：MOSS-Live 报告的是工具调用成功率，DuplexAgent-RSI 基于 VoiceChat、参数按字符串精确匹配，Realtime-Venus-Audio 离线评测时工具定义写在提示词里。* 为商业系统。</sub>
+<sub>左栏为商业系统（文献报告值），右栏为开源系统与 Duopra，两栏同一刻度。Full-Duplex-Bench v3：100 条真实、不流利的英文录音，12 个模拟 API。Duopra 由我们的评测流程跑出——3 个种子，每种配置 300 个会话，judge 为 Qwen3.8-27B；± 为种子间的标准差。斜线条为已发表的结果，用的是各自来源的评测流程和 judge（多为 GPT-4o），仅作参照，并非同一协议下的排名：MOSS-Live 报告的是工具调用成功率，DuplexAgent-RSI 基于 VoiceChat、参数按字符串精确匹配，Realtime-Venus-Audio 离线评测时工具定义写在提示词里。* 为商业系统。</sub>
 
 <details>
-<summary><b>榜单上各系统的全部指标</b></summary>
+<summary><b>图中各系统的全部指标</b></summary>
 
 <br>
 
@@ -214,7 +214,7 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 | Duopra，Qwen3-8B 后台 | **81.8** | **57.0** | **70.6** | 44.7 ± 5.7 |
 | Duopra，DeepSeek 后台 | 71.8 | 55.0 | 69.0 | **49.3** ± 3.5 |
 
-<sub>工具：工具选择 F1，不经过 judge（Hu et al. 报告的是工具选择准确率）。参数：参数准确率。回复：回复质量。n/a：未报告。加粗：各组内最好。DuplexAgent-RSI 在 Qwen-Realtime 上为 49.0。我们在自己的评测流程中跑过的其他开源系统见论文表 1。</sub>
+<sub>工具：工具名 F1，不经过 judge（Hu et al. 报告的是工具选择准确率）。参数：参数准确率。回复：回复质量。n/a：未报告。加粗：各组内最好。DuplexAgent-RSI 在 Qwen-Realtime 上为 49.0。“自己调用工具”即论文中的 Direct 设置；标出后台模型的为 Backend 设置，此时只看得到 <code>query(task)</code>。我们在自己的评测流程中跑过的其他开源系统见论文表 2 和表 11。</sub>
 
 </details>
 
@@ -226,7 +226,7 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 | :--- | ---: | ---: | ---: | ---: | ---: |
 | Duopra-SFT · Stage 1 之后 | 78 | 17 | 38 | 1 | 166 |
 | Duopra-RL1 · Stage 2a 之后 | 80 | 17 | 72 | 0 | 131 |
-| **Duopra** · Stage 2b 之后 | **143** | 58 | 40 | 3 | **56** |
+| **Duopra** · 最终模型 | **143** | 58 | 40 | 3 | **56** |
 
 多步请求变得可解：在需要两到三次调用的 102 个会话里，Duopra 通过 **28 个**，SFT 之后只有 2 个。剩下的提升空间在参数上——参数错误（占全部会话 19.3%）已经和没有调用（18.7%）一样多。
 
@@ -241,7 +241,7 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 | VoiceBench 九类均值 ↑ | 55.9 |
 | 任务完成延迟 ↓ <sub>领域工具与后台同时可见，Qwen3-8B 后台</sub> | 10.42 s |
 
-<sub>3 个种子，在我们的流式评测流程中测得。Pass@1 只看调用记录，不看转写；需要判分的指标由 Qwen3.8-27B 作 judge，工具选择 F1 不经过 judge。并非所有行为都保住了：Duopra 回应打断的比例低于 Duopra-RL1（96.5%），而且和所有后训练阶段一样，不再附和。</sub>
+<sub>3 个种子，在我们的流式评测流程中测得。Pass@1 只看调用记录，不看转写；需要判分的指标由 Qwen3.8-27B 作 judge，工具名 F1 不经过 judge。并非所有行为都保住了：Duopra 回应打断的比例低于 Duopra-RL1（96.5%），而且和所有后训练阶段一样，不再附和。</sub>
 
 <a id="quick-start"></a>
 

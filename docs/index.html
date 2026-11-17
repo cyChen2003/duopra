@@ -11,7 +11,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Duopra: From Full-Duplex Conversation to Full-Duplex Agency</title>
-<meta name="description" content="Duopra is a full-duplex voice agent: it listens and speaks at the same time and decides on its own when to act, sending tool calls mid-sentence that are never spoken aloud. The highest Pass@1 among open-source systems on Full-Duplex-Bench v3.">
+<meta name="description" content="Duopra is a full-duplex voice agent: it listens and speaks at the same time and decides on its own when to act, sending tool calls mid-sentence that are never spoken aloud. On Full-Duplex-Bench v3 it passes 47.7% of tasks calling tools itself and 49.3% with a backend.">
 <meta property="og:title" content="Duopra: From Full-Duplex Conversation to Full-Duplex Agency">
 <meta property="og:description" content="A voice agent that listens, speaks and acts on its own: tool calls go out while it is still speaking.">
 <meta property="og:image" content="https://cychen2003.github.io/duopra/assets/og.png">
@@ -105,7 +105,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
       </figure>
 
       <div class="bignums" data-reveal-group>
-        <div class="bn"><b><span class="h">#</span>1</b><span class="k">among open-source systems on Full-Duplex-Bench v3</span><small>49.3% Pass@1 with an open backend. The next open-source result, 48.0%, is self-reported with another harness and judge.</small></div>
+        <div class="bn"><b><span class="count" data-to="49.3">49.3</span><i>%</i></b><span class="k">of tasks passed with a backend</span><small>Pass@1 over 300 sessions; Duopra hands each task to a DeepSeek backend, called as one more tool.</small></div>
         <div class="bn"><b><span class="count" data-to="47.7">47.7</span><i>%</i></b><span class="k">of tasks passed, calling tools itself</span><small>Pass@1 over 300 sessions, with no backend involved.</small></div>
         <div class="bn"><b><span class="count" data-to="1.8">1.8</span><i>×</i></b><span class="k">the pass rate, from full-duplex RL</span><small>26.0% after supervised fine-tuning, 47.7% after reinforcement learning, on the same 300 sessions.</small></div>
         <div class="bn"><b><span class="count" data-to="91.3">91.3</span><i>%</i></b><span class="k">of interruptions answered</span><small>Full-Duplex-Bench v1.0, three seeds, in our streaming pipeline.</small></div>
@@ -226,8 +226,8 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
       </div>
 
       <figure class="paperfig" data-reveal>
-        <a href="assets/paper/fig1-timeline.webp" target="_blank" rel="noopener"><img src="assets/paper/fig1-timeline.webp" width="2240" height="1022" loading="lazy" decoding="async" alt="Figure 1 in two panels with the same lanes: user, frontend, backend and tools. The user says “Search for a laptop…”, “Wait, a tablet.”, “Add 2 to the cart…” and “Actually, just 1.” (a) Frontend–backend separation: the frontend says “Sure, searching.” and hands off “Search for a laptop.”, so the backend searches for a laptop; it answers “Got it, a tablet.” without a request; it hands off “Add 2 to the cart.”, and the backend calls add_to_cart(laptop_001, 2); it answers “OK, just one.” without a request. The cart ends with 2 laptops. (b) Duopra stays silent until the user has finished, says “Sure, one tablet.” and sends query(“Find a tablet, then add one to my cart.”); the backend searches for a tablet and calls add_to_cart(tablet_001, 1), and Duopra says “Done, it's $99.” The cart ends with 1 tablet."></a>
-        <figcaption><b>Figure 1.</b> One spoken request, corrected twice (Full-Duplex-Bench v3 task <code>ecommerce_19</code>; speech abridged; schematic, not a trace of a particular system). The user changes the product (laptop → tablet) and the quantity (2 → 1), and adding to the cart needs the product ID that the search returns. Both panels have the same capable backend and the same tools; only the frontend's requests differ. (a) A frontend that hands off at the first pause sends a stale, search-only request (hand-off 1), acknowledges the correction without sending it, and forwards “Add 2 to the cart” (hand-off 2) to a backend whose last search was for laptops; the last correction is acknowledged but not sent either. (b) Duopra waits until the request has settled, then sends one request, <code>query(task)</code>, with both corrections and both steps; it could equally make the two calls itself. In our evaluation, Duopra with a Qwen3-8B backend passed this task (paper, Table 17(a)).</figcaption>
+        <a href="assets/paper/fig1-timeline.webp" target="_blank" rel="noopener"><img src="assets/paper/fig1-timeline.webp" width="2240" height="1044" loading="lazy" decoding="async" alt="Figure 1 in two panels. (a) Frontend–backend separation, four hand-offs: the frontend has no tool schemas; the backend has them, injected from a catalog of search_products, add_to_cart and more. The user says “Search for a laptop…”, “Wait, a tablet.”, “Add 2 to the cart…” and “Actually, just 1.” The frontend says “Let me check.” and hands off “Find a laptop.”; the backend thinks and calls search_products(laptop). After “Wait, a tablet.” it hands off “Make it a tablet.”; the backend thinks again, undoes the search, searches for a tablet and replies, and only then does the frontend say “OK, a tablet.” It hands off “Add 2 to the cart.”; the backend thinks and calls add_to_cart(tablet_001, 2). After “Actually, just 1.” it hands off “Make it 1.”; the backend thinks, undoes the call, adds one and replies, and the frontend says “Done, it's $99.” (b) Duopra, no hand-offs: the frontend sees the tool schemas, query(task) included. It says “Sure, searching.” and calls search_products(laptop) itself; on “Wait, a tablet.” it undoes the call, searches for a tablet and says “OK, a tablet.”; it says “Adding two.” and calls add_to_cart(tablet_001, 2); on “Actually, just 1.” it undoes the call, adds one and says “Done, it's $99.”, well before (a) ends."></a>
+        <figcaption><b>Figure 1.</b> Frontend responsibility in an evolving request (Full-Duplex-Bench v3 task <code>ecommerce_19</code>; schematic). The user corrects both the product (laptop → tablet) and the quantity (two → one); <code>add_to_cart</code> depends on the product ID returned by <code>search_products</code>. (a) With the domain tools' schemas behind the backend, the frontend may forward successive requests and corrections (four hand-offs illustrated). (b) With the schemas visible, Duopra can issue the corrected domain-tool calls directly, without a hand-off, while <code>query(task)</code> remains available. Crossed-out values and curved arrows denote superseded requests, not verified tool rollbacks; these are illustrative routes. Table 18(a) of the paper reports an observed delegated success on this request.</figcaption>
       </figure>
 
       <div class="subhead" data-reveal>
@@ -255,12 +255,12 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
           <h3>Projector-only repair</h3>
           <p class="what">Keeps the voice intelligible.</p>
           <p>Post-training shifts the thinker's hidden states, which condition the talker. Only the projector between them is retrained, on cached features; the text, control tokens and calls are untouched.</p>
-          <div class="st-out"><div><span>Pilot · Chinese character error rate</span><b><span class="from">5.17→</span>1.78%</b><small>88 pilot samples; 2.05% before post-training.</small></div></div>
+          <div class="st-out"><div><span>Same thinker · Chinese character error rate</span><b><span class="from">6.01→</span>2.58%</b><small>Original vs. repaired projector, 221-utterance selection set; English WER 9.74→7.66%.</small></div></div>
         </li>
       </ol>
       <figure class="paperfig" data-reveal>
-        <a href="assets/paper/fig2-method.webp" target="_blank" rel="noopener"><img src="assets/paper/fig2-method.webp" width="2240" height="955" loading="lazy" decoding="async" alt="The three training stages. Stage 1 trains the thinker on unit-level sessions. Stage 2 trains a thinker LoRA with Dr. GRPO in a sandbox with a scripted user, a backend agent, simulated tools and a scorer. Stage 3 trains only the projector on cached hidden states."></a>
-        <figcaption><b>Figure 2.</b> Duopra's three training stages on Realtime-Venus-Audio; each row marks what its stage trains. <i>h<sub>t</sub></i>: thinker hidden state; <i>P</i>: projector; <i>c<sub>t</sub></i>: talker conditioning.</figcaption>
+        <a href="assets/paper/fig2-method.webp" target="_blank" rel="noopener"><img src="assets/paper/fig2-method.webp" width="2240" height="955" loading="lazy" decoding="async" alt="Duopra's three training stages on Realtime-Venus-Audio. Stage 1 trains the thinker on unit-level sessions and yields Duopra-SFT. Stage 2 trains a thinker LoRA with Dr. GRPO in a sandbox with a scripted user, a backend agent, simulated tools and a scorer; Stage 2a yields Duopra-RL1 and Stage 2b Duopra-RL. Stage 3 freezes the Duopra-RL thinker and trains only its projector, on cached hidden states, giving the final Duopra."></a>
+        <figcaption><b>Figure 2.</b> Duopra's three training stages on Realtime-Venus-Audio (<i>h<sub>t</sub></i>: thinker hidden state; <i>P</i>: projector; <i>c<sub>t</sub></i>: talker conditioning). Stage 1 trains the thinker on unit-level sessions and yields Duopra-SFT. Stage 2 trains a thinker LoRA with Dr. GRPO in the sandbox; Stage 2a yields Duopra-RL1 and Stage 2b yields Duopra-RL. Stage 3 freezes the Duopra-RL thinker and trains only its projector, producing the final Duopra model.</figcaption>
       </figure>
     </div>
   </section>
@@ -271,7 +271,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
       <div class="head" data-reveal>
         <span class="eyebrow">Results</span>
         <h2>Tools that actually get called.</h2>
-        <p>The highest pass rate among open-source systems on Full-Duplex-Bench v3.</p>
+        <p>Pass@1 on Full-Duplex-Bench v3: 49.3% with a backend, 47.7% calling tools itself.</p>
       </div>
 
       <div class="tile chart" data-reveal>
@@ -284,7 +284,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
           <div class="bl"><b>GPT-Realtime</b><span class="star">*</span></div><div class="bt rep" style="--w:100%" tabindex="0" role="img" data-tip="GPT-Realtime|60.0% Pass@1|Commercial system · as reported"><i></i></div><div class="bv">60.0<small>reported</small></div>
           <div class="bl"><b>Gemini Live 3.1</b><span class="star">*</span></div><div class="bt rep" style="--w:90%" tabindex="0" role="img" data-tip="Gemini Live 3.1|54.0% Pass@1|Commercial system · as reported"><i></i></div><div class="bv">54.0<small>reported</small></div>
           <div class="bl"><b>MOSS-Live</b><span class="star">*</span></div><div class="bt rep" style="--w:85%" tabindex="0" role="img" data-tip="MOSS-Live|51.0% Pass@1|Commercial system · as reported|A tool-call success rate in the developer's report"><i></i></div><div class="bv">51.0<small>reported</small></div>
-          <div class="bl ours"><b>Duopra</b> <span class="cfg">· DeepSeek backend</span></div><div class="bt ours" style="--w:82.17%" tabindex="0" role="img" data-tip="Duopra, DeepSeek backend|49.3% ± 3.5 Pass@1|Our harness, three seeds"><i></i><em class="no1">#1 open-source</em></div><div class="bv ours">49.3<small>± 3.5</small></div>
+          <div class="bl ours"><b>Duopra</b> <span class="cfg">· DeepSeek backend</span></div><div class="bt ours" style="--w:82.17%" tabindex="0" role="img" data-tip="Duopra, DeepSeek backend|49.3% ± 3.5 Pass@1|Our harness, three seeds"><i></i></div><div class="bv ours">49.3<small>± 3.5</small></div>
           <div class="bl"><b>Gemini Live 2.5</b><span class="star">*</span></div><div class="bt rep" style="--w:81.67%" tabindex="0" role="img" data-tip="Gemini Live 2.5|49.0% Pass@1|Commercial system · as reported"><i></i></div><div class="bv">49.0<small>reported</small></div>
           <div class="bl"><b>Hu et al.</b> <span class="cfg">· Qwen3-235B backend</span></div><div class="bt rep" style="--w:80%" tabindex="0" role="img" data-tip="Hu et al., Qwen3-235B backend|48.0% Pass@1|As reported, with another harness and judge"><i></i></div><div class="bv">48.0<small>reported</small></div>
           <div class="bl ours"><b>Duopra</b> <span class="cfg">· calling tools itself</span></div><div class="bt ours" style="--w:79.5%" tabindex="0" role="img" data-tip="Duopra, calling tools itself|47.7% ± 3.5 Pass@1|Our harness, three seeds"><i></i></div><div class="bv ours">47.7<small>± 3.5</small></div>
@@ -298,7 +298,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
           <div class="bl"><b>NemotronLabs VoiceChat</b></div><div class="bt rep" style="--w:55%" tabindex="0" role="img" data-tip="NemotronLabs VoiceChat|33.0% Pass@1|As reported, with another harness and judge"><i></i></div><div class="bv">33.0<small>reported</small></div>
           <div class="bx" aria-hidden="true"></div><div class="ba" aria-hidden="true"><i style="left:0">0</i><i style="left:33.333%">20</i><i style="left:66.667%">40</i><i style="left:100%">60%</i></div><div class="bx" aria-hidden="true"></div>
         </div>
-        <p class="foot">Full-Duplex-Bench v3: 100 real, disfluent English recordings and 12 simulated APIs. Duopra runs in our harness — three seeds, 300 sessions per configuration, judged by Qwen3.8-27B; ± is the standard deviation across seeds. Hatched bars are reported numbers, measured with each source's own harness and judge (mostly GPT-4o), so they compare only approximately. * Commercial system.</p>
+        <p class="foot">Full-Duplex-Bench v3: 100 real, disfluent English recordings and 12 simulated APIs. Duopra runs in our harness — three seeds, 300 sessions per configuration, judged by Qwen3.8-27B; ± is the standard deviation across seeds. Hatched bars are published results, measured with each source's own harness and judge (mostly GPT-4o): reference points, not a common-protocol ranking. * Commercial system.</p>
       </div>
 
 
@@ -318,7 +318,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
             <div class="sb" role="group" aria-label="Duopra-RL1: passed 80, called but did not pass 89, no call 131 of 300 sessions">
               <span class="seg p" style="width:26.67%" tabindex="0" data-tip="Passed|80 of 300 · 26.7%"><span>27%</span></span><span class="seg f" style="width:29.67%" tabindex="0" data-tip="Called, did not pass|89 of 300|wrong argument 17 · missing call 72 · extra call 0"></span><span class="seg n" style="width:43.67%" tabindex="0" data-tip="No call|131 of 300 · 43.7%|spoke 85 · silent 46"><span>44%</span></span>
             </div>
-            <div class="sl ours"><b>Duopra</b>after Stage 2b</div>
+            <div class="sl ours"><b>Duopra</b>final model</div>
             <div class="sb" role="group" aria-label="Duopra: passed 143, called but did not pass 101, no call 56 of 300 sessions">
               <span class="seg p" style="width:47.67%" tabindex="0" data-tip="Passed|143 of 300 · 47.7%"><span>48%</span></span><span class="seg f" style="width:33.67%" tabindex="0" data-tip="Called, did not pass|101 of 300|wrong argument 58 · missing call 40 · extra call 3"><span>34%</span></span><span class="seg n" style="width:18.67%" tabindex="0" data-tip="No call|56 of 300 · 18.7%|spoke 39 · silent 17"><span>19%</span></span>
             </div>
@@ -369,7 +369,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
         <div class="inner">
           <div class="scroll-x numtable">
             <table>
-              <caption>Full-Duplex-Bench v3 — tool selection, arguments, response quality and Pass@1 (%)</caption>
+              <caption>Full-Duplex-Bench v3 — tool names, arguments, response quality and Pass@1 (%)</caption>
               <thead><tr><th>System</th><th>Tool</th><th>Arg.</th><th>Resp.</th><th>Pass@1</th></tr></thead>
               <tbody>
                 <tr class="grp"><td colspan="5">Commercial systems*, as reported</td></tr>
@@ -393,7 +393,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
               </tbody>
             </table>
           </div>
-          <p class="note">Tool: tool-selection F1, which involves no judge (Hu et al. report tool-selection accuracy). Arg.: argument accuracy. Resp.: response quality. n/a: not reported. Bold: best within each group. Reported rows use each source's harness and judge, mostly GPT-4o; Duopra's use Qwen3.8-27B. DuplexAgent-RSI is measured on VoiceChat (49.0 on Qwen-Realtime) with exact-string argument matching; Realtime-Venus-Audio offline has the tool definitions in the prompt; MOSS-Live reports a tool-call success rate. Further open-source systems that we ran in our harness are listed in the paper's Table 1.</p>
+          <p class="note">Tool: tool-name F1, which involves no judge (Hu et al. report tool-selection accuracy). Arg.: argument accuracy. Resp.: response quality. n/a: not reported. Bold: best within each group. Published rows use each source's harness and judge, mostly GPT-4o, and are reference points, not a common-protocol ranking; Duopra's use Qwen3.8-27B. DuplexAgent-RSI is measured on VoiceChat (49.0 on Qwen-Realtime) with exact-string argument matching; Realtime-Venus-Audio offline has the tool definitions in the prompt; MOSS-Live reports a tool-call success rate. Calling tools itself is the paper's Direct setting; a named backend is its Backend setting, in which only <code>query(task)</code> is visible. Further open-source systems that we ran in our harness are in the paper's Tables 2 and 11.</p>
 
           <div class="scroll-x numtable">
             <table>
@@ -409,7 +409,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
               </tbody>
             </table>
           </div>
-          <p class="note">Pass@1 is read from the call log rather than the transcript. ± is the standard deviation across three seeds. Judged metrics use Qwen3.8-27B; tool-selection F1 involves no judge. Delegating every request instead raises the task-completion latency to 14.85 s.</p>
+          <p class="note">Pass@1 is read from the call log rather than the transcript. ± is the standard deviation across three seeds. Judged metrics use Qwen3.8-27B; tool-name F1 involves no judge. Delegating every request instead raises the task-completion latency to 14.85 s.</p>
         </div>
       </details>
     </div>
@@ -424,7 +424,8 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
         <p class="paper-meta">The code and the weights are available now; the preprint will follow.</p>
         <details class="abstract">
           <summary>Read the abstract <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></summary>
-          <p>Full-duplex interaction models exhibit strong conversational intelligence, enabling natural, low-latency turn-taking, backchannels, and interruptions. However, successful task completion further requires task agency—timely tool invocation and argument revision following user corrections. In frontend–backend architectures, delegation and execution errors are often entangled, obscuring the primary bottleneck. We first investigate this question on Full-Duplex-Bench (FDB) v3. Realtime-Venus-Audio with its original Harness delegates only 11.0% of sessions and passes 4.7%; even a perfect backend could improve performance by at most 6.3 points. We then introduce Duopra, which directly performs non-verbalized tool calls and treats backend delegation as tool selection. Its three-stage training combines supervised fine-tuning, full-duplex reinforcement learning with time-anchored deadlines and tiered rewards, and projector-only talker repair. With a fixed backend, Duopra raises the pass rate from 4.7% to 44.7%, compared with a 4.7-point gain from a much larger backend. It achieves 47.7% standalone and 49.3% with an open backend, outperforming all compared open-source systems. Complementary evaluations show improved turn-taking control and overlap handling over the base model, though with reduced backchanneling, showing that task agency can build on conversational agency.</p>
+          <p>Full-duplex speech models manage conversation, but task agency requires timely, faithful execution of evolving requests. Frontend–backend agents separate initiation from execution: the frontend decides whether and what to request, while the backend determines how. Execution can be offloaded, but unsent requests cannot be executed, and incomplete ones can misdirect the backend. On Full-Duplex-Bench (FDB) v3, most failures of Realtime-Venus-Audio + Harness in our streaming setting occur before a domain tool executes.</p>
+          <p>We introduce <b>Duopra</b>, a full-duplex speech model that learns task execution alongside conversational control. Duopra treats the backend as a tool, <code>query(task)</code>, accepting a self-contained natural-language request. Direct calls and delegation share an action interface and requirements for faithful initiation and correct execution. Its three-stage training combines protocol SFT, full-duplex RL rewarding timely and complete execution, and projector-only repair of speech conditioning after thinker updates. With a fixed backend, Pass@1 rises from 4.7% to 44.7%; Duopra achieves 47.7% under Direct (26.0% after SFT) and 49.3% under Backend with DeepSeek. It improves three FDB v1.0 takeover rates over baselines. These results show that task agency can coexist with key turn-taking capabilities.</p>
         </details>
       </div>
       <div id="cite" class="cite" data-reveal>

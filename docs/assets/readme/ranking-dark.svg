@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="880" height="300" viewBox="0 0 880 300" role="img" aria-labelledby="t d">
   <title id="t">Pass@1 on Full-Duplex-Bench v3</title>
-  <desc id="d">Pass@1 in percent. Commercial systems, as reported: GPT-Realtime 60.0; Gemini Live 3.1 54.0; MOSS-Live 51.0; Gemini Live 2.5 49.0; Cascaded 45.0; Grok 43.0; Ultravox v0.7 41.0. Open-source systems and Duopra: Duopra, DeepSeek backend 49.3 ± 3.5; Hu et al., Qwen3-235B backend 48.0 (reported); Duopra, calling tools itself 47.7 ± 3.5; DuplexAgent-RSI 47.0 (reported); Duopra, Qwen3-8B backend 44.7 ± 5.7; Realtime-Venus-Audio, offline 42.0 (reported); Gander, GPT-5.6 40.0 (reported); NemotronLabs VoiceChat 33.0 (reported). Duopra with a DeepSeek backend is the highest open-source result.</desc>
+  <desc id="d">Pass@1 in percent. Commercial systems, as reported: GPT-Realtime 60.0; Gemini Live 3.1 54.0; MOSS-Live 51.0; Gemini Live 2.5 49.0; Cascaded 45.0; Grok 43.0; Ultravox v0.7 41.0. Open-source systems and Duopra: Duopra, DeepSeek backend 49.3 ± 3.5; Hu et al., Qwen3-235B backend 48.0 (reported); Duopra, calling tools itself 47.7 ± 3.5; DuplexAgent-RSI 47.0 (reported); Duopra, Qwen3-8B backend 44.7 ± 5.7; Realtime-Venus-Audio, offline 42.0 (reported); Gander, GPT-5.6 40.0 (reported); NemotronLabs VoiceChat 33.0 (reported). Published results are reference points, not a common-protocol ranking.</desc>
   <defs><pattern id="hatch-dark" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="5" fill="#1d242e"/><path d="M0 0V5" stroke="#4f5a69" stroke-width="2"/></pattern></defs>
   <rect width="880" height="300" rx="18" fill="#10151c"/>
   <rect x=".5" y=".5" width="879" height="299" rx="17.5" fill="none" stroke="#e9eef5" stroke-opacity=".10"/>
@@ -55,7 +55,6 @@
     <text x="456" y="118.5" fill="#eef2f7" font-size="12.5" font-weight="600">Duopra<tspan fill="#97a1b0" font-size="11.5" font-weight="400"> · DeepSeek backend</tspan></text>
     <path d="M648 109.5H760.0Q763.0 109.5 763.0 112.5V116.5Q763.0 119.5 760.0 119.5H648Z" fill="#6b8fe0"/>
     <text x="795.0" y="118.5" fill="#eef2f7" font-size="12" font-weight="600">49.3<tspan fill="#97a1b0" font-size="10" font-weight="400"> ±3.5</tspan></text>
-    <text x="757.0" y="117.5" fill="#0b1020" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="8" font-weight="600" letter-spacing=".8" text-anchor="end">#1 OPEN-SOURCE</text>
     <text x="456" y="139.5" fill="#c3cbd6" font-size="12.5" font-weight="400">Hu et al.<tspan fill="#97a1b0" font-size="11.5" font-weight="400"> · Qwen3-235B backend</tspan></text>
     <path d="M648 130.5H757.0Q760.0 130.5 760.0 133.5V137.5Q760.0 140.5 757.0 140.5H648Z" fill="url(#hatch-dark)"/>
     <text x="795.0" y="139.5" fill="#c3cbd6" font-size="12" font-weight="400">48.0</text>
