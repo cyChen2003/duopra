@@ -139,7 +139,7 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
   <img src="docs/assets/paper/fig1-timeline.webp" alt="图 1 分两栏。(a) 前后台分离，4 次交接：前台没有工具 schema（no schemas）；后台有，由工具目录（search_products、add_to_cart 等）注入。用户依次说“Search for a laptop…”“Wait, a tablet.”“Add 2 to the cart…”“Actually, just 1.”。前台说“Let me check.”，交出“Find a laptop.”；后台思考后调用 search_products(laptop)。用户改口后，前台交出“Make it a tablet.”；后台再次思考，撤销这次搜索、改搜平板，然后回复，前台这才说“OK, a tablet.”。前台交出“Add 2 to the cart.”；后台思考后调用 add_to_cart(tablet_001, 2)。用户说“Actually, just 1.”后，前台交出“Make it 1.”；后台思考、撤销这次调用、改加一件，然后回复，前台说“Done, it's &#36;99.”。(b) Duopra，0 次交接：前台能看到工具 schema，包括 query(task)。它说“Sure, searching.”并自己调用 search_products(laptop)；听到“Wait, a tablet.”就撤销这次调用、改搜平板，并说“OK, a tablet.”；它说“Adding two.”并调用 add_to_cart(tablet_001, 2)；听到“Actually, just 1.”就撤销、改加一件，并说“Done, it's &#36;99.”。" width="100%">
 </p>
 
-<sub><b>图 1.</b> 请求不断变化时，前台要承担的责任（Full-Duplex-Bench v3 的任务 <code>ecommerce_19</code>；示意图）。用户先后改了商品（笔记本电脑 → 平板）和数量（两件 → 一件）；<code>add_to_cart</code> 依赖 <code>search_products</code> 返回的商品 ID。(a) 领域工具的 schema 只在后台时，前台可能要连续多次交接，才能把不断变化的请求转达过去，改口和工具之间的依赖也就更难保住。(b) schema 可见时，Duopra 可以不经交接、直接发出改正后的领域工具调用，同时 <code>query(task)</code> 依然可用。划掉的值和弧形箭头表示被取代的请求，不代表已验证的工具回滚；图中是示意路线，不是成对的模型运行记录。论文表 18(a) 记录了这条请求一次实际的委派成功。</sub>
+<sub><b>图 1.</b> 面对 FDB v3 中一条不断变化的请求，前台要承担的责任（<code>ecommerce_19</code>；示意图）。用户既改了商品（从笔记本电脑改成平板），也改了数量（从两件改成一件）；<code>add_to_cart</code> 依赖 <code>search_products</code> 返回的商品 ID。(a) 领域工具的 schema 只在后台时，前台可能要连续多次交接，才能把不断变化的请求转达过去，改口和工具之间的依赖也就更难保住。(b) schema 可见时，Duopra 可以不经交接、直接发出改正后的领域工具调用，同时 <code>query(task)</code> 依然可用。划掉的值和弧形箭头表示被取代的请求。论文表 18(a) 记录了这条请求一次实际的委派成功。</sub>
 
 ### 分三个阶段训练
 
