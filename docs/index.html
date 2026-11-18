@@ -105,7 +105,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
       </figure>
 
       <div class="bignums" data-reveal-group>
-        <div class="bn"><b><span class="count" data-to="49.3">49.3</span><i>%</i></b><span class="k">of tasks passed with a backend</span><small>Pass@1 over 300 sessions; Duopra hands each task to a DeepSeek backend, called as one more tool.</small></div>
+        <div class="bn"><b><span class="count" data-to="49.3">49.3</span><i>%</i></b><span class="k">of tasks passed with a backend</span><small>Pass@1 over 300 sessions, with the domain tools behind a DeepSeek backend that Duopra calls as one more tool.</small></div>
         <div class="bn"><b><span class="count" data-to="47.7">47.7</span><i>%</i></b><span class="k">of tasks passed, calling tools itself</span><small>Pass@1 over 300 sessions, with no backend involved.</small></div>
         <div class="bn"><b><span class="count" data-to="1.8">1.8</span><i>×</i></b><span class="k">the pass rate, from full-duplex RL</span><small>26.0% after supervised fine-tuning, 47.7% after reinforcement learning, on the same 300 sessions.</small></div>
         <div class="bn"><b><span class="count" data-to="91.3">91.3</span><i>%</i></b><span class="k">of interruptions answered</span><small>Full-Duplex-Bench v1.0, three seeds, in our streaming pipeline.</small></div>
@@ -226,8 +226,8 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
       </div>
 
       <figure class="paperfig" data-reveal>
-        <a href="assets/paper/fig1-timeline.webp" target="_blank" rel="noopener"><img src="assets/paper/fig1-timeline.webp" width="2240" height="1044" loading="lazy" decoding="async" alt="Figure 1 in two panels. (a) Frontend–backend separation, four hand-offs: the frontend has no tool schemas; the backend has them, injected from a catalog of search_products, add_to_cart and more. The user says “Search for a laptop…”, “Wait, a tablet.”, “Add 2 to the cart…” and “Actually, just 1.” The frontend says “Let me check.” and hands off “Find a laptop.”; the backend thinks and calls search_products(laptop). After “Wait, a tablet.” it hands off “Make it a tablet.”; the backend thinks again, undoes the search, searches for a tablet and replies, and only then does the frontend say “OK, a tablet.” It hands off “Add 2 to the cart.”; the backend thinks and calls add_to_cart(tablet_001, 2). After “Actually, just 1.” it hands off “Make it 1.”; the backend thinks, undoes the call, adds one and replies, and the frontend says “Done, it's $99.” (b) Duopra, no hand-offs: the frontend sees the tool schemas, query(task) included. It says “Sure, searching.” and calls search_products(laptop) itself; on “Wait, a tablet.” it undoes the call, searches for a tablet and says “OK, a tablet.”; it says “Adding two.” and calls add_to_cart(tablet_001, 2); on “Actually, just 1.” it undoes the call, adds one and says “Done, it's $99.”, well before (a) ends."></a>
-        <figcaption><b>Figure 1.</b> Frontend responsibility in an evolving request (Full-Duplex-Bench v3 task <code>ecommerce_19</code>; schematic). The user corrects both the product (laptop → tablet) and the quantity (two → one); <code>add_to_cart</code> depends on the product ID returned by <code>search_products</code>. (a) With the domain tools' schemas behind the backend, the frontend may forward successive requests and corrections (four hand-offs illustrated). (b) With the schemas visible, Duopra can issue the corrected domain-tool calls directly, without a hand-off, while <code>query(task)</code> remains available. Crossed-out values and curved arrows denote superseded requests, not verified tool rollbacks; these are illustrative routes. Table 18(a) of the paper reports an observed delegated success on this request.</figcaption>
+        <a href="assets/paper/fig1-timeline.webp" target="_blank" rel="noopener"><img src="assets/paper/fig1-timeline.webp" width="2240" height="1044" loading="lazy" decoding="async" alt="Figure 1 in two panels. (a) Frontend–backend separation, four hand-offs: the frontend has no tool schemas; the backend has them, injected from a catalog of search_products, add_to_cart and more. The user says “Search for a laptop…”, “Wait, a tablet.”, “Add 2 to the cart…” and “Actually, just 1.” The frontend says “Let me check.” and hands off “Find a laptop.”; the backend thinks and calls search_products(laptop). After “Wait, a tablet.” it hands off “Make it a tablet.”; the backend thinks again, undoes the search, searches for a tablet and replies, and only then does the frontend say “OK, a tablet.” It hands off “Add 2 to the cart.”; the backend thinks and calls add_to_cart(tablet_001, 2). After “Actually, just 1.” it hands off “Make it 1.”; the backend thinks, undoes the call, adds one and replies, and the frontend says “Done, it's $99.” (b) Duopra, no hand-offs: the frontend sees the tool schemas, query(task) included. It says “Sure, searching.” and calls search_products(laptop) itself; on “Wait, a tablet.” it undoes the call, searches for a tablet and says “OK, a tablet.”; it says “Adding two.” and calls add_to_cart(tablet_001, 2); on “Actually, just 1.” it undoes the call, adds one and says “Done, it's $99.”."></a>
+        <figcaption><b>Figure 1.</b> Frontend responsibility in an evolving request (Full-Duplex-Bench v3 task <code>ecommerce_19</code>; schematic). The user corrects both the product (laptop → tablet) and the quantity (two → one); <code>add_to_cart</code> depends on the product ID returned by <code>search_products</code>. (a) When the domain tools' schemas are available only to the backend, the frontend may need successive hand-offs to convey the evolving request, making it harder to preserve corrections and tool dependencies. (b) With the schemas visible, Duopra can issue the corrected domain-tool calls directly, without a hand-off, while <code>query(task)</code> remains available. Crossed-out values and curved arrows denote superseded requests, not verified tool rollbacks; these are illustrative routes, not paired model traces. Table 18(a) of the paper reports an observed delegated success on this request.</figcaption>
       </figure>
 
       <div class="subhead" data-reveal>
@@ -304,7 +304,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
 
       <div class="grid2">
         <div class="tile chart" data-reveal>
-          <h3>Training removes failures to act.</h3>
+          <h3>Training cuts failures to act.</h3>
           <p class="sub">The outcome of each of 300 sessions, Duopra models calling tools themselves.</p>
           <div class="legend" aria-hidden="true">
             <span><i class="p"></i>Passed</span><span><i class="f"></i>Called, but did not pass</span><span><i class="n"></i>No call</span>
@@ -340,7 +340,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
         </div>
 
         <div class="tile chart" data-reveal>
-          <h3>Learning to act, without forgetting to converse.</h3>
+          <h3>Learning to act, while taking turns better.</h3>
           <p class="sub">FDB v1.0 takeover rates of Duopra and the model it is built on, Realtime-Venus-Audio, in the same pipeline (%).</p>
           <div class="legend" aria-hidden="true"><span><i class="base"></i>Base model</span><span><i class="ours"></i>Duopra</span></div>
           <div class="pairs">
@@ -360,7 +360,6 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
               <div class="row ours"><div class="tr"><i style="width:91.3%"></i></div><span class="v">91.3</span></div>
             </div>
           </div>
-          <p class="foot">Not every behaviour survives: Duopra answers fewer interruptions than Duopra-RL1 (96.5%) and, like every post-trained stage, no longer backchannels.</p>
         </div>
       </div>
 
@@ -405,11 +404,11 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
                 <tr><td>Responds after an interruption ↑ <small>FDB v1.0</small></td><td>91.3</td></tr>
                 <tr><td>Takes the turn at all ↑ <small>FDB v3, calling tools itself</small></td><td>93.0</td></tr>
                 <tr><td>VoiceBench, mean of nine categories ↑</td><td>55.9</td></tr>
-                <tr><td>Task-completion latency ↓ <small>domain tools and backend both visible, Qwen3-8B</small></td><td>10.42 s</td></tr>
+                <tr><td>Factual-answer latency ↓ <small>domain tools and backend both visible, Qwen3-8B</small></td><td>10.42 s</td></tr>
               </tbody>
             </table>
           </div>
-          <p class="note">Pass@1 is read from the call log rather than the transcript. ± is the standard deviation across three seeds. Judged metrics use Qwen3.8-27B; tool-name F1 involves no judge. Delegating every request instead raises the task-completion latency to 14.85 s.</p>
+          <p class="note">Pass@1 is read from the call log rather than the transcript. ± is the standard deviation across three seeds. Judged metrics use Qwen3.8-27B; tool-name F1 involves no judge. Factual-answer latency is measured until the factual answer, including runtime and tool execution.</p>
         </div>
       </details>
     </div>
@@ -424,8 +423,8 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
         <p class="paper-meta">The code and the weights are available now; the preprint will follow.</p>
         <details class="abstract">
           <summary>Read the abstract <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></summary>
-          <p>Full-duplex speech models manage conversation, but task agency requires timely, faithful execution of evolving requests. Frontend–backend agents separate initiation from execution: the frontend decides whether and what to request, while the backend determines how. Execution can be offloaded, but unsent requests cannot be executed, and incomplete ones can misdirect the backend. On Full-Duplex-Bench (FDB) v3, most failures of Realtime-Venus-Audio + Harness in our streaming setting occur before a domain tool executes.</p>
-          <p>We introduce <b>Duopra</b>, a full-duplex speech model that learns task execution alongside conversational control. Duopra treats the backend as a tool, <code>query(task)</code>, accepting a self-contained natural-language request. Direct calls and delegation share an action interface and requirements for faithful initiation and correct execution. Its three-stage training combines protocol SFT, full-duplex RL rewarding timely and complete execution, and projector-only repair of speech conditioning after thinker updates. With a fixed backend, Pass@1 rises from 4.7% to 44.7%; Duopra achieves 47.7% under Direct (26.0% after SFT) and 49.3% under Backend with DeepSeek. It improves three FDB v1.0 takeover rates over baselines. These results show that task agency can coexist with key turn-taking capabilities.</p>
+          <p>Full-duplex interaction models exhibit strong conversational agency, enabling natural, low-latency turn-taking, backchannels, and interruptions. However, successful task completion further requires task agency that timely tool invocation and argument revision following user corrections. Frontend–backend agents separate initiation from execution: the frontend decides whether and what to request, while the backend determines how. Execution can be offloaded, but unsent requests cannot be executed, and incomplete ones can misdirect the backend. We investigate this issue on FD-Bench-v3, most failures of Realtime-Venus-Audio + Harness in our streaming setting occur before a domain tool executes.</p>
+          <p>We introduce <b>Duopra</b>, a full-duplex interaction model that learns task execution alongside conversational control. Duopra treats the backend as a tool, accepting a self-contained natural-language request. Direct calls and backend delegation share an action interface and requirements for faithful initiation and correct execution. Its three-stage training combines protocol SFT, full-duplex RL rewarding timely and complete execution, and projector-only repair of talker conditioning after thinker updates. With a fixed backend, Pass@1 rises from 4.7% to 44.7%; Duopra achieves 47.7% under Direct (26.0% after SFT) and 49.3% under Backend with DeepSeek. It improves three FDB v1.0 takeover rates over the base model. These results show that task agency can coexist with key conversational agency.</p>
         </details>
       </div>
       <div id="cite" class="cite" data-reveal>

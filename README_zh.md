@@ -136,10 +136,10 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 - **结果落在单元边界上。** 运行时异步执行每次调用，并在结果返回后的第一个 1 秒边界注入上下文。等待期间模型照常听、照常说，结果到了才报出数值。
 
 <p align="center">
-  <img src="docs/assets/paper/fig1-timeline.webp" alt="图 1 分两栏。(a) 前后台分离，4 次交接：前台没有工具 schema（no schemas）；后台有，由工具目录（search_products、add_to_cart 等）注入。用户依次说“Search for a laptop…”“Wait, a tablet.”“Add 2 to the cart…”“Actually, just 1.”。前台说“Let me check.”，交出“Find a laptop.”；后台思考后调用 search_products(laptop)。用户改口后，前台交出“Make it a tablet.”；后台再次思考，撤销这次搜索、改搜平板，然后回复，前台这才说“OK, a tablet.”。前台交出“Add 2 to the cart.”；后台思考后调用 add_to_cart(tablet_001, 2)。用户说“Actually, just 1.”后，前台交出“Make it 1.”；后台思考、撤销这次调用、改加一件，然后回复，前台说“Done, it's &#36;99.”。(b) Duopra，0 次交接：前台能看到工具 schema，包括 query(task)。它说“Sure, searching.”并自己调用 search_products(laptop)；听到“Wait, a tablet.”就撤销这次调用、改搜平板，并说“OK, a tablet.”；它说“Adding two.”并调用 add_to_cart(tablet_001, 2)；听到“Actually, just 1.”就撤销、改加一件，并说“Done, it's &#36;99.”，比 (a) 早得多结束。" width="100%">
+  <img src="docs/assets/paper/fig1-timeline.webp" alt="图 1 分两栏。(a) 前后台分离，4 次交接：前台没有工具 schema（no schemas）；后台有，由工具目录（search_products、add_to_cart 等）注入。用户依次说“Search for a laptop…”“Wait, a tablet.”“Add 2 to the cart…”“Actually, just 1.”。前台说“Let me check.”，交出“Find a laptop.”；后台思考后调用 search_products(laptop)。用户改口后，前台交出“Make it a tablet.”；后台再次思考，撤销这次搜索、改搜平板，然后回复，前台这才说“OK, a tablet.”。前台交出“Add 2 to the cart.”；后台思考后调用 add_to_cart(tablet_001, 2)。用户说“Actually, just 1.”后，前台交出“Make it 1.”；后台思考、撤销这次调用、改加一件，然后回复，前台说“Done, it's &#36;99.”。(b) Duopra，0 次交接：前台能看到工具 schema，包括 query(task)。它说“Sure, searching.”并自己调用 search_products(laptop)；听到“Wait, a tablet.”就撤销这次调用、改搜平板，并说“OK, a tablet.”；它说“Adding two.”并调用 add_to_cart(tablet_001, 2)；听到“Actually, just 1.”就撤销、改加一件，并说“Done, it's &#36;99.”。" width="100%">
 </p>
 
-<sub><b>图 1.</b> 请求不断变化时，前台要承担的责任（Full-Duplex-Bench v3 的任务 <code>ecommerce_19</code>；示意图）。用户先后改了商品（笔记本电脑 → 平板）和数量（两件 → 一件）；<code>add_to_cart</code> 依赖 <code>search_products</code> 返回的商品 ID。(a) 领域工具的 schema 只在后台时，前台可能把一个个请求和改口逐条转交（图中示意了 4 次交接）。(b) schema 可见时，Duopra 可以不经交接、直接发出改正后的领域工具调用，同时 <code>query(task)</code> 依然可用。划掉的值和弧形箭头表示被取代的请求，不代表已验证的工具回滚；图中路线仅作示意。论文表 18(a) 记录了这条请求一次实际的委派成功。</sub>
+<sub><b>图 1.</b> 请求不断变化时，前台要承担的责任（Full-Duplex-Bench v3 的任务 <code>ecommerce_19</code>；示意图）。用户先后改了商品（笔记本电脑 → 平板）和数量（两件 → 一件）；<code>add_to_cart</code> 依赖 <code>search_products</code> 返回的商品 ID。(a) 领域工具的 schema 只在后台时，前台可能要连续多次交接，才能把不断变化的请求转达过去，改口和工具之间的依赖也就更难保住。(b) schema 可见时，Duopra 可以不经交接、直接发出改正后的领域工具调用，同时 <code>query(task)</code> 依然可用。划掉的值和弧形箭头表示被取代的请求，不代表已验证的工具回滚；图中是示意路线，不是成对的模型运行记录。论文表 18(a) 记录了这条请求一次实际的委派成功。</sub>
 
 ### 分三个阶段训练
 
@@ -218,7 +218,7 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 
 </details>
 
-### 训练消除了「不动手」
+### 训练大幅减少了「不动手」
 
 300 个会话各自的结局，Duopra 各阶段均为自己调用工具。
 
@@ -230,18 +230,18 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 
 多步请求变得可解：在需要两到三次调用的 102 个会话里，Duopra 通过 **28 个**，SFT 之后只有 2 个。剩下的提升空间在参数上——参数错误（占全部会话 19.3%）已经和没有调用（18.7%）一样多。
 
-### 学会动手，没有忘记对话
+### 学会动手，话轮转换也更好了
 
 | 指标 | Duopra |
 | :--- | ---: |
-| 用户说完后接话 ↑ <sub>FDB v1.0</sub> | 75.6 |
-| 用户句中停顿时抢话 ↓ <sub>FDB v1.0</sub> | 5.4 |
-| 被打断后作出回应 ↑ <sub>FDB v1.0</sub> | 91.3 |
+| 用户说完后接话 ↑ <sub>FDB v1.0 · 基座模型 59.1</sub> | 75.6 |
+| 用户句中停顿时抢话 ↓ <sub>FDB v1.0 · 基座模型 18.1</sub> | 5.4 |
+| 被打断后作出回应 ↑ <sub>FDB v1.0 · 基座模型 79.5</sub> | 91.3 |
 | 接话率 ↑ <sub>FDB v3，自己调用工具</sub> | 93.0 |
 | VoiceBench 九类均值 ↑ | 55.9 |
-| 任务完成延迟 ↓ <sub>领域工具与后台同时可见，Qwen3-8B 后台</sub> | 10.42 s |
+| 给出事实答案的延迟 ↓ <sub>领域工具与后台同时可见，Qwen3-8B 后台</sub> | 10.42 s |
 
-<sub>3 个种子，在我们的流式评测流程中测得。Pass@1 只看调用记录，不看转写；需要判分的指标由 Qwen3.8-27B 作 judge，工具名 F1 不经过 judge。并非所有行为都保住了：Duopra 回应打断的比例低于 Duopra-RL1（96.5%），而且和所有后训练阶段一样，不再附和。</sub>
+<sub>3 个种子，在我们的流式评测流程中测得；基座模型为 Duopra 所基于的 Realtime-Venus-Audio。Pass@1 只看调用记录，不看转写；需要判分的指标由 Qwen3.8-27B 作 judge，工具名 F1 不经过 judge。给出事实答案的延迟测到说出事实答案为止，包含运行时和工具执行的时间。</sub>
 
 <a id="quick-start"></a>
 
@@ -423,6 +423,15 @@ duopra/
 <a id="citation"></a>
 
 ## 引用
+
+<details>
+<summary><b>摘要</b></summary>
+
+全双工交互模型已展现出很强的对话能力（conversational agency），能够自然、低延迟地完成话轮转换、附和与打断。然而，要成功完成任务，还需要任务能力（task agency）：及时调用工具，并在用户改口后修正参数。前后台智能体把发起与执行分开：前台决定是否发出请求、请求什么，后台决定怎么做。执行可以交给后台，但没发出的请求无从执行，不完整的请求还可能把后台引错方向。我们在 FD-Bench-v3 上研究这一问题：在我们的流式设置中，Realtime-Venus-Audio + Harness 的多数失败发生在任何领域工具执行之前。
+
+我们提出 **Duopra**：一个在学习对话控制的同时学习执行任务的全双工交互模型。Duopra 把后台当作一个工具，它接收一条自包含的自然语言请求。直接调用与后台委派共用同一个动作接口，也面对同样的要求：忠实地发起、正确地执行。它的三阶段训练包括：协议 SFT；奖励及时、完整执行的全双工强化学习；thinker 更新后只训练 projector，修复 talker 的条件输入。后台固定时，Pass@1 从 4.7% 升至 44.7%；Duopra 在 Direct 设置下达到 47.7%（SFT 后为 26.0%），在接 DeepSeek 的 Backend 设置下达到 49.3%。相比基座模型，它在三项 FDB v1.0 接管率上都有提升。这些结果表明，任务能力可以与关键的对话能力并存。
+
+</details>
 
 ```bibtex
 @misc{duopra2026,

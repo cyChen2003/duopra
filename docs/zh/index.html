@@ -98,7 +98,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
       </figure>
 
       <div class="bignums" data-reveal-group>
-        <div class="bn"><b><span class="count" data-to="49.3">49.3</span><i>%</i></b><span class="k">接后台时的任务通过率</span><small>300 个会话的 Pass@1；Duopra 把任务交给 DeepSeek 后台，后台只是它的又一个工具。</small></div>
+        <div class="bn"><b><span class="count" data-to="49.3">49.3</span><i>%</i></b><span class="k">接后台时的任务通过率</span><small>300 个会话的 Pass@1；领域工具都在 DeepSeek 后台那边，Duopra 把后台当作又一个工具来调用。</small></div>
         <div class="bn"><b><span class="count" data-to="47.7">47.7</span><i>%</i></b><span class="k">自己调用工具时的任务通过率</span><small>300 个会话的 Pass@1，不经过后台。</small></div>
         <div class="bn"><b><span class="count" data-to="1.8">1.8</span><i>×</i></b><span class="k">全双工强化学习带来的通过率提升</span><small>监督微调后为 26.0%，强化学习后为 47.7%，同一批 300 个会话。</small></div>
         <div class="bn"><b><span class="count" data-to="91.3">91.3</span><i>%</i></b><span class="k">被打断后作出回应</span><small>Full-Duplex-Bench v1.0，3 个种子，在我们的流式评测流程中测得。</small></div>
@@ -219,8 +219,8 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
       </div>
 
       <figure class="paperfig" data-reveal>
-        <a href="../assets/paper/fig1-timeline.webp" target="_blank" rel="noopener"><img src="../assets/paper/fig1-timeline.webp" width="2240" height="1044" loading="lazy" decoding="async" alt="图 1 分两栏。(a) 前后台分离，4 次交接：前台没有工具 schema（no schemas）；后台有，由工具目录（search_products、add_to_cart 等）注入。用户依次说“Search for a laptop…”“Wait, a tablet.”“Add 2 to the cart…”“Actually, just 1.”。前台说“Let me check.”，交出“Find a laptop.”；后台思考后调用 search_products(laptop)。用户改口后，前台交出“Make it a tablet.”；后台再次思考，撤销这次搜索、改搜平板，然后回复，前台这才说“OK, a tablet.”。前台交出“Add 2 to the cart.”；后台思考后调用 add_to_cart(tablet_001, 2)。用户说“Actually, just 1.”后，前台交出“Make it 1.”；后台思考、撤销这次调用、改加一件，然后回复，前台说“Done, it's $99.”。(b) Duopra，0 次交接：前台能看到工具 schema，包括 query(task)。它说“Sure, searching.”并自己调用 search_products(laptop)；听到“Wait, a tablet.”就撤销这次调用、改搜平板，并说“OK, a tablet.”；它说“Adding two.”并调用 add_to_cart(tablet_001, 2)；听到“Actually, just 1.”就撤销、改加一件，并说“Done, it's $99.”，比 (a) 早得多结束。"></a>
-        <figcaption><b>图 1.</b> 请求不断变化时，前台要承担的责任（Full-Duplex-Bench v3 的任务 <code>ecommerce_19</code>；示意图）。用户先后改了商品（笔记本电脑 → 平板）和数量（两件 → 一件）；<code>add_to_cart</code> 依赖 <code>search_products</code> 返回的商品 ID。(a) 领域工具的 schema 只在后台时，前台可能把一个个请求和改口逐条转交（图中示意了 4 次交接）。(b) schema 可见时，Duopra 可以不经交接、直接发出改正后的领域工具调用，同时 <code>query(task)</code> 依然可用。划掉的值和弧形箭头表示被取代的请求，不代表已验证的工具回滚；图中路线仅作示意。论文表 18(a) 记录了这条请求一次实际的委派成功。</figcaption>
+        <a href="../assets/paper/fig1-timeline.webp" target="_blank" rel="noopener"><img src="../assets/paper/fig1-timeline.webp" width="2240" height="1044" loading="lazy" decoding="async" alt="图 1 分两栏。(a) 前后台分离，4 次交接：前台没有工具 schema（no schemas）；后台有，由工具目录（search_products、add_to_cart 等）注入。用户依次说“Search for a laptop…”“Wait, a tablet.”“Add 2 to the cart…”“Actually, just 1.”。前台说“Let me check.”，交出“Find a laptop.”；后台思考后调用 search_products(laptop)。用户改口后，前台交出“Make it a tablet.”；后台再次思考，撤销这次搜索、改搜平板，然后回复，前台这才说“OK, a tablet.”。前台交出“Add 2 to the cart.”；后台思考后调用 add_to_cart(tablet_001, 2)。用户说“Actually, just 1.”后，前台交出“Make it 1.”；后台思考、撤销这次调用、改加一件，然后回复，前台说“Done, it's $99.”。(b) Duopra，0 次交接：前台能看到工具 schema，包括 query(task)。它说“Sure, searching.”并自己调用 search_products(laptop)；听到“Wait, a tablet.”就撤销这次调用、改搜平板，并说“OK, a tablet.”；它说“Adding two.”并调用 add_to_cart(tablet_001, 2)；听到“Actually, just 1.”就撤销、改加一件，并说“Done, it's $99.”。"></a>
+        <figcaption><b>图 1.</b> 请求不断变化时，前台要承担的责任（Full-Duplex-Bench v3 的任务 <code>ecommerce_19</code>；示意图）。用户先后改了商品（笔记本电脑 → 平板）和数量（两件 → 一件）；<code>add_to_cart</code> 依赖 <code>search_products</code> 返回的商品 ID。(a) 领域工具的 schema 只在后台时，前台可能要连续多次交接，才能把不断变化的请求转达过去，改口和工具之间的依赖也就更难保住。(b) schema 可见时，Duopra 可以不经交接、直接发出改正后的领域工具调用，同时 <code>query(task)</code> 依然可用。划掉的值和弧形箭头表示被取代的请求，不代表已验证的工具回滚；图中是示意路线，不是成对的模型运行记录。论文表 18(a) 记录了这条请求一次实际的委派成功。</figcaption>
       </figure>
 
       <div class="subhead" data-reveal>
@@ -297,7 +297,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
 
       <div class="grid2">
         <div class="tile chart" data-reveal>
-          <h3>训练消除了「不动手」。</h3>
+          <h3>训练大幅减少了「不动手」。</h3>
           <p class="sub">300 个会话各自的结局，Duopra 各阶段均为自己调用工具。</p>
           <div class="legend" aria-hidden="true">
             <span><i class="p"></i>通过</span><span><i class="f"></i>调用了但未通过</span><span><i class="n"></i>没有调用</span>
@@ -333,7 +333,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
         </div>
 
         <div class="tile chart" data-reveal>
-          <h3>学会动手，没有忘记对话。</h3>
+          <h3>学会动手，话轮转换也更好了。</h3>
           <p class="sub">FDB v1.0 接管率：Duopra 与它所基于的模型 Realtime-Venus-Audio，在同一流程下测得（%）。</p>
           <div class="legend" aria-hidden="true"><span><i class="base"></i>基座模型</span><span><i class="ours"></i>Duopra</span></div>
           <div class="pairs">
@@ -353,7 +353,6 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
               <div class="row ours"><div class="tr"><i style="width:91.3%"></i></div><span class="v">91.3</span></div>
             </div>
           </div>
-          <p class="foot">并非所有行为都保住了：Duopra 回应打断的比例低于 Duopra-RL1（96.5%），而且和所有后训练阶段一样，不再附和。</p>
         </div>
       </div>
 
@@ -398,11 +397,11 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
                 <tr><td>被打断后作出回应 ↑ <small>FDB v1.0</small></td><td>91.3</td></tr>
                 <tr><td>接话率 ↑ <small>FDB v3，自己调用工具</small></td><td>93.0</td></tr>
                 <tr><td>VoiceBench 九类均值 ↑</td><td>55.9</td></tr>
-                <tr><td>任务完成延迟 ↓ <small>领域工具与后台同时可见，Qwen3-8B</small></td><td>10.42 s</td></tr>
+                <tr><td>给出事实答案的延迟 ↓ <small>领域工具与后台同时可见，Qwen3-8B</small></td><td>10.42 s</td></tr>
               </tbody>
             </table>
           </div>
-          <p class="note">Pass@1 只看调用记录，不看语音转写。± 为 3 个种子的标准差。涉及判分的指标由 Qwen3.8-27B 作 judge；工具名 F1 不需要 judge。若所有请求都委派给后台，任务完成延迟会升到 14.85 秒。</p>
+          <p class="note">Pass@1 只看调用记录，不看语音转写。± 为 3 个种子的标准差。涉及判分的指标由 Qwen3.8-27B 作 judge；工具名 F1 不需要 judge。给出事实答案的延迟测到说出事实答案为止，包含运行时和工具执行的时间。</p>
         </div>
       </details>
     </div>
@@ -417,8 +416,8 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
         <p class="paper-meta">代码与模型权重现已公开，预印本即将公开。</p>
         <details class="abstract">
           <summary>阅读摘要 <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></summary>
-          <p>全双工语音模型已经能驾驭对话，但任务能力（task agency）还要求及时、忠实地执行不断变化的请求。前后台智能体把发起与执行分开：前台决定是否发出请求、请求什么，后台决定怎么做。执行可以交给后台，但没发出的请求无从执行，不完整的请求还可能把后台引错方向。在 Full-Duplex-Bench（FDB）v3 上，在我们的流式设置中，Realtime-Venus-Audio + Harness 的多数失败发生在任何领域工具执行之前。</p>
-          <p>我们提出 <b>Duopra</b>：一个在学习对话控制的同时学习执行任务的全双工语音模型。Duopra 把后台当作一个工具 <code>query(task)</code>，它接收一条自包含的自然语言请求。直接调用与委派共用同一个动作接口，也面对同样的要求：忠实地发起、正确地执行。三阶段训练包括协议 SFT、奖励及时且完整执行的全双工强化学习，以及 thinker 更新后仅训练 projector 的语音条件修复。后台固定时，Pass@1 从 4.7% 升至 44.7%；Duopra 在 Direct 设置下达到 47.7%（SFT 后为 26.0%），在接 DeepSeek 的 Backend 设置下达到 49.3%。它在三项 FDB v1.0 接话率上优于基线。这些结果表明，任务能力可以与关键的话轮转换能力并存。</p>
+          <p>全双工交互模型已展现出很强的对话能力（conversational agency），能够自然、低延迟地完成话轮转换、附和与打断。然而，要成功完成任务，还需要任务能力（task agency）：及时调用工具，并在用户改口后修正参数。前后台智能体把发起与执行分开：前台决定是否发出请求、请求什么，后台决定怎么做。执行可以交给后台，但没发出的请求无从执行，不完整的请求还可能把后台引错方向。我们在 FD-Bench-v3 上研究这一问题：在我们的流式设置中，Realtime-Venus-Audio + Harness 的多数失败发生在任何领域工具执行之前。</p>
+          <p>我们提出 <b>Duopra</b>：一个在学习对话控制的同时学习执行任务的全双工交互模型。Duopra 把后台当作一个工具，它接收一条自包含的自然语言请求。直接调用与后台委派共用同一个动作接口，也面对同样的要求：忠实地发起、正确地执行。它的三阶段训练包括：协议 SFT；奖励及时、完整执行的全双工强化学习；thinker 更新后只训练 projector，修复 talker 的条件输入。后台固定时，Pass@1 从 4.7% 升至 44.7%；Duopra 在 Direct 设置下达到 47.7%（SFT 后为 26.0%），在接 DeepSeek 的 Backend 设置下达到 49.3%。相比基座模型，它在三项 FDB v1.0 接管率上都有提升。这些结果表明，任务能力可以与关键的对话能力并存。</p>
         </details>
       </div>
       <div id="cite" class="cite" data-reveal>
