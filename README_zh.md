@@ -6,10 +6,10 @@
 </picture>
 
 Chiyu Chen<sup>1,2*</sup> · Pengzhou Cheng<sup>3*</sup> · Yuezhao Ma<sup>1</sup> · Xiaocheng Li<sup>1</sup> · Can Liu<sup>1</sup> · Haonan Hu<sup>2</sup> · Yao Yao<sup>1</sup> · Yifei Yang<sup>1</sup><br>
-Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhuan Wu<sup>4</sup> · Zhuosheng Zhang<sup>1†</sup> · Gongshen Liu<sup>1†</sup> · Chenglu Sun<sup>2‡</sup>
+Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhuan Wu<sup>4</sup> · Chenglu Sun<sup>2†</sup> · Gongshen Liu<sup>1‡</sup> · Zhuosheng Zhang<sup>1‡</sup>
 
 <sub><sup>1</sup>上海交通大学 &nbsp;·&nbsp; <sup>2</sup>腾讯 &nbsp;·&nbsp; <sup>3</sup>上海大学 &nbsp;·&nbsp; <sup>4</sup>布里斯托大学</sub><br>
-<sub><sup>*</sup>同等贡献 &nbsp;·&nbsp; <sup>†</sup>通讯作者 &nbsp;·&nbsp; <sup>‡</sup>项目负责人</sub>
+<sub><sup>*</sup>同等贡献 &nbsp;·&nbsp; <sup>†</sup>项目负责人 &nbsp;·&nbsp; <sup>‡</sup>通讯作者</sub>
 
 <br>
 
@@ -139,7 +139,7 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
   <img src="docs/assets/paper/fig1-timeline.webp" alt="图 1 分两栏。(a) 前后台分离，4 次交接：前台没有工具 schema（no schemas）；后台有，由工具目录（search_products、add_to_cart 等）注入。用户依次说“Search for a laptop…”“Wait, a tablet.”“Add 2 to the cart…”“Actually, just 1.”。前台说“Let me check.”，交出“Find a laptop.”；后台思考后调用 search_products(laptop)。用户改口后，前台交出“Make it a tablet.”；后台再次思考，撤销这次搜索、改搜平板，然后回复，前台这才说“OK, a tablet.”。前台交出“Add 2 to the cart.”；后台思考后调用 add_to_cart(tablet_001, 2)。用户说“Actually, just 1.”后，前台交出“Make it 1.”；后台思考、撤销这次调用、改加一件，然后回复，前台说“Done, it's &#36;99.”。(b) Duopra，0 次交接：前台能看到工具 schema，包括 query(task)。它说“Sure, searching.”并自己调用 search_products(laptop)；听到“Wait, a tablet.”就撤销这次调用、改搜平板，并说“OK, a tablet.”；它说“Adding two.”并调用 add_to_cart(tablet_001, 2)；听到“Actually, just 1.”就撤销、改加一件，并说“Done, it's &#36;99.”。" width="100%">
 </p>
 
-<sub><b>图 1.</b> 面对 FDB v3 中一条不断变化的请求，前台要承担的责任（<code>ecommerce_19</code>；示意图）。用户既改了商品（从笔记本电脑改成平板），也改了数量（从两件改成一件）；<code>add_to_cart</code> 依赖 <code>search_products</code> 返回的商品 ID。(a) 领域工具的 schema 只在后台时，前台可能要连续多次交接，才能把不断变化的请求转达过去，改口和工具之间的依赖也就更难保住。(b) schema 可见时，Duopra 可以不经交接、直接发出改正后的领域工具调用，同时 <code>query(task)</code> 依然可用。划掉的值和弧形箭头表示被取代的请求。论文表 18(a) 记录了这条请求一次实际的委派成功。</sub>
+<sub><b>图 1.</b> 面对 FDB v3 中一条不断变化的请求，前台要承担的责任（<code>ecommerce_19</code>；示意图）。执行可以交给后台，但发起一条忠实的请求仍是前台的责任。用户既改了商品（从笔记本电脑改成平板），也改了数量（从两件改成一件）；<code>add_to_cart</code> 依赖 <code>search_products</code> 返回的商品 ID。(a) 领域工具的 schema 只在后台时，前台可能要连续多次交接，才能把不断变化的请求转达过去，改口和工具之间的依赖也就更难保住。(b) schema 可见时，Duopra 可以不经交接、直接发出改正后的领域工具调用，同时 <code>query(task)</code> 依然可用。划掉的值和弧形箭头表示被取代的请求。论文表 16(a) 记录了这条请求一次实际的委派成功。</sub>
 
 ### 分三个阶段训练
 
@@ -168,10 +168,10 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 <summary><b>图 2 · 三个训练阶段</b></summary>
 
 <p align="center">
-  <img src="docs/assets/paper/fig2-method.webp" alt="Duopra 在 Realtime-Venus-Audio 上的三个训练阶段。Stage 1 在单元级会话上训练 thinker，得到 Duopra-SFT；Stage 2 在包含脚本化用户、后台 agent、模拟工具和评分器的沙盒里，用 Dr. GRPO 训练 thinker 的 LoRA，Stage 2a 得到 Duopra-RL1，Stage 2b 得到 Duopra-RL；Stage 3 冻结 Duopra-RL 的 thinker，只在缓存的隐藏状态上训练 projector，得到最终的 Duopra。" width="100%">
+  <img src="docs/assets/paper/fig2-method.webp" alt="Duopra 在 Realtime-Venus-Audio 上的三个训练阶段。每一行都重画同一个模型：thinker 把要念出的 token_j 送入文本嵌入，把隐藏状态 h_j 送入 projector，两者相加得到 c_j，作为 talker 的条件输入；火焰标出该阶段训练的部分。Stage 1 在单元级会话上训练 thinker，得到 Duopra-SFT；Stage 2 在包含脚本化用户、后台 agent、模拟工具和评分器的沙盒里，用 Dr. GRPO 训练 thinker 的 LoRA，Stage 2a 得到 Duopra-RL1，Stage 2b 得到 Duopra-RL；Stage 3 冻结 Duopra-RL 的 thinker，只训练 projector：原始 thinker 缓存的 h_j^orig 经冻结的基座 projector P_ϕ0 得到目标 u_j^0，Duopra-RL thinker 的 h_j^RL 经训练中的 projector P_ϕ 得到 u_j^ϕ，损失为 1 − cos(u_j^ϕ, u_j^0)，最终得到 Duopra。" width="100%">
 </p>
 
-<sub><b>图 2.</b> Duopra 在 Realtime-Venus-Audio 上的三个训练阶段（<i>h<sub>t</sub></i>：thinker 隐藏状态；<i>P</i>：projector；<i>c<sub>t</sub></i>：talker 的条件输入）。Stage 1 在单元级会话上训练 thinker，得到 Duopra-SFT。Stage 2 在沙盒中用 Dr. GRPO 训练 thinker 的 LoRA：Stage 2a 得到 Duopra-RL1，Stage 2b 得到 Duopra-RL。Stage 3 冻结 Duopra-RL 的 thinker，只训练它的 projector，得到最终的 Duopra 模型。</sub>
+<sub><b>图 2.</b> Duopra 在 Realtime-Venus-Audio 上的三个训练阶段（<i>h<sub>j</sub></i>：要念出的第 <i>j</i> 个 token 处的 thinker 隐藏状态；<i>P</i><sub><i>ϕ</i><sub>0</sub></sub>、<i>P</i><sub><i>ϕ</i></sub>：基座 projector 与 Stage 3 的 projector；<i>c<sub>j</sub></i>：talker 的条件输入）。Stage 1 在单元级会话上训练 thinker，得到 Duopra-SFT。Stage 2 在沙盒中用 Dr. GRPO 训练 thinker 的 LoRA：Stage 2a 得到 Duopra-RL1，Stage 2b 得到 Duopra-RL。Stage 3 冻结 Duopra-RL 的 thinker，只训练它的 projector，得到最终的 Duopra 模型。</sub>
 
 </details>
 
@@ -186,7 +186,7 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
   <img src="docs/assets/readme/ranking-light.svg" alt="Full-Duplex-Bench v3 上的 Pass@1，分左右两栏、同一刻度：左栏商业系统，右栏开源系统与 Duopra；从高到低：GPT-Realtime* 60.0，Gemini Live 3.1* 54.0，MOSS-Live* 51.0，Duopra（DeepSeek 后台）49.3 ± 3.5，Gemini Live 2.5* 49.0，Hu et al.（Qwen3-235B 后台）48.0，Duopra（自己调用工具）47.7 ± 3.5，DuplexAgent-RSI 47.0，Cascaded* 45.0，Duopra（Qwen3-8B 后台）44.7 ± 5.7，Grok* 43.0，Realtime-Venus-Audio（离线）42.0，Ultravox v0.7* 41.0，Gander（GPT-5.6）40.0，NemotronLabs VoiceChat 33.0。* 为商业系统，其余系统为文献报告值，仅作参照，并非同一协议下的排名。" width="100%">
 </picture>
 
-<sub>左栏为商业系统（文献报告值），右栏为开源系统与 Duopra，两栏同一刻度。Full-Duplex-Bench v3：100 条真实、不流利的英文录音，12 个模拟 API。Duopra 由我们的评测流程跑出——3 个种子，每种配置 300 个会话，judge 为 Qwen3.8-27B；± 为种子间的标准差。斜线条为已发表的结果，用的是各自来源的评测流程和 judge（多为 GPT-4o），仅作参照，并非同一协议下的排名：MOSS-Live 报告的是工具调用成功率，DuplexAgent-RSI 基于 VoiceChat、参数按字符串精确匹配，Realtime-Venus-Audio 离线评测时工具定义写在提示词里。* 为商业系统。</sub>
+<sub>左栏为商业系统（文献报告值），右栏为开源系统与 Duopra，两栏同一刻度。Full-Duplex-Bench v3：100 条真实、不流利的英文录音，12 个模拟 API。Duopra 由我们的流式评测流程跑出——3 个种子，每种配置 300 个会话，judge 为 Qwen3.8-27B；± 为种子间的标准差。斜线条为已发表的结果，用的是各自来源的评测设置和 judge（多为 GPT-4o），仅作参照，并非同一协议下的排名：MOSS-Live 报告的是工具调用成功率，DuplexAgent-RSI 基于 VoiceChat、参数按字符串精确匹配，Realtime-Venus-Audio 离线评测时工具定义写在提示词里。* 为商业系统。</sub>
 
 <details>
 <summary><b>图中各系统的全部指标</b></summary>
@@ -196,7 +196,7 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 | 系统 | 工具 | 参数 | 回复 | Pass@1 |
 | :--- | ---: | ---: | ---: | ---: |
 | ***商业系统\*，文献报告值*** | | | | |
-| GPT-Realtime | **87.6** | **68.0** | **79.2** | **60.0** |
+| GPT-Realtime | 87.6 | 68.0 | 79.2 | 60.0 |
 | Gemini Live 3.1 | 81.7 | 58.8 | 71.8 | 54.0 |
 | MOSS-Live | n/a | n/a | n/a | 51.0 |
 | Gemini Live 2.5 | 78.6 | 59.3 | 55.4 | 49.0 |
@@ -204,17 +204,17 @@ $$y_t = (m_t,\ w_t,\ a_t)$$
 | Grok | 79.7 | 54.2 | 61.7 | 43.0 |
 | Ultravox v0.7 | 79.4 | 51.3 | 51.0 | 41.0 |
 | ***开源系统，文献报告值*** | | | | |
-| Hu et al.，Qwen3-235B 后台 | 71.7 | 55.2 | **67.0** | **48.0** |
-| DuplexAgent-RSI | **97.4** | **57.0** | n/a | 47.0 |
+| Hu et al.，Qwen3-235B 后台 | 71.7 | 55.2 | 67.0 | 48.0 |
+| DuplexAgent-RSI | 97.4 | 57.0 | n/a | 47.0 |
 | Realtime-Venus-Audio，离线 | 82.0 | 52.2 | n/a | 42.0 |
 | Gander，GPT-5.6 | 75.9 | 50.3 | 49.0 | 40.0 |
 | NemotronLabs VoiceChat | 82.5 | 42.2 | n/a | 33.0 |
-| ***Duopra，我们的评测流程*** | | | | |
+| ***Duopra，我们的流式评测流程*** | | | | |
 | Duopra，自己调用工具 | 76.7 | 56.2 | 66.3 | 47.7 ± 3.5 |
 | Duopra，Qwen3-8B 后台 | **81.8** | **57.0** | **70.6** | 44.7 ± 5.7 |
 | Duopra，DeepSeek 后台 | 71.8 | 55.0 | 69.0 | **49.3** ± 3.5 |
 
-<sub>工具：工具名 F1，不经过 judge（Hu et al. 报告的是工具选择准确率）。参数：参数准确率。回复：回复质量。n/a：未报告。加粗：各组内最好。DuplexAgent-RSI 在 Qwen-Realtime 上为 49.0。“自己调用工具”即论文中的 Direct 设置；标出后台模型的为 Backend 设置，此时只看得到 <code>query(task)</code>。我们在自己的评测流程中跑过的其他开源系统见论文表 2 和表 11。</sub>
+<sub>工具：工具名 F1，不经过 judge（Hu et al. 报告的是工具选择准确率）。参数：参数准确率。回复：回复质量。n/a：未报告。加粗：Duopra 各配置中最好。DuplexAgent-RSI 在 Qwen-Realtime 上为 49.0。“自己调用工具”即论文中的 Direct 设置；标出后台模型的为 Backend 设置，此时只看得到 <code>query(task)</code>。我们在自己的流式评测流程中跑过的其他开源系统见论文表 1。</sub>
 
 </details>
 
@@ -427,9 +427,7 @@ duopra/
 <details>
 <summary><b>摘要</b></summary>
 
-全双工交互模型已展现出很强的对话能力（conversational agency），能够自然、低延迟地完成话轮转换、附和与打断。然而，要成功完成任务，还需要任务能力（task agency）：及时调用工具，并在用户改口后修正参数。前后台智能体把发起与执行分开：前台决定是否发出请求、请求什么，后台决定怎么做。执行可以交给后台，但没发出的请求无从执行，不完整的请求还可能把后台引错方向。我们在 FD-Bench-v3 上研究这一问题：在我们的流式设置中，Realtime-Venus-Audio + Harness 的多数失败发生在任何领域工具执行之前。
-
-我们提出 **Duopra**：一个在学习对话控制的同时学习执行任务的全双工交互模型。Duopra 把后台当作一个工具，它接收一条自包含的自然语言请求。直接调用与后台委派共用同一个动作接口，也面对同样的要求：忠实地发起、正确地执行。它的三阶段训练包括：协议 SFT；奖励及时、完整执行的全双工强化学习；thinker 更新后只训练 projector，修复 talker 的条件输入。后台固定时，Pass@1 从 4.7% 升至 44.7%；Duopra 在 Direct 设置下达到 47.7%（SFT 后为 26.0%），在接 DeepSeek 的 Backend 设置下达到 49.3%。相比基座模型，它在三项 FDB v1.0 接管率上都有提升。这些结果表明，任务能力可以与关键的对话能力并存。
+全双工交互模型已展现出很强的对话能力（conversational agency），能够自然、低延迟地完成话轮转换、附和与打断。然而，完成任务还需要任务能力（task agency）：及时调用工具，并在用户改口后修正参数。前后台智能体把发起与执行分开：前台决定是否发出请求、请求什么，后台决定怎么做。执行可以交给后台，但没发出的请求无从执行，不完整的请求还可能把后台引错方向。在 Full-Duplex-Bench v3（FDB v3）上，在我们的流式评测流程中，Realtime-Venus-Audio + Harness 的多数失败发生在任何领域工具执行之前。我们提出 **Duopra**：一个在学习对话控制的同时学习执行任务的全双工交互模型。Duopra 把后台当作一个工具，它接收一条自包含的自然语言请求。直接调用与后台委派共用同一个动作接口，也面对同样的要求：忠实地发起、正确地执行。它的三阶段训练包括：协议 SFT；奖励及时、完整执行的全双工强化学习；thinker 更新后只训练 projector，修复 talker 的条件输入。使用同一个后台时，Pass@1 从 4.7% 升至 44.7%；Duopra 直接调用工具时达到 47.7%（SFT 后为 26.0%），接 DeepSeek 后台时达到 49.3%。相比基座模型，它在三项 FDB v1.0 接管率上都有提升。这些结果表明，任务能力可以与关键的对话能力并存。
 
 </details>
 
@@ -439,7 +437,7 @@ duopra/
   author = {Chen, Chiyu and Cheng, Pengzhou and Ma, Yuezhao and Li, Xiaocheng
             and Liu, Can and Hu, Haonan and Yao, Yao and Yang, Yifei
             and Lu, Yijie and Wang, Taolei and Li, Yansi and Wu, Muhuan
-            and Zhang, Zhuosheng and Liu, Gongshen and Sun, Chenglu},
+            and Sun, Chenglu and Liu, Gongshen and Zhang, Zhuosheng},
   year   = {2026},
   note   = {Preprint forthcoming},
   url    = {https://cychen2003.github.io/duopra/}

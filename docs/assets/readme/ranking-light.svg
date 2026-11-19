@@ -11,8 +11,8 @@
     <text x="721.8" y="40.5" fill="#6b7280" font-size="12.5" font-weight="600">*</text>
     <text x="631.2" y="40" fill="#424245" font-size="12">As reported</text>
     <rect x="610.2" y="31" width="15" height="9" rx="2.5" fill="url(#hatch-light)"/>
-    <text x="466.8" y="40" fill="#424245" font-size="12">Duopra, our harness</text>
-    <rect x="445.8" y="31" width="15" height="9" rx="2.5" fill="#4a74c2"/>
+    <text x="394.2" y="40" fill="#424245" font-size="12">Duopra, our streaming pipeline</text>
+    <rect x="373.2" y="31" width="15" height="9" rx="2.5" fill="#4a74c2"/>
     <text x="36" y="90" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10.5" letter-spacing="1.8" text-anchor="start">COMMERCIAL SYSTEMS* · AS REPORTED</text>
     <path d="M228.0 101V272" stroke="#18202d" stroke-opacity=".16"/>
     <text x="228.0" y="288" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" text-anchor="middle">0</text>
@@ -43,7 +43,7 @@
     <text x="36" y="244.5" fill="#424245" font-size="12.5" font-weight="400">Ultravox v0.7<tspan fill="#6b7280" font-weight="600">*</tspan></text>
     <path d="M228 235.5H320.7Q323.7 235.5 323.7 238.5V242.5Q323.7 245.5 320.7 245.5H228Z" fill="url(#hatch-light)"/>
     <text x="375.0" y="244.5" fill="#424245" font-size="12" font-weight="400">41.0</text>
-    <text x="456" y="90" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10.5" letter-spacing="1.8" text-anchor="start">OPEN-SOURCE SYSTEMS · DUOPRA IN OUR HARNESS</text>
+    <text x="456" y="90" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10.5" letter-spacing="1.8" text-anchor="start">OPEN-SOURCE SYSTEMS · DUOPRA IN OUR PIPELINE</text>
     <path d="M648.0 101V272" stroke="#18202d" stroke-opacity=".16"/>
     <text x="648.0" y="288" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace" font-size="10" text-anchor="middle">0</text>
     <path d="M694.7 101V272" stroke="#18202d" stroke-opacity=".07"/>

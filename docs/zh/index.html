@@ -64,9 +64,9 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
 
       <!-- 作者，与论文 main.tex 一致 -->
       <div class="hero-meta" data-reveal-group>
-        <p class="authors" lang="en"><span class="au">Chiyu Chen<sup>1,2*</sup></span> <span class="au">Pengzhou Cheng<sup>3*</sup></span> <span class="au">Yuezhao Ma<sup>1</sup></span> <span class="au">Xiaocheng Li<sup>1</sup></span> <span class="au">Can Liu<sup>1</sup></span> <span class="au">Haonan Hu<sup>2</sup></span> <span class="au">Yao Yao<sup>1</sup></span> <span class="au">Yifei Yang<sup>1</sup></span> <span class="au">Yijie Lu<sup>1</sup></span> <span class="au">Taolei Wang<sup>1</sup></span> <span class="au">Yansi Li<sup>1</sup></span> <span class="au">Muhuan Wu<sup>4</sup></span> <span class="au">Zhuosheng Zhang<sup>1†</sup></span> <span class="au">Gongshen Liu<sup>1†</sup></span> <span class="au">Chenglu Sun<sup>2‡</sup></span></p>
+        <p class="authors" lang="en"><span class="au">Chiyu Chen<sup>1,2*</sup></span> <span class="au">Pengzhou Cheng<sup>3*</sup></span> <span class="au">Yuezhao Ma<sup>1</sup></span> <span class="au">Xiaocheng Li<sup>1</sup></span> <span class="au">Can Liu<sup>1</sup></span> <span class="au">Haonan Hu<sup>2</sup></span> <span class="au">Yao Yao<sup>1</sup></span> <span class="au">Yifei Yang<sup>1</sup></span> <span class="au">Yijie Lu<sup>1</sup></span> <span class="au">Taolei Wang<sup>1</sup></span> <span class="au">Yansi Li<sup>1</sup></span> <span class="au">Muhuan Wu<sup>4</sup></span> <span class="au">Chenglu Sun<sup>2†</sup></span> <span class="au">Gongshen Liu<sup>1‡</sup></span> <span class="au">Zhuosheng Zhang<sup>1‡</sup></span></p>
         <p class="affils"><span><sup>1</sup>上海交通大学</span> <span><sup>2</sup>腾讯</span> <span><sup>3</sup>上海大学</span> <span><sup>4</sup>布里斯托大学</span></p>
-        <p class="marks"><span><sup>*</sup>同等贡献</span> <span><sup>†</sup>通讯作者</span> <span><sup>‡</sup>项目负责人</span></p>
+        <p class="marks"><span><sup>*</sup>同等贡献</span> <span><sup>†</sup>项目负责人</span> <span><sup>‡</sup>通讯作者</span></p>
         <ul class="links" aria-label="论文资源">
           <li data-res="paper"><span class="chip-link is-soon" aria-disabled="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.5 1.75H4.25A1.5 1.5 0 0 0 2.75 3.25v9.5a1.5 1.5 0 0 0 1.5 1.5h7.5a1.5 1.5 0 0 0 1.5-1.5v-7.5zM9.5 1.75v3.5h3.75M5.5 8.75h5M5.5 11.25h3.5"/></svg>论文 <small>即将公开</small></span></li>
           <li data-res="code"><a class="chip-link" href="https://github.com/cyChen2003/duopra" rel="noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4.5L2 8l3.5 3.5M10.5 4.5L14 8l-3.5 3.5"/></svg>代码</a></li>
@@ -220,7 +220,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
 
       <figure class="paperfig" data-reveal>
         <a href="../assets/paper/fig1-timeline.webp" target="_blank" rel="noopener"><img src="../assets/paper/fig1-timeline.webp" width="2240" height="1044" loading="lazy" decoding="async" alt="图 1 分两栏。(a) 前后台分离，4 次交接：前台没有工具 schema（no schemas）；后台有，由工具目录（search_products、add_to_cart 等）注入。用户依次说“Search for a laptop…”“Wait, a tablet.”“Add 2 to the cart…”“Actually, just 1.”。前台说“Let me check.”，交出“Find a laptop.”；后台思考后调用 search_products(laptop)。用户改口后，前台交出“Make it a tablet.”；后台再次思考，撤销这次搜索、改搜平板，然后回复，前台这才说“OK, a tablet.”。前台交出“Add 2 to the cart.”；后台思考后调用 add_to_cart(tablet_001, 2)。用户说“Actually, just 1.”后，前台交出“Make it 1.”；后台思考、撤销这次调用、改加一件，然后回复，前台说“Done, it's $99.”。(b) Duopra，0 次交接：前台能看到工具 schema，包括 query(task)。它说“Sure, searching.”并自己调用 search_products(laptop)；听到“Wait, a tablet.”就撤销这次调用、改搜平板，并说“OK, a tablet.”；它说“Adding two.”并调用 add_to_cart(tablet_001, 2)；听到“Actually, just 1.”就撤销、改加一件，并说“Done, it's $99.”。"></a>
-        <figcaption><b>图 1.</b> 面对 FDB v3 中一条不断变化的请求，前台要承担的责任（<code>ecommerce_19</code>；示意图）。用户既改了商品（从笔记本电脑改成平板），也改了数量（从两件改成一件）；<code>add_to_cart</code> 依赖 <code>search_products</code> 返回的商品 ID。(a) 领域工具的 schema 只在后台时，前台可能要连续多次交接，才能把不断变化的请求转达过去，改口和工具之间的依赖也就更难保住。(b) schema 可见时，Duopra 可以不经交接、直接发出改正后的领域工具调用，同时 <code>query(task)</code> 依然可用。划掉的值和弧形箭头表示被取代的请求。论文表 18(a) 记录了这条请求一次实际的委派成功。</figcaption>
+        <figcaption><b>图 1.</b> 面对 FDB v3 中一条不断变化的请求，前台要承担的责任（<code>ecommerce_19</code>；示意图）。执行可以交给后台，但发起一条忠实的请求仍是前台的责任。用户既改了商品（从笔记本电脑改成平板），也改了数量（从两件改成一件）；<code>add_to_cart</code> 依赖 <code>search_products</code> 返回的商品 ID。(a) 领域工具的 schema 只在后台时，前台可能要连续多次交接，才能把不断变化的请求转达过去，改口和工具之间的依赖也就更难保住。(b) schema 可见时，Duopra 可以不经交接、直接发出改正后的领域工具调用，同时 <code>query(task)</code> 依然可用。划掉的值和弧形箭头表示被取代的请求。论文表 16(a) 记录了这条请求一次实际的委派成功。</figcaption>
       </figure>
 
       <div class="subhead" data-reveal>
@@ -248,12 +248,12 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
           <h3>只修 projector</h3>
           <p class="what">让声音保持清晰。</p>
           <p>后训练会改变 thinker 的隐藏状态，而这些状态决定 talker 怎么发音。只在缓存特征上重训两者之间的 projector；文字、控制 token 和调用都不受影响。</p>
-          <div class="st-out"><div><span>同一 thinker · 中文字错误率</span><b><span class="from">6.01→</span>2.58%</b><small>原始 projector 对比修复后的 projector，221 条选择集；英文 WER 9.74→7.66%。</small></div></div>
+          <div class="st-out"><div><span>同一 thinker · 中文字错误率</span><b><span class="from">6.01→</span>2.58%</b><small>基座 projector 对比 Stage 3 的 projector，221 条选择集；英文 WER 9.74→7.66%。</small></div></div>
         </li>
       </ol>
       <figure class="paperfig" data-reveal>
-        <a href="../assets/paper/fig2-method.webp" target="_blank" rel="noopener"><img src="../assets/paper/fig2-method.webp" width="2240" height="955" loading="lazy" decoding="async" alt="Duopra 在 Realtime-Venus-Audio 上的三个训练阶段。Stage 1 在单元级会话上训练 thinker，得到 Duopra-SFT；Stage 2 在包含脚本化用户、后台 agent、模拟工具和评分器的沙盒里，用 Dr. GRPO 训练 thinker 的 LoRA，Stage 2a 得到 Duopra-RL1，Stage 2b 得到 Duopra-RL；Stage 3 冻结 Duopra-RL 的 thinker，只在缓存的隐藏状态上训练 projector，得到最终的 Duopra。"></a>
-        <figcaption><b>图 2.</b> Duopra 在 Realtime-Venus-Audio 上的三个训练阶段（<i>h<sub>t</sub></i>：thinker 隐藏状态；<i>P</i>：projector；<i>c<sub>t</sub></i>：talker 的条件输入）。Stage 1 在单元级会话上训练 thinker，得到 Duopra-SFT。Stage 2 在沙盒中用 Dr. GRPO 训练 thinker 的 LoRA：Stage 2a 得到 Duopra-RL1，Stage 2b 得到 Duopra-RL。Stage 3 冻结 Duopra-RL 的 thinker，只训练它的 projector，得到最终的 Duopra 模型。</figcaption>
+        <a href="../assets/paper/fig2-method.webp" target="_blank" rel="noopener"><img src="../assets/paper/fig2-method.webp" width="2240" height="955" loading="lazy" decoding="async" alt="Duopra 在 Realtime-Venus-Audio 上的三个训练阶段。每一行都重画同一个模型：thinker 把要念出的 token_j 送入文本嵌入，把隐藏状态 h_j 送入 projector，两者相加得到 c_j，作为 talker 的条件输入；火焰标出该阶段训练的部分。Stage 1 在单元级会话上训练 thinker，得到 Duopra-SFT；Stage 2 在包含脚本化用户、后台 agent、模拟工具和评分器的沙盒里，用 Dr. GRPO 训练 thinker 的 LoRA，Stage 2a 得到 Duopra-RL1，Stage 2b 得到 Duopra-RL；Stage 3 冻结 Duopra-RL 的 thinker，只训练 projector：原始 thinker 缓存的 h_j^orig 经冻结的基座 projector P_ϕ0 得到目标 u_j^0，Duopra-RL thinker 的 h_j^RL 经训练中的 projector P_ϕ 得到 u_j^ϕ，损失为 1 − cos(u_j^ϕ, u_j^0)，最终得到 Duopra。"></a>
+        <figcaption><b>图 2.</b> Duopra 在 Realtime-Venus-Audio 上的三个训练阶段（<i>h<sub>j</sub></i>：要念出的第 <i>j</i> 个 token 处的 thinker 隐藏状态；<i>P</i><sub><i>ϕ</i><sub>0</sub></sub>、<i>P</i><sub><i>ϕ</i></sub>：基座 projector 与 Stage 3 的 projector；<i>c<sub>j</sub></i>：talker 的条件输入）。Stage 1 在单元级会话上训练 thinker，得到 Duopra-SFT。Stage 2 在沙盒中用 Dr. GRPO 训练 thinker 的 LoRA：Stage 2a 得到 Duopra-RL1，Stage 2b 得到 Duopra-RL。Stage 3 冻结 Duopra-RL 的 thinker，只训练它的 projector，得到最终的 Duopra 模型。</figcaption>
       </figure>
     </div>
   </section>
@@ -271,27 +271,27 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
         <h3>Full-Duplex-Bench v3 上的 Pass@1</h3>
         <p class="sub">一次会话里实际执行的调用与金标完全一致——工具正确、参数全对、没有多余调用——才算通过。</p>
         <div class="legend" aria-hidden="true">
-          <span><i class="ours"></i>Duopra，我们的评测流程</span><span><i class="rep"></i>文献报告值</span><span class="star-key"><b>*</b>商业系统</span>
+          <span><i class="ours"></i>Duopra，我们的流式评测流程</span><span><i class="rep"></i>文献报告值</span><span class="star-key"><b>*</b>商业系统</span>
         </div>
         <div class="bars rank">
           <div class="bl"><b>GPT-Realtime</b><span class="star">*</span></div><div class="bt rep" style="--w:100%" tabindex="0" role="img" data-tip="GPT-Realtime|Pass@1 60.0%|商业系统 · 文献报告值"><i></i></div><div class="bv">60.0<small>报告值</small></div>
           <div class="bl"><b>Gemini Live 3.1</b><span class="star">*</span></div><div class="bt rep" style="--w:90%" tabindex="0" role="img" data-tip="Gemini Live 3.1|Pass@1 54.0%|商业系统 · 文献报告值"><i></i></div><div class="bv">54.0<small>报告值</small></div>
           <div class="bl"><b>MOSS-Live</b><span class="star">*</span></div><div class="bt rep" style="--w:85%" tabindex="0" role="img" data-tip="MOSS-Live|Pass@1 51.0%|商业系统 · 文献报告值|开发者报告中的工具调用成功率"><i></i></div><div class="bv">51.0<small>报告值</small></div>
-          <div class="bl ours"><b>Duopra</b> <span class="cfg">· DeepSeek 后台</span></div><div class="bt ours" style="--w:82.17%" tabindex="0" role="img" data-tip="Duopra，DeepSeek 后台|Pass@1 49.3% ± 3.5|我们的评测流程，3 个种子"><i></i></div><div class="bv ours">49.3<small>± 3.5</small></div>
+          <div class="bl ours"><b>Duopra</b> <span class="cfg">· DeepSeek 后台</span></div><div class="bt ours" style="--w:82.17%" tabindex="0" role="img" data-tip="Duopra，DeepSeek 后台|Pass@1 49.3% ± 3.5|我们的流式评测流程，3 个种子"><i></i></div><div class="bv ours">49.3<small>± 3.5</small></div>
           <div class="bl"><b>Gemini Live 2.5</b><span class="star">*</span></div><div class="bt rep" style="--w:81.67%" tabindex="0" role="img" data-tip="Gemini Live 2.5|Pass@1 49.0%|商业系统 · 文献报告值"><i></i></div><div class="bv">49.0<small>报告值</small></div>
-          <div class="bl"><b>Hu et al.</b> <span class="cfg">· Qwen3-235B 后台</span></div><div class="bt rep" style="--w:80%" tabindex="0" role="img" data-tip="Hu et al.，Qwen3-235B 后台|Pass@1 48.0%|文献报告值，评测流程与 judge 不同"><i></i></div><div class="bv">48.0<small>报告值</small></div>
-          <div class="bl ours"><b>Duopra</b> <span class="cfg">· 自己调用工具</span></div><div class="bt ours" style="--w:79.5%" tabindex="0" role="img" data-tip="Duopra，自己调用工具|Pass@1 47.7% ± 3.5|我们的评测流程，3 个种子"><i></i></div><div class="bv ours">47.7<small>± 3.5</small></div>
-          <div class="bl"><b>DuplexAgent-RSI</b></div><div class="bt rep" style="--w:78.33%" tabindex="0" role="img" data-tip="DuplexAgent-RSI|Pass@1 47.0%|文献报告值，评测流程与 judge 不同|基于 VoiceChat，参数按字符串精确匹配"><i></i></div><div class="bv">47.0<small>报告值</small></div>
+          <div class="bl"><b>Hu et al.</b> <span class="cfg">· Qwen3-235B 后台</span></div><div class="bt rep" style="--w:80%" tabindex="0" role="img" data-tip="Hu et al.，Qwen3-235B 后台|Pass@1 48.0%|文献报告值，评测设置与 judge 不同"><i></i></div><div class="bv">48.0<small>报告值</small></div>
+          <div class="bl ours"><b>Duopra</b> <span class="cfg">· 自己调用工具</span></div><div class="bt ours" style="--w:79.5%" tabindex="0" role="img" data-tip="Duopra，自己调用工具|Pass@1 47.7% ± 3.5|我们的流式评测流程，3 个种子"><i></i></div><div class="bv ours">47.7<small>± 3.5</small></div>
+          <div class="bl"><b>DuplexAgent-RSI</b></div><div class="bt rep" style="--w:78.33%" tabindex="0" role="img" data-tip="DuplexAgent-RSI|Pass@1 47.0%|文献报告值，评测设置与 judge 不同|基于 VoiceChat，参数按字符串精确匹配"><i></i></div><div class="bv">47.0<small>报告值</small></div>
           <div class="bl"><b>Cascaded</b><span class="star">*</span></div><div class="bt rep" style="--w:75%" tabindex="0" role="img" data-tip="Cascaded|Pass@1 45.0%|商业系统 · 文献报告值"><i></i></div><div class="bv">45.0<small>报告值</small></div>
-          <div class="bl ours"><b>Duopra</b> <span class="cfg">· Qwen3-8B 后台</span></div><div class="bt ours" style="--w:74.5%" tabindex="0" role="img" data-tip="Duopra，Qwen3-8B 后台|Pass@1 44.7% ± 5.7|我们的评测流程，3 个种子"><i></i></div><div class="bv ours">44.7<small>± 5.7</small></div>
+          <div class="bl ours"><b>Duopra</b> <span class="cfg">· Qwen3-8B 后台</span></div><div class="bt ours" style="--w:74.5%" tabindex="0" role="img" data-tip="Duopra，Qwen3-8B 后台|Pass@1 44.7% ± 5.7|我们的流式评测流程，3 个种子"><i></i></div><div class="bv ours">44.7<small>± 5.7</small></div>
           <div class="bl"><b>Grok</b><span class="star">*</span></div><div class="bt rep" style="--w:71.67%" tabindex="0" role="img" data-tip="Grok|Pass@1 43.0%|商业系统 · 文献报告值"><i></i></div><div class="bv">43.0<small>报告值</small></div>
-          <div class="bl"><b>Realtime-Venus-Audio</b> <span class="cfg">· 离线</span></div><div class="bt rep" style="--w:70%" tabindex="0" role="img" data-tip="Realtime-Venus-Audio，离线|Pass@1 42.0%|文献报告值，评测流程与 judge 不同|离线，工具定义写在提示词里"><i></i></div><div class="bv">42.0<small>报告值</small></div>
+          <div class="bl"><b>Realtime-Venus-Audio</b> <span class="cfg">· 离线</span></div><div class="bt rep" style="--w:70%" tabindex="0" role="img" data-tip="Realtime-Venus-Audio，离线|Pass@1 42.0%|文献报告值，评测设置与 judge 不同|离线，工具定义写在提示词里"><i></i></div><div class="bv">42.0<small>报告值</small></div>
           <div class="bl"><b>Ultravox v0.7</b><span class="star">*</span></div><div class="bt rep" style="--w:68.33%" tabindex="0" role="img" data-tip="Ultravox v0.7|Pass@1 41.0%|商业系统 · 文献报告值"><i></i></div><div class="bv">41.0<small>报告值</small></div>
-          <div class="bl"><b>Gander</b> <span class="cfg">· GPT-5.6</span></div><div class="bt rep" style="--w:66.67%" tabindex="0" role="img" data-tip="Gander，GPT-5.6|Pass@1 40.0%|文献报告值，评测流程与 judge 不同"><i></i></div><div class="bv">40.0<small>报告值</small></div>
-          <div class="bl"><b>NemotronLabs VoiceChat</b></div><div class="bt rep" style="--w:55%" tabindex="0" role="img" data-tip="NemotronLabs VoiceChat|Pass@1 33.0%|文献报告值，评测流程与 judge 不同"><i></i></div><div class="bv">33.0<small>报告值</small></div>
+          <div class="bl"><b>Gander</b> <span class="cfg">· GPT-5.6</span></div><div class="bt rep" style="--w:66.67%" tabindex="0" role="img" data-tip="Gander，GPT-5.6|Pass@1 40.0%|文献报告值，评测设置与 judge 不同"><i></i></div><div class="bv">40.0<small>报告值</small></div>
+          <div class="bl"><b>NemotronLabs VoiceChat</b></div><div class="bt rep" style="--w:55%" tabindex="0" role="img" data-tip="NemotronLabs VoiceChat|Pass@1 33.0%|文献报告值，评测设置与 judge 不同"><i></i></div><div class="bv">33.0<small>报告值</small></div>
           <div class="bx" aria-hidden="true"></div><div class="ba" aria-hidden="true"><i style="left:0">0</i><i style="left:33.333%">20</i><i style="left:66.667%">40</i><i style="left:100%">60%</i></div><div class="bx" aria-hidden="true"></div>
         </div>
-        <p class="foot">Full-Duplex-Bench v3：100 条真实、不流利的英文录音，12 个模拟 API。Duopra 由我们的评测流程跑出——3 个种子，每种配置 300 个会话，judge 为 Qwen3.8-27B；± 为种子间的标准差。斜线条为已发表的结果，用的是各自来源的评测流程和 judge（多为 GPT-4o），仅作参照，并非同一协议下的排名。* 为商业系统。</p>
+        <p class="foot">Full-Duplex-Bench v3：100 条真实、不流利的英文录音，12 个模拟 API。Duopra 由我们的流式评测流程跑出——3 个种子，每种配置 300 个会话，judge 为 Qwen3.8-27B；± 为种子间的标准差。斜线条为已发表的结果，用的是各自来源的评测设置和 judge（多为 GPT-4o），仅作参照，并非同一协议下的排名。* 为商业系统。</p>
       </div>
 
 
@@ -365,7 +365,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
               <thead><tr><th>系统</th><th>工具</th><th>参数</th><th>回复</th><th>Pass@1</th></tr></thead>
               <tbody>
                 <tr class="grp"><td colspan="5">商业系统*，文献报告值</td></tr>
-                <tr><td>GPT-Realtime</td><td><b>87.6</b></td><td><b>68.0</b></td><td><b>79.2</b></td><td><b>60.0</b></td></tr>
+                <tr><td>GPT-Realtime</td><td>87.6</td><td>68.0</td><td>79.2</td><td>60.0</td></tr>
                 <tr><td>Gemini Live 3.1</td><td>81.7</td><td>58.8</td><td>71.8</td><td>54.0</td></tr>
                 <tr><td>MOSS-Live</td><td><span class="na">n/a</span></td><td><span class="na">n/a</span></td><td><span class="na">n/a</span></td><td>51.0</td></tr>
                 <tr><td>Gemini Live 2.5</td><td>78.6</td><td>59.3</td><td>55.4</td><td>49.0</td></tr>
@@ -373,19 +373,19 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
                 <tr><td>Grok</td><td>79.7</td><td>54.2</td><td>61.7</td><td>43.0</td></tr>
                 <tr><td>Ultravox v0.7</td><td>79.4</td><td>51.3</td><td>51.0</td><td>41.0</td></tr>
                 <tr class="grp"><td colspan="5">开源系统，文献报告值</td></tr>
-                <tr><td>Hu et al.，Qwen3-235B 后台</td><td>71.7</td><td>55.2</td><td><b>67.0</b></td><td><b>48.0</b></td></tr>
-                <tr><td>DuplexAgent-RSI</td><td><b>97.4</b></td><td><b>57.0</b></td><td><span class="na">n/a</span></td><td>47.0</td></tr>
+                <tr><td>Hu et al.，Qwen3-235B 后台</td><td>71.7</td><td>55.2</td><td>67.0</td><td>48.0</td></tr>
+                <tr><td>DuplexAgent-RSI</td><td>97.4</td><td>57.0</td><td><span class="na">n/a</span></td><td>47.0</td></tr>
                 <tr><td>Realtime-Venus-Audio，离线</td><td>82.0</td><td>52.2</td><td><span class="na">n/a</span></td><td>42.0</td></tr>
                 <tr><td>Gander，GPT-5.6</td><td>75.9</td><td>50.3</td><td>49.0</td><td>40.0</td></tr>
                 <tr><td>NemotronLabs VoiceChat</td><td>82.5</td><td>42.2</td><td><span class="na">n/a</span></td><td>33.0</td></tr>
-                <tr class="grp"><td colspan="5">Duopra，我们的评测流程</td></tr>
+                <tr class="grp"><td colspan="5">Duopra，我们的流式评测流程</td></tr>
                 <tr class="ours"><td>Duopra，自己调用工具</td><td>76.7</td><td>56.2</td><td>66.3</td><td>47.7 <small>± 3.5</small></td></tr>
                 <tr class="ours"><td>Duopra，Qwen3-8B 后台</td><td><b>81.8</b></td><td><b>57.0</b></td><td><b>70.6</b></td><td>44.7 <small>± 5.7</small></td></tr>
                 <tr class="ours"><td>Duopra，DeepSeek 后台</td><td>71.8</td><td>55.0</td><td>69.0</td><td><b>49.3</b> <small>± 3.5</small></td></tr>
               </tbody>
             </table>
           </div>
-          <p class="note">工具：工具名 F1，不需要 judge（Hu et al. 报告的是工具选择准确率）。参数：参数准确率。回复：回复质量。n/a：未报告。加粗：各组内最好。已发表的结果来自各自来源的评测流程和 judge（多为 GPT-4o），仅作参照，并非同一协议下的排名；Duopra 的结果用 Qwen3.8-27B 作 judge。DuplexAgent-RSI 基于 VoiceChat（在 Qwen-Realtime 上为 49.0），参数按字符串精确匹配；Realtime-Venus-Audio 离线评测时工具定义写在提示词里；MOSS-Live 报告的是工具调用成功率。“自己调用工具”即论文中的 Direct 设置；标出后台模型的为 Backend 设置，此时只看得到 <code>query(task)</code>。我们在自己的评测流程中运行的其他开源系统，列在论文的表 2 和表 11 中。</p>
+          <p class="note">工具：工具名 F1，不需要 judge（Hu et al. 报告的是工具选择准确率）。参数：参数准确率。回复：回复质量。n/a：未报告。加粗：Duopra 各配置中最好。已发表的结果来自各自来源的评测设置和 judge（多为 GPT-4o），仅作参照，并非同一协议下的排名；Duopra 的结果用 Qwen3.8-27B 作 judge。DuplexAgent-RSI 基于 VoiceChat（在 Qwen-Realtime 上为 49.0），参数按字符串精确匹配；Realtime-Venus-Audio 离线评测时工具定义写在提示词里；MOSS-Live 报告的是工具调用成功率。“自己调用工具”即论文中的 Direct 设置；标出后台模型的为 Backend 设置，此时只看得到 <code>query(task)</code>。我们在自己的流式评测流程中运行的其他开源系统，列在论文的表 1 中。</p>
 
           <div class="scroll-x numtable">
             <table>
@@ -416,8 +416,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
         <p class="paper-meta">代码与模型权重现已公开，预印本即将公开。</p>
         <details class="abstract">
           <summary>阅读摘要 <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></summary>
-          <p>全双工交互模型已展现出很强的对话能力（conversational agency），能够自然、低延迟地完成话轮转换、附和与打断。然而，要成功完成任务，还需要任务能力（task agency）：及时调用工具，并在用户改口后修正参数。前后台智能体把发起与执行分开：前台决定是否发出请求、请求什么，后台决定怎么做。执行可以交给后台，但没发出的请求无从执行，不完整的请求还可能把后台引错方向。我们在 FD-Bench-v3 上研究这一问题：在我们的流式设置中，Realtime-Venus-Audio + Harness 的多数失败发生在任何领域工具执行之前。</p>
-          <p>我们提出 <b>Duopra</b>：一个在学习对话控制的同时学习执行任务的全双工交互模型。Duopra 把后台当作一个工具，它接收一条自包含的自然语言请求。直接调用与后台委派共用同一个动作接口，也面对同样的要求：忠实地发起、正确地执行。它的三阶段训练包括：协议 SFT；奖励及时、完整执行的全双工强化学习；thinker 更新后只训练 projector，修复 talker 的条件输入。后台固定时，Pass@1 从 4.7% 升至 44.7%；Duopra 在 Direct 设置下达到 47.7%（SFT 后为 26.0%），在接 DeepSeek 的 Backend 设置下达到 49.3%。相比基座模型，它在三项 FDB v1.0 接管率上都有提升。这些结果表明，任务能力可以与关键的对话能力并存。</p>
+          <p>全双工交互模型已展现出很强的对话能力（conversational agency），能够自然、低延迟地完成话轮转换、附和与打断。然而，完成任务还需要任务能力（task agency）：及时调用工具，并在用户改口后修正参数。前后台智能体把发起与执行分开：前台决定是否发出请求、请求什么，后台决定怎么做。执行可以交给后台，但没发出的请求无从执行，不完整的请求还可能把后台引错方向。在 Full-Duplex-Bench v3（FDB v3）上，在我们的流式评测流程中，Realtime-Venus-Audio + Harness 的多数失败发生在任何领域工具执行之前。我们提出 <b>Duopra</b>：一个在学习对话控制的同时学习执行任务的全双工交互模型。Duopra 把后台当作一个工具，它接收一条自包含的自然语言请求。直接调用与后台委派共用同一个动作接口，也面对同样的要求：忠实地发起、正确地执行。它的三阶段训练包括：协议 SFT；奖励及时、完整执行的全双工强化学习；thinker 更新后只训练 projector，修复 talker 的条件输入。使用同一个后台时，Pass@1 从 4.7% 升至 44.7%；Duopra 直接调用工具时达到 47.7%（SFT 后为 26.0%），接 DeepSeek 后台时达到 49.3%。相比基座模型，它在三项 FDB v1.0 接管率上都有提升。这些结果表明，任务能力可以与关键的对话能力并存。</p>
         </details>
       </div>
       <div id="cite" class="cite" data-reveal>
@@ -430,7 +429,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
   author = {Chen, Chiyu and Cheng, Pengzhou and Ma, Yuezhao and Li, Xiaocheng
             and Liu, Can and Hu, Haonan and Yao, Yao and Yang, Yifei
             and Lu, Yijie and Wang, Taolei and Li, Yansi and Wu, Muhuan
-            and Zhang, Zhuosheng and Liu, Gongshen and Sun, Chenglu},
+            and Sun, Chenglu and Liu, Gongshen and Zhang, Zhuosheng},
   year   = {2026},
   note   = {Preprint forthcoming},
   url    = {https://cychen2003.github.io/duopra/}
