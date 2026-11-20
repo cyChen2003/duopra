@@ -27,12 +27,6 @@ Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhua
 
 <br>
 
-<a id="video"></a>
-
-<a href="https://cychen2003.github.io/duopra/assets/video/duopra-demo.mp4"><img src="docs/assets/readme/demo-poster.webp" alt="Demo video, 3:06, recorded in the Duopra app: while it talks, Duopra checks tomorrow's weather in Shanghai with a tool, hands the day's itinerary and a small budget sum to the backend model, and keeps up when the user cuts in. Select to play." width="100%"></a>
-
-<p align="center"><sub>▶&nbsp; <a href="https://cychen2003.github.io/duopra/assets/video/duopra-demo.mp4"><b>Play the demo</b></a> &nbsp;·&nbsp; 3:06, in Chinese with English at the end &nbsp;·&nbsp; also on the <a href="https://cychen2003.github.io/duopra/#film">project page</a></sub></p>
-
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-dark.svg">
   <img src="docs/assets/readme/stats-light.svg" alt="49.3% of tasks passed with a backend (Pass@1 on Full-Duplex-Bench v3, Duopra delegating through query(task) to DeepSeek). 47.7% of tasks passed calling tools itself (Pass@1 over 300 sessions). 1.8× the pass rate from full-duplex RL (26.0% after SFT, 47.7% after RL). 91.3% of interruptions answered (Full-Duplex-Bench v1.0)." width="100%">
@@ -41,7 +35,6 @@ Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhua
 ## News
 
 - **2026-11-20** &nbsp; The preprint is out on [arXiv:2611.25773](https://arxiv.org/abs/2611.25773).
-- **2026-11-16** &nbsp; The [demo video](#video) is out: three minutes in the Duopra app — a tool call while it talks, the backend model called as one more tool, and interruptions it keeps up with.
 - **2026-11-15** &nbsp; The [project page](https://cychen2003.github.io/duopra/) is live, with both recorded sessions replayed second by second, the full results and every number. Code and [model weights](https://huggingface.co/Chechen123/Duopra) are out.
 
 <a id="overview"></a>
