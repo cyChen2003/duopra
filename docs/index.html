@@ -75,7 +75,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
         <p class="affils"><span><sup>1</sup>Shanghai Jiao Tong University</span> <span><sup>2</sup>Tencent</span> <span><sup>3</sup>Shanghai University</span> <span><sup>4</sup>University of Bristol</span></p>
         <p class="marks"><span><sup>*</sup>Equal contribution</span> <span><sup>†</sup>Project lead</span> <span><sup>‡</sup>Corresponding authors</span></p>
         <ul class="links" aria-label="Paper resources">
-          <li data-res="paper"><span class="chip-link is-soon" aria-disabled="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.5 1.75H4.25A1.5 1.5 0 0 0 2.75 3.25v9.5a1.5 1.5 0 0 0 1.5 1.5h7.5a1.5 1.5 0 0 0 1.5-1.5v-7.5zM9.5 1.75v3.5h3.75M5.5 8.75h5M5.5 11.25h3.5"/></svg>Paper <small>soon</small></span></li>
+          <li data-res="paper"><a class="chip-link" href="https://arxiv.org/abs/2611.25773" rel="noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.5 1.75H4.25A1.5 1.5 0 0 0 2.75 3.25v9.5a1.5 1.5 0 0 0 1.5 1.5h7.5a1.5 1.5 0 0 0 1.5-1.5v-7.5zM9.5 1.75v3.5h3.75M5.5 8.75h5M5.5 11.25h3.5"/></svg>Paper</a></li>
           <li data-res="code"><a class="chip-link" href="https://github.com/cyChen2003/duopra" rel="noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4.5L2 8l3.5 3.5M10.5 4.5L14 8l-3.5 3.5"/></svg>Code</a></li>
           <li data-res="weights"><a class="chip-link" href="https://huggingface.co/Chechen123/Duopra" rel="noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.75l5.5 3.1v6.3L8 14.25l-5.5-3.1v-6.3zM2.5 4.85L8 8l5.5-3.15M8 8v6.25"/></svg>Weights</a></li>
           <li><a class="chip-link" href="#cite"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6"/></svg>BibTeX</a></li>
@@ -420,7 +420,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
       <div data-reveal>
         <span class="eyebrow">Paper</span>
         <h2 class="paper-title">Duopra: From Full-Duplex Conversation to Full-Duplex Agency</h2>
-        <p class="paper-meta">The code and the weights are available now; the preprint will follow.</p>
+        <p class="paper-meta">The preprint, the code and the weights are available now.</p>
         <details class="abstract">
           <summary>Read the abstract <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></summary>
           <p>Full-duplex interaction models exhibit strong conversational agency, enabling natural, low-latency turn-taking, backchannels, and interruptions. However, completing tasks further requires task agency: timely tool invocation and argument revision following user corrections. Frontend–backend agents separate initiation from execution: the frontend decides whether and what to request, while the backend determines how. Execution can be offloaded, but unsent requests cannot be executed, and incomplete ones can misdirect the backend. On Full-Duplex-Bench v3 (FDB v3), most failures of Realtime-Venus-Audio&nbsp;+ Harness in our streaming pipeline occur before a domain tool executes. We introduce <b>Duopra</b>, a full-duplex interaction model that learns task execution alongside conversational control. Duopra treats the backend as a tool, accepting a self-contained natural-language request. Direct calls and backend delegation share an action interface and requirements for faithful initiation and correct execution. Its three-stage training combines protocol SFT, full-duplex RL rewarding timely and complete execution, and projector-only repair of talker conditioning after thinker updates. With the same backend, Pass@1 rises from 4.7% to 44.7%; Duopra achieves 47.7% calling tools directly (26.0% after SFT) and 49.3% with a DeepSeek backend. It improves three FDB v1.0 takeover rates over the base model. These results show that task agency can coexist with key conversational agency.</p>
@@ -438,11 +438,12 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
             and Lu, Yijie and Wang, Taolei and Li, Yansi and Wu, Muhuan
             and Sun, Chenglu and Liu, Gongshen and Zhang, Zhuosheng},
   year   = {2026},
-  note   = {Preprint forthcoming},
-  url    = {https://cychen2003.github.io/duopra/}
+  eprint = {2611.25773},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  url    = {https://arxiv.org/abs/2611.25773}
 }</code></pre>
         </div>
-        <p class="note" style="margin-top:.9rem">The entry will be updated with a link once the preprint is public.</p>
       </div>
 
     </div>

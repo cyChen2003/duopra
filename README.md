@@ -15,7 +15,7 @@ Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhua
 
 [![Project page](https://img.shields.io/badge/Project_page-cychen2003.github.io%2Fduopra-4a74c2?style=flat-square&labelColor=1d1d1f)](https://cychen2003.github.io/duopra/)
 [![Weights](https://img.shields.io/badge/Weights-Hugging_Face-e0a020?style=flat-square&labelColor=1d1d1f&logo=huggingface&logoColor=ffd21e)](https://huggingface.co/Chechen123/Duopra)
-[![Paper](https://img.shields.io/badge/Paper-coming_soon-8a8f98?style=flat-square&labelColor=1d1d1f)](#citation)
+[![Paper](https://img.shields.io/badge/Paper-arXiv_2611.25773-b31b1b?style=flat-square&labelColor=1d1d1f&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2611.25773)
 [![BibTeX](https://img.shields.io/badge/Cite-BibTeX-16a07a?style=flat-square&labelColor=1d1d1f)](#citation)
 [![License](https://img.shields.io/badge/License-see_NOTICE-6b7280?style=flat-square&labelColor=1d1d1f)](NOTICE)
 
@@ -40,8 +40,9 @@ Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhua
 
 ## News
 
+- **2026-11-20** &nbsp; The preprint is out on [arXiv:2611.25773](https://arxiv.org/abs/2611.25773).
 - **2026-11-16** &nbsp; The [demo video](#video) is out: three minutes in the Duopra app — a tool call while it talks, the backend model called as one more tool, and interruptions it keeps up with.
-- **2026-11-15** &nbsp; The [project page](https://cychen2003.github.io/duopra/) is live, with both recorded sessions replayed second by second, the full results and every number. Code and [model weights](https://huggingface.co/Chechen123/Duopra) are out; the preprint follows soon.
+- **2026-11-15** &nbsp; The [project page](https://cychen2003.github.io/duopra/) is live, with both recorded sessions replayed second by second, the full results and every number. Code and [model weights](https://huggingface.co/Chechen123/Duopra) are out.
 
 <a id="overview"></a>
 
@@ -439,8 +440,10 @@ Full-duplex interaction models exhibit strong conversational agency, enabling na
             and Lu, Yijie and Wang, Taolei and Li, Yansi and Wu, Muhuan
             and Sun, Chenglu and Liu, Gongshen and Zhang, Zhuosheng},
   year   = {2026},
-  note   = {Preprint forthcoming},
-  url    = {https://cychen2003.github.io/duopra/}
+  eprint = {2611.25773},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  url    = {https://arxiv.org/abs/2611.25773}
 }
 ```
 

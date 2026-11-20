@@ -68,7 +68,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
         <p class="affils"><span><sup>1</sup>上海交通大学</span> <span><sup>2</sup>腾讯</span> <span><sup>3</sup>上海大学</span> <span><sup>4</sup>布里斯托大学</span></p>
         <p class="marks"><span><sup>*</sup>同等贡献</span> <span><sup>†</sup>项目负责人</span> <span><sup>‡</sup>通讯作者</span></p>
         <ul class="links" aria-label="论文资源">
-          <li data-res="paper"><span class="chip-link is-soon" aria-disabled="true"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.5 1.75H4.25A1.5 1.5 0 0 0 2.75 3.25v9.5a1.5 1.5 0 0 0 1.5 1.5h7.5a1.5 1.5 0 0 0 1.5-1.5v-7.5zM9.5 1.75v3.5h3.75M5.5 8.75h5M5.5 11.25h3.5"/></svg>论文 <small>即将公开</small></span></li>
+          <li data-res="paper"><a class="chip-link" href="https://arxiv.org/abs/2611.25773" rel="noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9.5 1.75H4.25A1.5 1.5 0 0 0 2.75 3.25v9.5a1.5 1.5 0 0 0 1.5 1.5h7.5a1.5 1.5 0 0 0 1.5-1.5v-7.5zM9.5 1.75v3.5h3.75M5.5 8.75h5M5.5 11.25h3.5"/></svg>论文</a></li>
           <li data-res="code"><a class="chip-link" href="https://github.com/cyChen2003/duopra" rel="noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 4.5L2 8l3.5 3.5M10.5 4.5L14 8l-3.5 3.5"/></svg>代码</a></li>
           <li data-res="weights"><a class="chip-link" href="https://huggingface.co/Chechen123/Duopra" rel="noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.75l5.5 3.1v6.3L8 14.25l-5.5-3.1v-6.3zM2.5 4.85L8 8l5.5-3.15M8 8v6.25"/></svg>模型权重</a></li>
           <li><a class="chip-link" href="#cite"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h6"/></svg>BibTeX</a></li>
@@ -413,7 +413,7 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
       <div data-reveal>
         <span class="eyebrow">论文</span>
         <h2 class="paper-title" lang="en">Duopra: From Full-Duplex Conversation to Full-Duplex Agency</h2>
-        <p class="paper-meta">代码与模型权重现已公开，预印本即将公开。</p>
+        <p class="paper-meta">预印本、代码与模型权重均已公开。</p>
         <details class="abstract">
           <summary>阅读摘要 <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></summary>
           <p>全双工交互模型已展现出很强的对话能力（conversational agency），能够自然、低延迟地完成话轮转换、附和与打断。然而，完成任务还需要任务能力（task agency）：及时调用工具，并在用户改口后修正参数。前后台智能体把发起与执行分开：前台决定是否发出请求、请求什么，后台决定怎么做。执行可以交给后台，但没发出的请求无从执行，不完整的请求还可能把后台引错方向。在 Full-Duplex-Bench v3（FDB v3）上，在我们的流式评测流程中，Realtime-Venus-Audio + Harness 的多数失败发生在任何领域工具执行之前。我们提出 <b>Duopra</b>：一个在学习对话控制的同时学习执行任务的全双工交互模型。Duopra 把后台当作一个工具，它接收一条自包含的自然语言请求。直接调用与后台委派共用同一个动作接口，也面对同样的要求：忠实地发起、正确地执行。它的三阶段训练包括：协议 SFT；奖励及时、完整执行的全双工强化学习；thinker 更新后只训练 projector，修复 talker 的条件输入。使用同一个后台时，Pass@1 从 4.7% 升至 44.7%；Duopra 直接调用工具时达到 47.7%（SFT 后为 26.0%），接 DeepSeek 后台时达到 49.3%。相比基座模型，它在三项 FDB v1.0 接管率上都有提升。这些结果表明，任务能力可以与关键的对话能力并存。</p>
@@ -431,11 +431,12 @@ setTimeout(function(){ if(!window.DUOPRA_READY) document.documentElement.classLi
             and Lu, Yijie and Wang, Taolei and Li, Yansi and Wu, Muhuan
             and Sun, Chenglu and Liu, Gongshen and Zhang, Zhuosheng},
   year   = {2026},
-  note   = {Preprint forthcoming},
-  url    = {https://cychen2003.github.io/duopra/}
+  eprint = {2611.25773},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  url    = {https://arxiv.org/abs/2611.25773}
 }</code></pre>
         </div>
-        <p class="note" style="margin-top:.9rem">预印本公开后，这条记录会补上链接。</p>
       </div>
 
     </div>

@@ -15,7 +15,7 @@ Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhua
 
 [![项目主页](https://img.shields.io/badge/%E9%A1%B9%E7%9B%AE%E4%B8%BB%E9%A1%B5-cychen2003.github.io%2Fduopra-4a74c2?style=flat-square&labelColor=1d1d1f)](https://cychen2003.github.io/duopra/zh/)
 [![模型权重](https://img.shields.io/badge/%E6%A8%A1%E5%9E%8B%E6%9D%83%E9%87%8D-Hugging_Face-e0a020?style=flat-square&labelColor=1d1d1f&logo=huggingface&logoColor=ffd21e)](https://huggingface.co/Chechen123/Duopra)
-[![论文](https://img.shields.io/badge/%E8%AE%BA%E6%96%87-%E5%8D%B3%E5%B0%86%E5%85%AC%E5%BC%80-8a8f98?style=flat-square&labelColor=1d1d1f)](#citation)
+[![论文](https://img.shields.io/badge/%E8%AE%BA%E6%96%87-arXiv_2611.25773-b31b1b?style=flat-square&labelColor=1d1d1f&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2611.25773)
 [![引用](https://img.shields.io/badge/%E5%BC%95%E7%94%A8-BibTeX-16a07a?style=flat-square&labelColor=1d1d1f)](#citation)
 [![许可](https://img.shields.io/badge/%E8%AE%B8%E5%8F%AF-%E8%A7%81_NOTICE-6b7280?style=flat-square&labelColor=1d1d1f)](NOTICE)
 
@@ -40,8 +40,9 @@ Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhua
 
 ## 动态
 
+- **2026-11-20** &nbsp; 预印本已在 [arXiv:2611.25773](https://arxiv.org/abs/2611.25773) 公开。
 - **2026-11-16** &nbsp; 发布[演示视频](#video)：在 Duopra 应用中录制的三分钟会话——边说话边调用工具、把后台模型当作又一个工具来调用，以及被打断时怎样接上。
-- **2026-11-15** &nbsp; [项目主页](https://cychen2003.github.io/duopra/zh/)上线：两段真实会话的逐秒回放、完整结果和全部数字。代码与[模型权重](https://huggingface.co/Chechen123/Duopra)已经公开，预印本即将发布。
+- **2026-11-15** &nbsp; [项目主页](https://cychen2003.github.io/duopra/zh/)上线：两段真实会话的逐秒回放、完整结果和全部数字。代码与[模型权重](https://huggingface.co/Chechen123/Duopra)已经公开。
 
 <a id="overview"></a>
 
@@ -439,8 +440,10 @@ duopra/
             and Lu, Yijie and Wang, Taolei and Li, Yansi and Wu, Muhuan
             and Sun, Chenglu and Liu, Gongshen and Zhang, Zhuosheng},
   year   = {2026},
-  note   = {Preprint forthcoming},
-  url    = {https://cychen2003.github.io/duopra/}
+  eprint = {2611.25773},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  url    = {https://arxiv.org/abs/2611.25773}
 }
 ```
 
