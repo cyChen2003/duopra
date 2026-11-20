@@ -27,6 +27,12 @@ Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhua
 
 <br>
 
+<a id="video"></a>
+
+<a href="https://cychen2003.github.io/duopra/assets/video/Duopra_demo.mp4"><img src="docs/assets/readme/demo-poster.webp" alt="演示视频，3:07，在 Duopra 应用中录制：Duopra 一边说话一边用工具查天气，用户中途改口要查上海，它跟着改；把一日游行程和一笔小账交给后台模型；用户插话让它把故事从春天改成秋天、再改用英文，它都接得上；最后是工具的结果卡片，以及自己添加的工具。点击播放。" width="100%"></a>
+
+<p align="center"><sub>▶&nbsp; <a href="https://cychen2003.github.io/duopra/assets/video/Duopra_demo.mp4"><b>播放演示视频</b></a> &nbsp;·&nbsp; 3:07，中文对话，配中英字幕 &nbsp;·&nbsp; 也可以在<a href="https://cychen2003.github.io/duopra/zh/#film">项目主页</a>观看</sub></p>
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-dark.svg">
   <img src="docs/assets/readme/stats-light.svg" alt="接后台时任务通过率 49.3%（Full-Duplex-Bench v3 的 Pass@1，Duopra 通过 query(task) 委派给 DeepSeek）；自己调用工具时任务通过率 47.7%（300 个会话的 Pass@1）；全双工强化学习带来 1.8 倍的通过率（SFT 后 26.0%，RL 后 47.7%）；被打断后作出回应 91.3%（Full-Duplex-Bench v1.0）。" width="100%">
@@ -34,6 +40,7 @@ Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhua
 
 ## 动态
 
+- **2026-11-20** &nbsp; 发布[演示视频](#video)：在 Duopra 应用中录制的三分钟——工具调用途中用户改口，它跟着改；把后台模型当作又一个工具来调用；被打断时接得上；还有它的工具，包括你自己添加的。
 - **2026-11-20** &nbsp; 预印本已在 [arXiv:2611.25773](https://arxiv.org/abs/2611.25773) 公开。
 - **2026-11-15** &nbsp; [项目主页](https://cychen2003.github.io/duopra/zh/)上线：两段真实会话的逐秒回放、完整结果和全部数字。代码与[模型权重](https://huggingface.co/Chechen123/Duopra)已经公开。
 

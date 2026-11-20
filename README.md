@@ -27,6 +27,12 @@ Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhua
 
 <br>
 
+<a id="video"></a>
+
+<a href="https://cychen2003.github.io/duopra/assets/video/Duopra_demo.mp4"><img src="docs/assets/readme/demo-poster.webp" alt="Demo video, 3:07, recorded in the Duopra app: while it talks, Duopra checks the weather with a tool and switches to Shanghai when the user changes their mind mid-call, hands a day plan and a budget question to the backend model, and keeps up when the user cuts in to change the story, then the language; it ends with the result cards of its tools and a tool you add yourself. Select to play." width="100%"></a>
+
+<p align="center"><sub>▶&nbsp; <a href="https://cychen2003.github.io/duopra/assets/video/Duopra_demo.mp4"><b>Play the demo</b></a> &nbsp;·&nbsp; 3:07, in Chinese with English subtitles &nbsp;·&nbsp; also on the <a href="https://cychen2003.github.io/duopra/#film">project page</a></sub></p>
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/readme/stats-dark.svg">
   <img src="docs/assets/readme/stats-light.svg" alt="49.3% of tasks passed with a backend (Pass@1 on Full-Duplex-Bench v3, Duopra delegating through query(task) to DeepSeek). 47.7% of tasks passed calling tools itself (Pass@1 over 300 sessions). 1.8× the pass rate from full-duplex RL (26.0% after SFT, 47.7% after RL). 91.3% of interruptions answered (Full-Duplex-Bench v1.0)." width="100%">
@@ -34,6 +40,7 @@ Yijie Lu<sup>1</sup> · Taolei Wang<sup>1</sup> · Yansi Li<sup>1</sup> · Muhua
 
 ## News
 
+- **2026-11-20** &nbsp; The [demo video](#video) is out: three minutes in the Duopra app — a tool call it redirects when the user changes their mind, the backend model called as one more tool, interruptions it keeps up with, and its tools, including one you add yourself.
 - **2026-11-20** &nbsp; The preprint is out on [arXiv:2611.25773](https://arxiv.org/abs/2611.25773).
 - **2026-11-15** &nbsp; The [project page](https://cychen2003.github.io/duopra/) is live, with both recorded sessions replayed second by second, the full results and every number. Code and [model weights](https://huggingface.co/Chechen123/Duopra) are out.
 
