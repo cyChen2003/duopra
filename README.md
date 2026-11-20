@@ -433,17 +433,15 @@ Full-duplex interaction models exhibit strong conversational agency, enabling na
 </details>
 
 ```bibtex
-@misc{duopra2026,
-  title  = {Duopra: From Full-Duplex Conversation to Full-Duplex Agency},
-  author = {Chen, Chiyu and Cheng, Pengzhou and Ma, Yuezhao and Li, Xiaocheng
-            and Liu, Can and Hu, Haonan and Yao, Yao and Yang, Yifei
-            and Lu, Yijie and Wang, Taolei and Li, Yansi and Wu, Muhuan
-            and Sun, Chenglu and Liu, Gongshen and Zhang, Zhuosheng},
-  year   = {2026},
-  eprint = {2611.25773},
-  archivePrefix = {arXiv},
-  primaryClass  = {cs.AI},
-  url    = {https://arxiv.org/abs/2611.25773}
+@article{duopra2026,
+  title   = {Duopra: From Full-Duplex Conversation to Full-Duplex Agency},
+  author  = {Chen, Chiyu and Cheng, Pengzhou and Ma, Yuezhao and Li, Xiaocheng
+             and Liu, Can and Hu, Haonan and Yao, Yao and Yang, Yifei
+             and Lu, Yijie and Wang, Taolei and Li, Yansi and Wu, Muhuan
+             and Sun, Chenglu and Liu, Gongshen and Zhang, Zhuosheng},
+  journal = {arXiv preprint arXiv:2611.25773},
+  year    = {2026},
+  url     = {https://arxiv.org/abs/2611.25773}
 }
 ```
 
